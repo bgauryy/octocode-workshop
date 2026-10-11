@@ -14,7 +14,7 @@ The deck has five hands-on pauses. Each slide links directly to its matching pra
 | 4 | Hands on: Octocode V2 | [Short RFC and one build step](./workshop/4.md) | 15 min | `RFC.md` and one verified step or blocker |
 | 5 | Hands on: Octocode V3 | [One repeatable check](./workshop/5.md) | 10 min | Observed result and keep/change decision |
 
-**Three-hour run of show:** 105 minutes for the 87-slide talk (about 72 seconds per slide on average), 55 minutes for the five live checkpoints, and 20 minutes for transitions, questions and a break. Rehearse the complete talk against the 105-minute cap. Give each of the eleven skill slides one short example and move its detailed walkthrough into the notes; keep their one-slide-per-skill format. If a section runs long, use the 20-minute buffer before extending a lab.
+**Three-hour run of show:** 105 minutes for the 86-slide talk (about 73 seconds per slide on average), 55 minutes for the five live checkpoints, and 20 minutes for transitions, questions and a break. Rehearse the complete talk against the 105-minute cap. Give each of the eleven skill slides one short example and move its detailed walkthrough into the notes; keep their one-slide-per-skill format. If a section runs long, use the 20-minute buffer before extending a lab.
 
 > **Before the session:** do the [Setup](#setup-do-it-before-the-session) below, so workshop 1 takes minutes and not the whole slot.
 
