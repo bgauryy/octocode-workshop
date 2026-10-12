@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Let the agent loop on tests it wrote first</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .tdd { display: grid; grid-template-columns: 500px minmax(0, 1fr); gap: 32px; width: 100%; align-items: stretch; }
+    .tdd .pane { border: 1px solid var(--border-strong); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); padding: 20px 24px; display: flex; flex-direction: column; gap: 12px; }
+    .tdd .pane h3 { font-size: var(--t-body); color: var(--text-strong); }
+    .tdd .pane .tag { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); text-transform: uppercase; letter-spacing: 0.1em; }
+    .tdd img { width: 100%; max-height: 270px; object-fit: contain; }
+    .tdd .cap { font-size: var(--t-small); line-height: 1.4; color: var(--muted); }
+    .tdd .cap b { color: var(--text-strong); }
+    .tdd .right { display: flex; flex-direction: column; gap: 20px; }
+    .tdd .pane.loop { border-color: var(--accent); }
+    .tdd .pane.junk { border-color: var(--warm); flex: 1; }
+    .tdd .pane p { font-size: var(--t-small); line-height: 1.4; color: var(--muted); }
+    .tdd .pane p b { color: var(--text-strong); }
+    .tdd .flow { font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent-2); }
+    .tdd ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .tdd li { font-size: var(--t-small); line-height: 1.35; color: var(--text); padding-left: 26px; position: relative; }
+    .tdd li::before { content: "✕"; position: absolute; left: 0; color: var(--negative); }
+    .tdd li.keep::before { content: "✓"; color: var(--positive); }
+    .tdd li.keep { color: var(--text-strong); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · how I build</span>
+    <h2 class="title" data-slide-title>Agentic TDD - the improvment loop<br></h2>
+    <p class="description" data-slide-subtitle>Recommended: allow the agent to run tests on its own. TDD gives it a target; junk tests give it the wrong one.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="tdd">
+      <div class="pane" data-anim="rise">
+        <span class="tag">Important · TDD</span>
+        <img src="../assets/tdd-loop.svg" alt="TDD loop: red, write a failing test first; green, make it pass; refactor, clean up while staying green; the agent runs the tests at every step">
+        <p class="cap"><b>The test is the spec:</b> fail first, pass, then clean up while staying green.</p>
+      </div>
+      <div class="right">
+        <div class="pane loop" data-step="1" data-anim="rise">
+          <h3>Allow the loop</h3>
+          <p class="flow">write test → run → read failure → fix → rerun</p>
+          <p><b>Give the agent the test command</b> and let it repeat until green, instead of you pasting errors back.</p>
+        </div>
+        <div class="pane junk" data-step="2" data-anim="rise">
+          <h3>Important · remove junk tests</h3>
+          <ul>
+            <li>Rigid, hand-picked inputs that mirror the implementation</li>
+            <li>Exact strings, full snapshots, call counts on internals</li>
+            <li>Mocks that only test the mock</li>
+            <li class="keep">Keep tests that check behavior a user would notice</li>
+          </ul>
+          <p>They break on harmless changes, so the agent <b>fixes tests instead of code</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">With the environment in place, my recommendation is to let the agent run the tests itself, in a loop. Give it the test command and let it write, run, read the failure, fix and rerun until green, instead of you copying errors back into the chat. The important part is TDD. Look at the loop on the left: red, the agent first writes a test that fails for the behavior you want; green, it changes the code until that test passes; refactor, it cleans up while the tests stay green. The test becomes the spec the agent works toward, and the loop tells it when it's done. The second important part: remove junk tests. Agents happily generate rigid tests: hand-picked inputs that just mirror the implementation, exact string and snapshot matches, call counts on internal functions, mocks that only test the mock. They break on every harmless change, and then the agent spends its loop "fixing" tests instead of code, or bends the code to satisfy them. Delete those and keep the tests that check behavior a user would notice. This is my recommended practice, not a measured result. Next: research before you write the code.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

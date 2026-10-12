@@ -7,18 +7,32 @@
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
-    .kqv { display: flex; flex-direction: column; gap: 18px; }
-    .steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
-    .card { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 6px 16px; align-content: center; padding: 18px 20px; border-radius: 14px; border: 1px solid var(--qc); background: color-mix(in srgb, var(--qc) 12%, transparent); }
-    .card .l { grid-row: span 3; align-self: center; font-family: var(--font-head); font-size: 68px; font-weight: 700; color: var(--qc); line-height: 1; text-align: center; }
-    .card .nm { font-size: var(--t-small); color: var(--qc); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; line-height: 1.2; }
-    .card b { font-family: var(--font-head); font-size: var(--t-sub); color: var(--text-strong); font-weight: 700; line-height: 1.2; }
-    .card .ln { font-size: var(--t-body); color: var(--muted); line-height: 1.3; }
-    .algo { display: grid; grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; padding: 16px 20px; border-radius: 14px; border: 1px solid var(--border-strong); background: var(--surface); }
-    .algo .tag { font-size: var(--t-small); color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-    .algo .st { font-size: var(--t-body); color: var(--text); line-height: 1.3; }
-    .algo .st strong { display: block; color: var(--text-strong); font-weight: 700; font-family: var(--font-head); }
-    .algo .ar { color: var(--muted); font-size: var(--t-sub); }
+    .se { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+    .sent { display: flex; align-items: baseline; gap: 18px; padding: 12px 24px; border-radius: 14px; border: 1px dashed var(--border-strong); background: var(--surface); }
+    .sent .lb { font-size: var(--t-small); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); white-space: nowrap; }
+    .sent .tx { font-size: var(--t-sub); color: var(--text); white-space: nowrap; }
+    .sent .tok { font-weight: 700; padding: 0 6px; border-radius: 6px; color: var(--text-strong); background: color-mix(in srgb, var(--c) 22%, transparent); box-shadow: inset 0 -2px 0 var(--c); }
+    .sent .tok.dim { background: color-mix(in srgb, var(--c) 10%, transparent); }
+    .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; }
+    .col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .card.k { flex-direction: row; align-items: center; justify-content: space-between; }
+    .hd { display: flex; align-items: center; gap: 14px; min-height: 64px; padding-bottom: 10px; border-bottom: 2px solid var(--c); }
+    .badge { font-family: var(--font-head); font-size: 52px; font-weight: 700; line-height: 1.15; color: var(--c); }
+    .hd .t { font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .hd .t strong { display: block; color: var(--c); text-transform: uppercase; letter-spacing: 0.04em; font-size: var(--t-small); white-space: nowrap; }
+    .card { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 12px 22px; border-radius: 14px; border: 1px solid var(--c); background: color-mix(in srgb, var(--c) 12%, transparent); }
+    .q { border-width: 2px; gap: 10px; }
+    .q .who { font-family: var(--font-mono); font-size: var(--t-sub); color: var(--text-strong); font-weight: 700; }
+    .q .who .ic { color: var(--accent); margin-right: 10px; }
+    .q .what { font-size: var(--t-body); color: var(--text); line-height: 1.3; }
+    .m { font-size: var(--t-small); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+    .m.top { color: var(--accent); }
+    .w { font-family: var(--font-mono); font-size: var(--t-sub); color: var(--text-strong); font-weight: 700; }
+    .d { font-size: var(--t-body); color: var(--text); line-height: 1.3; }
+    .weak { opacity: 0.55; }
+    .strip { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px 26px; border-radius: 14px; border: 1px solid var(--border-strong); background: var(--surface); }
+    .strip .s { font-family: var(--font-head); font-size: var(--t-body); color: var(--text-strong); font-weight: 700; white-space: nowrap; }
+    .strip .f { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -26,27 +40,45 @@
   <div class="slide-header">
     <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
     <h2 class="title" data-slide-title>Each token gets a key, value and query</h2>
-    <p class="description" data-slide-subtitle>Like a library: every book has a label and content, and a question finds the right ones.</p>
+    <p class="description" data-slide-subtitle>Attention works like a search engine: the query searches, keys get matched, values come back.</p>
   </div>
   <div class="slide-content slide-content--middle">
-    <div class="kqv">
-      <div class="steps">
-        <div class="card" style="--qc: var(--warm)" data-step="1" data-anim="rise"><span class="l">K</span><span class="nm">Key</span><b>"What I'm about"</b><span class="ln">The label on the book's spine</span></div>
-        <div class="card" style="--qc: var(--positive)" data-step="2" data-anim="rise"><span class="l">V</span><span class="nm">Value</span><b>"What I give"</b><span class="ln">The content inside the book</span></div>
-        <div class="card" style="--qc: var(--accent)" data-step="3" data-anim="rise"><span class="l">Q</span><span class="nm">Query</span><b>"What I need"</b><span class="ln">"I want a book about cats"</span></div>
+    <div class="se">
+      <div class="sent">
+        <span class="lb">Example</span>
+        <span class="tx">The <span class="tok" style="--c: var(--warm)">animal</span> didn't cross the <span class="tok dim" style="--c: var(--warm)">street</span> because <span class="tok" style="--c: var(--accent)">it</span> was tired.</span>
       </div>
-      <div class="algo" data-step="4" data-anim="rise">
-        <span class="tag">The algorithm</span>
-        <span class="st"><strong>1 · Match</strong>Compare Q with every K</span>
-        <span class="ar">→</span>
-        <span class="st"><strong>2 · Weigh</strong>Better match, bigger share</span>
-        <span class="ar">→</span>
-        <span class="st"><strong>3 · Mix</strong>Blend the V's by those shares</span>
+
+      <div class="cols">
+        <div class="col" style="--c: var(--accent)" data-step="1" data-anim="rise">
+          <div class="hd"><span class="badge">Q</span><span class="t"><strong>Query · the search request</strong>what this token is looking for</span></div>
+          <div class="card q">
+            <span class="who"><span class="ic">⌕</span>"it"</span>
+            <span class="what">What does "it" refer to?</span>
+          </div>
+        </div>
+
+        <div class="col" style="--c: var(--warm)" data-step="2" data-anim="rise">
+          <div class="hd"><span class="badge">K</span><span class="t"><strong>Key · the searchable title</strong>what a token offers for matching</span></div>
+          <div class="card k"><span class="w">animal</span><span class="m top">Top match</span></div>
+          <div class="card k weak"><span class="w">street</span><span class="m">Weak</span></div>
+        </div>
+
+        <div class="col" style="--c: var(--positive)" data-step="3" data-anim="rise">
+          <div class="hd"><span class="badge">V</span><span class="t"><strong>Value · the result content</strong>the information it contributes</span></div>
+          <div class="card"><span class="d">"animal" info flows into "it"</span></div>
+          <div class="card weak"><span class="d">little of "street" is taken</span></div>
+        </div>
+      </div>
+
+      <div class="strip" data-step="4" data-anim="rise">
+        <span class="s">Q and K decide where to look · V decides what you take.</span>
+        <span class="f">Q = X·W_Q &nbsp; K = X·W_K &nbsp; V = X·W_V</span>
       </div>
     </div>
   </div>
 </div>
-<aside class="speaker-notes">Classroom opener: you ask 30 students, "Who has a red backpack?" and look for the ones that match. That's attention, and to do it every token plays three roles. Think of a library. Click 1, K, Key: what I'm about, the label on each book's spine. Click 2, V, Value: what I give, the content inside the book. Click 3, Q, Query: what I need, "I want a book about cats." These are not three algorithms: they are three vectors per token, made by multiplying the token's embedding by three learned matrices (W_Q, W_K, W_V). Click 4, the algorithm in three steps. Match: compare the query with every key (a dot product gives a score). Weigh: turn the scores into shares that add up to 100% (softmax), so better matches get bigger shares. Mix: blend the values by those shares. Engineer's version: a soft dict lookup. Q and K decide where to look; V decides what you take. Source: Vaswani et al. 2017, "Attention Is All You Need", arXiv:1706.03762. Hand-off: next, watch that lookup run on one sentence.</aside>
+<aside class="speaker-notes">Think of a search engine. Click 1, the search bar: that's the Query. The token "it" in "The animal didn't cross the street because it was tired" is asking: what am I looking for, what do I refer to? Click 2, the Keys: every token has a searchable title, what it offers for matching. The query is compared with every key; "animal" is the top match, "street" is a weak one. Click 3, the Values: the result content, the information each token actually contributes. "it" takes mostly from "animal" and very little from "street". Why three separate vectors? Because finding relevant information and providing it are different jobs: what makes a token easy to find is not the same as what it should hand over. Click 4: Q and K decide where to look; V decides what you take. All three come from the same token embedding X, multiplied by three learned matrices: W_Q, W_K and W_V. Source: Vaswani et al. 2017, "Attention Is All You Need", arXiv:1706.03762. Hand-off: next, watch the search run on one sentence.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

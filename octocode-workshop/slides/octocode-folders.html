@@ -3,52 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home configures Octocode; the workspace keeps skill output</title>
+  <title>Home holds settings and keys; the workspace keeps results</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
-    .fold { display: grid; grid-template-columns: 1fr 1.15fr; gap: 24px; align-items: stretch; }
-    .fold .card { display: flex; flex-direction: column; gap: 6px; padding: 14px 24px; }
+    .fold { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: stretch; }
+    .fold .card { display: flex; flex-direction: column; gap: 12px; padding: 18px 28px; }
     .fold .card h3 { font-family: var(--font-mono); }
-    .fold .who { font-size: var(--t-small); color: var(--muted); }
-    .fold .tree { font-family: var(--font-mono); font-size: var(--t-code); line-height: 1.45; color: var(--code-text); display: grid; grid-template-columns: max-content 1fr; column-gap: 20px; row-gap: 0; margin-top: 0; }
-    .fold .tree .d { color: var(--text-strong); }
-    .fold .tree .c { color: var(--code-comment); }
-    .fold-rule { margin-top: 12px; }
+    .fold .rows { display: flex; flex-direction: column; gap: 10px; }
+    .fold .row { display: grid; grid-template-columns: 250px 1fr; column-gap: 16px; align-items: baseline; }
+    .fold .rows .d { font-family: var(--font-mono); font-size: var(--t-code); color: var(--text-strong); }
+    .fold .rows .c { font-size: var(--t-small); color: var(--muted); }
+    .fold-rule { margin-top: 18px; }
+    .fold-rule code { font-family: var(--font-mono); color: var(--text-strong); }
   </style>
 </head>
 <body>
 <div class="slide slide--content" data-step-focus>
   <div class="slide-header">
     <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · where things live</span>
-    <h2 class="title" data-slide-title>Home configures Octocode; the workspace keeps skill output</h2>
-    <p class="description" data-slide-subtitle>Two .octocode folders: one for settings and keys, one for results.</p>
+    <h2 class="title" data-slide-title>Home holds settings and keys; the workspace keeps results</h2>
+    <p class="description" data-slide-subtitle>Two .octocode folders: one per machine, one per project.</p>
   </div>
   <div class="slide-content slide-content--middle">
     <div class="fold">
       <div class="card card--violet" data-step="1" data-anim="land">
-        <span class="kicker">once per machine · configuration, among others</span>
+        <span class="kicker">once per machine · settings</span>
         <h3>~/.octocode/</h3>
-        <span class="who">read by the CLI, the MCP server and the skills</span>
-<div class="tree"><span class="d">.octocoderc</span><span class="c">// features &amp; settings</span>
-<span class="d">.env</span><span class="c">// tokens &amp; API keys</span>
-<span class="d">credentials.json</span><span class="c">// GitHub login</span>
-<span class="d">skills/</span><span class="c">// installed skills</span></div>
+        <div class="rows">
+          <div class="row"><span class="d">.env</span><span class="c">API keys and tokens</span></div>
+          <div class="row"><span class="d">.octocoderc</span><span class="c">features and tool switches</span></div>
+          <div class="row"><span class="d">credentials.json</span><span class="c">GitHub login</span></div>
+          <div class="row"><span class="d">skills/</span><span class="c">installed skills</span></div>
+        </div>
       </div>
       <div class="card card--positive" data-step="2" data-anim="land">
-        <span class="kicker">once per project · output</span>
+        <span class="kicker">once per project · results</span>
         <h3>&lt;workspace&gt;/.octocode/</h3>
-        <span class="who">what the skills write, next to the code</span>
-<div class="tree"><span class="d">octocode-rfc-generator/</span><span class="c">// RFCs</span>
-<span class="d">octocode-research/</span><span class="c">// reports, PR reviews</span>
-<span class="d">octocode-… /</span><span class="c">// one per skill</span>
-<span class="d">.env</span><span class="c">// project keys, override home</span></div>
+        <div class="rows">
+          <div class="row"><span class="d">octocode-research/</span><span class="c">reports, PR reviews</span></div>
+          <div class="row"><span class="d">octocode-rfc-…/</span><span class="c">RFCs</span></div>
+          <div class="row"><span class="d">octocode-…/</span><span class="c">one per skill</span></div>
+          <div class="row"><span class="d">.env</span><span class="c">project keys, beat home</span></div>
+        </div>
       </div>
     </div>
-    <p class="rule fold-rule" data-step="3" data-anim="land"><span class="k">//</span>settings live at home; results live with the project, so the <strong>next session reads them</strong> instead of redoing them</p>
+    <p class="rule fold-rule" data-step="3" data-anim="land"><span class="k">//</span>.octocoderc never holds tokens · edit both: <code>octocode config view</code></p>
   </div>
 </div>
-<aside class="speaker-notes">Click 1: ~/.octocode is the Octocode home (%USERPROFILE%\.octocode on Windows; move it with OCTOCODE_HOME). .octocoderc = JSONC settings the MCP server and CLI read (features like local tools, tool lists, timeouts). .env = tokens and third-party API keys (GH_TOKEN, TAVILY_API_KEY, SERPER_API_KEY, EXA_API_KEY) that the CLI and MCP server load. credentials.json = encrypted GitHub login (AES-256-GCM, key in .key). skills/ = installed skills. The folder holds more than these (stats, tmp/ caches and so on), so treat the list as examples (docs/CONFIGURATION.md, docs/AUTHENTICATION.md:51, https://github.com/bgauryy/octocode/blob/main/docs/CONFIGURATION.md). Click 2: the workspace .octocode is where skills save output after you approve. The RFC generator saves &lt;workspace&gt;/.octocode/octocode-rfc-generator/&lt;YYYY-MM-DD&gt;-&lt;slug&gt;/RFC.md (skills/octocode-rfc-generator/SKILL.md:24); research reports and PR reviews go to .octocode/octocode-research/&lt;YYYY-MM-DD&gt;-pr-&lt;number&gt;.md (skills/octocode-research/references/workflow-pr-review.md:52); a project .env beats the home .env for the same key, except home-only keys. Click 3: results are files next to the code. Next: when both folders set the same thing, which one wins.</aside>
+<aside class="speaker-notes">Click 1: ~/.octocode is the Octocode home (%USERPROFILE%\.octocode on Windows; move it with OCTOCODE_HOME), read by the CLI, the MCP server and the skills. .env holds tokens and third-party API keys: TAVILY_API_KEY, SERPER_API_KEY, EXA_API_KEY, any key your skills need, and optionally GH_TOKEN or GITHUB_TOKEN. .octocoderc is JSONC that the MCP server and CLI read: github.apiUrl points at GitHub Enterprise; local.enabled turns the local and LSP tools on (ghCloneRepo is CLI-only and needs persistent storage; the old local.enableClone key is ignored, docs/OCTOCODE_TOOLS.md:57); tools.disabled removes tools and tools.enabled is a strict allowlist; network.timeout defaults to 30000 ms (range 5000–300000). Restart the MCP server or start a new session after editing. credentials.json is the encrypted GitHub login (AES-256-GCM, key in .key); skills/ holds installed skills. The folder also holds stats and tmp caches, so treat the list as examples (docs/CONFIGURATION.md, docs/AUTHENTICATION.md:51, https://github.com/bgauryy/octocode/blob/main/docs/CONFIGURATION.md). Click 2: the workspace .octocode is where skills save output after you approve. The RFC generator writes &lt;workspace&gt;/.octocode/octocode-rfc-generator/&lt;YYYY-MM-DD&gt;-&lt;slug&gt;/RFC.md (skills/octocode-rfc-generator/SKILL.md:24); PR reviews go to .octocode/octocode-research/&lt;YYYY-MM-DD&gt;-pr-&lt;number&gt;.md (skills/octocode-research/references/workflow-pr-review.md:52). A project .env beats the home .env for the same key, except home-only keys. Results sit next to the code, so the next session reads them instead of redoing them. Click 3: .octocoderc never supplies GitHub tokens (docs/AUTHENTICATION.md:35); a token comes from a token variable (shell or .env), octocode auth login, or gh auth token. octocode config view opens a local settings page on 127.0.0.1 where you edit both files. Next: how to set up the dev environment around these folders.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>August: fewer characters, similar correctness</title>
+  <title>Benchmarking Octocode</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
-    .aug { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 40px; align-items: center; }
+    .aug { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 32px; align-items: center; }
     .aug .shot { margin: 0; display: flex; flex-direction: column; gap: 10px; }
     .aug .shot img { display: block; width: 100%; height: auto; border-radius: var(--radius); box-shadow: 0 18px 40px color-mix(in srgb, var(--bg) 70%, transparent); }
-    .aug .side { display: flex; flex-direction: column; gap: 26px; padding-left: 28px; border-left: 1px solid var(--border-strong); }
-    .aug .qn { font-family: var(--font-head); font-size: 84px; font-weight: 700; line-height: 1; color: var(--violet); font-variant-numeric: tabular-nums; }
-    .aug .qcap { display: block; margin-top: 6px; font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); }
-    .aug .side p { font-size: var(--t-mid); color: var(--muted); line-height: 1.4; margin: 0; }
+    .aug .side { display: flex; flex-direction: column; gap: 14px; padding-left: 24px; border-left: 1px solid var(--border-strong); }
+    .aug .qcap { display: block; margin-bottom: 10px; font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+    .aug .won { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .aug .won li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; white-space: nowrap; padding: 6px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+    .aug .won li b { font-family: var(--font-head); font-size: var(--t-body); color: var(--text-strong); font-weight: 600; }
+    .aug .won li span { font-size: var(--t-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+    .aug .won li span em { font-style: normal; color: var(--warm); font-weight: 600; }
+    .aug .loop { padding: 10px 14px; border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: var(--radius-sm); }
+    .aug .side p { font-size: var(--t-body); color: var(--muted); line-height: 1.4; margin: 0; }
     .aug .side p b { color: var(--text-strong); font-weight: 600; }
     .aug .link { font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent); text-decoration: none; line-height: 1.4; word-break: break-word; }
     .aug .link:hover { text-decoration: underline; }
@@ -23,27 +28,32 @@
 <div class="slide slide--content" data-step-focus>
   <div class="slide-header">
     <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · stats · Aug 2026</span>
-    <h2 class="title" data-slide-title>August: fewer characters, similar correctness</h2>
-    <p class="description" data-slide-subtitle>On the same 30 GitHub questions, the gh arms used 2–3.2× more characters than Octocode.</p>
+    <h2 class="title" data-slide-title>Benchmarking Octocode</h2>
+    <p class="description" data-slide-subtitle>August: on 30 GitHub questions, Octocode beat gh, gh + RTK and gh + Headroom.</p>
   </div>
   <div class="slide-content slide-content--middle">
     <div class="aug">
       <figure class="shot" data-anim="rise">
         <img src="../assets/benchmark-august-results.png" alt="August benchmark table. Mean characters per question: Octocode 22,111 (the anchor); gh 114,849, 2.01× more; gh + RTK 368,586, 3.22× more; gh + Headroom 382,598, 2.73× more. Totals over 30 questions: 663,319; 3,445,482; 11,057,569; 11,477,951.">
         <span class="src">30 questions × 3 runs · seed 42 · Octocode v18.1.1 CLI · blind gpt-5.5 judge</span>
+        <a class="link" data-step="3" href="https://github.com/bgauryy/octocode/tree/main/packages/octocode-benchmark/compare/github-questions" target="_blank" rel="noopener">See the 30 questions ↗ octocode-benchmark/compare/github-questions</a>
       </figure>
       <div class="side">
         <div data-step="1" data-anim="rise">
-          <span class="qn" data-anim="count">30</span>
-          <span class="qcap">public GitHub questions</span>
+          <span class="qcap">Octocode beat all three</span>
+          <ul class="won">
+            <li><b>gh</b><span><em>2.01×</em> more chars</span></li>
+            <li><b>gh + RTK</b><span><em>3.22×</em> more</span></li>
+            <li><b>gh + Headroom</b><span><em>2.73×</em> more</span></li>
+          </ul>
         </div>
-        <p data-step="1">Every arm answers the same set. <b>Correctness ≈ 9 / 10 for all of them</b>, so the difference is the context bill.</p>
-        <a class="link" data-step="2" href="https://github.com/bgauryy/octocode/tree/main/packages/octocode-benchmark/compare/github-questions" target="_blank" rel="noopener">See the 30 questions ↗<br>octocode-benchmark/compare/github-questions</a>
+        <p data-step="1"><b>Correctness ≈ 9 / 10 for all</b>: the difference is the context bill.</p>
+        <p class="loop" data-step="2" data-anim="land"><b>Then we loop:</b> change a tool, re-run the same questions, keep only what improves.</p>
       </div>
     </div>
   </div>
 </div>
-<aside class="speaker-notes">August 2026 campaign: 30 public GitHub questions × 3 runs, seed 42, a fresh agent per question, blind gpt-5.5 judge (packages/octocode-benchmark/results/SUMMARY.md:20-41; ledger X8). The questions are public: https://github.com/bgauryy/octocode/tree/main/packages/octocode-benchmark/compare/github-questions — open one so people see what "a question" means. The table is my results screenshot: mean characters per question (model in + out): Octocode v18.1.1 CLI 22,111, plain gh 114,849, gh + RTK 368,586, gh + Headroom 382,598. The "vs Octocode" column is the per-question ratio (geometric mean), not the ratio of the means: 2.01× for gh, 3.22× for RTK, 2.73× for Headroom. (SUMMARY.md reports 1.99× / 3.21× / 2.62× with 95% CIs 1.52–2.61, 2.36–4.46, 1.87–3.71 — say "about 2 to 3.2×".) Press →: correctness was a tie — 9.19 vs 9.27 against gh, 9.29 vs 9.42 against RTK, 9.30 vs 8.62 against Headroom; MATRIX.md treats arms within one point as equally correct. Compressing output after the fact (RTK, Headroom) used more characters, not fewer, because the agent kept asking for more. Caveat: this was the v18.1.1 CLI, not today's v20, and plain gh with no guidance is an easy opponent. Press →: the link to the question set. Next: in October I made the opponent as strong as I could.</aside>
+<aside class="speaker-notes">Benchmarking Octocode, August 2026 campaign: 30 public GitHub questions × 3 runs, seed 42, a fresh agent per question, blind gpt-5.5 judge (packages/octocode-benchmark/results/SUMMARY.md:20-41; ledger X8). The table is my results screenshot: mean characters per question (model in + out): Octocode v18.1.1 CLI 22,111, plain gh 114,849, gh + RTK 368,586, gh + Headroom 382,598. Press →: Octocode beat all three. The ratios on the right are per-question geometric means, not the ratio of the means: 2.01× for gh, 3.22× for RTK, 2.73× for Headroom. (SUMMARY.md reports 1.99× / 3.21× / 2.62× with 95% CIs 1.52–2.61, 2.36–4.46, 1.87–3.71 — say "about 2 to 3.2×".) Correctness was a tie — 9.19 vs 9.27 against gh, 9.29 vs 9.42 against RTK, 9.30 vs 8.62 against Headroom; MATRIX.md treats arms within one point as equally correct. Compressing output after the fact (RTK, Headroom) used more characters, not fewer, because the agent kept asking for more. Press →: the benchmark is not a one-off. We loop on it: change a tool, re-run the same questions, keep only what improves — the reflection-and-critique loop from the previous slide. Caveat: this was the v18.1.1 CLI, not today's v20, and plain gh with no guidance is an easy opponent. Press →: the link to the question set — https://github.com/bgauryy/octocode/tree/main/packages/octocode-benchmark/compare/github-questions — open one so people see what "a question" means. Next: in October I made the opponent as strong as I could.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

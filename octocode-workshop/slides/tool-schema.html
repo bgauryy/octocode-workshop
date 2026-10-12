@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Long research can carry a goal and a reason</title>
+  <title>Every Octocode tool asks for a goal and a reason</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
@@ -23,8 +23,8 @@
 <div class="slide slide--content" data-step-focus>
   <div class="slide-header">
     <span class="eyebrow"><span class="pip"></span>Octocode V1 · input schema</span>
-    <h2 class="title" data-slide-title>Long research can carry a goal and a reason</h2>
-    <p class="description" data-slide-subtitle>These optional fields keep a multi-call search on track; simple lookups omit them.</p>
+    <h2 class="title" data-slide-title>Every Octocode tool asks for a goal and a reason</h2>
+    <p class="description" data-slide-subtitle>We built the input schema to make the agent reason better before each call.</p>
   </div>
   <div class="slide-content">
     <div class="sc">
@@ -38,14 +38,14 @@
   }]
 <span class="tk-pn">}</span></div>
       <div class="fields">
-        <div class="fd" data-step="1"><span class="q">Optional · what for</span><h3>mainGoal</h3><p>The question the research serves.</p></div>
-        <div class="fd r" data-step="2"><span class="q">Optional · why now</span><h3>reasoning</h3><p>Why this call advances the goal.</p></div>
+        <div class="fd" data-step="1"><span class="q">Improves attention</span><h3>mainGoal</h3><p>Keeps the research question in view on every call.</p></div>
+        <div class="fd r" data-step="2"><span class="q">Forces real reasoning</span><h3>reasoning</h3><p>The agent must say why it needs this tool now.</p></div>
       </div>
     </div>
-    <div class="rule" data-step="3"><span class="k">// use for:</span> multi-call research; <strong>omit for a simple lookup</strong>.</div>
+    <div class="rule" data-step="3"><span class="k">// both:</span> written into the <strong>context window</strong>, so the agent reads them again.</div>
   </div>
 </div>
-<aside class="speaker-notes">The ghSearchCode MCP input is a queries array with one to five query objects (packages/octocode-config/contract/tool-contract.json, ghSearchCode inputSchema; ledger V5). This is one valid call. Click 1: mainGoal, the research question. Click 2: reasoning, why this query advances it. Both are optional per-query fields, each at most 500 characters. Use them when the agent is following an unknown across calls; omit them for a simple lookup. They make the purpose visible again in subsequent tool context, but that benefit is a design intent, not a measured improvement here. Octocode can carry them into suggested next queries. Next: what comes back.</aside>
+<aside class="speaker-notes">We built Octocode's tools to make the agent reason better, so each tool's input schema carries two fields: mainGoal and reasoning (ghSearchCode shown; packages/octocode-config/contract/tool-contract.json, ledger V5). Click 1: mainGoal, the research question. Restating it in every call keeps the agent's attention on what it is actually trying to answer. Click 2: reasoning. The agent has to write down why it needs this tool now, so it reasons before it calls. Click 3: both fields end up in the context window, so the goal and the reason stay in front of the model on later turns. Both fields are optional, up to 500 characters each. The benefit is our design intent and what we saw in use, not a measured benchmark. Next: what comes back.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

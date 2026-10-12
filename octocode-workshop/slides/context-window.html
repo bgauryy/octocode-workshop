@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Each turn carries a message history</title>
+  <title>Context window</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
@@ -11,12 +11,18 @@
     .panel-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; }
     .panel-h .kicker { color: var(--muted); }
     .panel-h .resend { font-family: var(--font-mono); font-size: var(--t-small); color: var(--warm); }
-    .win { border: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .stackwrap { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; }
+    .axis { display: flex; flex-direction: column; align-items: center; justify-content: space-between; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); padding: 6px 0; }
+    .axis .line { flex: 1; width: 2px; margin: 6px 0; background: linear-gradient(to top, var(--border), var(--accent)); }
+    .axis .lbl { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
+    .axis .lbl.top { color: var(--accent); }
+    .win { border: 2px solid color-mix(in srgb, var(--accent) 60%, transparent); border-top-style: dashed; border-radius: 4px 4px 12px 12px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
     .grp { display: flex; flex-direction: column; gap: 6px; }
     .m { --c: var(--accent); display: grid; grid-template-columns: 74px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 0 12px; height: 34px; border-radius: 6px; font-size: var(--t-small); color: var(--text-strong); background: color-mix(in srgb, var(--c) 18%, transparent); border-left: 4px solid var(--c); }
     .m b { font-family: var(--font-mono); font-weight: 500; color: var(--c); }
     .m .tag { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); white-space: nowrap; }
     .m .tag strong { color: var(--text-strong); }
+    .m.sys { background: color-mix(in srgb, var(--c) 30%, transparent); }
     .m.tools { height: 52px; }
     .m.user { --c: var(--positive); }
     .m.call { --c: var(--warm); }
@@ -24,55 +30,91 @@
     .m.bad { --c: var(--negative); height: 74px; }
     .m.free { background: transparent; border: 1px dashed var(--border); border-left: 4px dashed var(--border); color: var(--muted); height: 30px; }
     .m.free b { color: var(--muted); }
+    /* each message drops onto the top of the stack */
+    .win [data-step] { opacity: 0; transform: translateY(-18px); transition: opacity 300ms cubic-bezier(.4,0,.2,1), transform 300ms cubic-bezier(.4,0,.2,1); }
+    .win [data-step].step-visible { opacity: 1; transform: translateY(0); }
+    /* the same stack, flattened into one stream */
+    .tstream { margin-bottom: 22px; }
+    .flat { display: flex; width: 100%; align-items: stretch; gap: 3px; height: 44px; }
+    .tk { --c: var(--accent); flex: 1 1 auto; display: flex; align-items: center; justify-content: center; padding: 0 6px; min-width: 0; border-radius: 4px; font-family: var(--font-mono); font-size: var(--t-small); color: var(--c); background: color-mix(in srgb, var(--c) 22%, transparent); border-bottom: 3px solid var(--c); white-space: nowrap; }
+    .tk.sys { background: color-mix(in srgb, var(--c) 34%, transparent); }
+    .tk.tools { flex-grow: 2; }
+    .tk.user { --c: var(--positive); }
+    .tk.call { --c: var(--warm); }
+    .tk.res { --c: var(--muted); }
+    .tk.bad { --c: var(--negative); flex-grow: 3; }
+    .tk.to { flex: 0 0 auto; background: none; border: 0; color: var(--accent); padding: 0 0 0 6px; }
+    .tstream .cap { margin-top: 10px; font-size: var(--t-small); color: var(--muted); }
+    .tstream .cap strong { color: var(--text-strong); font-weight: 500; }
     .sizes { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
     .sz { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 8px 4px; border-bottom: 1px solid var(--border); }
     .sz > span { font-size: var(--t-body); color: var(--text-strong); }
     .sz > strong { font-family: var(--font-head); font-size: var(--t-body); color: var(--accent); white-space: nowrap; }
     .sz.small > strong { color: var(--warm); }
-    .cw .rule { margin-top: 18px; }
   </style>
 </head>
 <body>
 <div class="slide slide--content" data-step-focus>
   <div class="slide-header">
     <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
-    <h2 class="title" data-slide-title>Each turn carries a message history</h2>
-    <p class="description" data-slide-subtitle>The context window contains the messages sent with the current request.</p>
+    <h2 class="title" data-slide-title>Context window</h2>
+    <p class="description" data-slide-subtitle>A stack re-sent every turn: the system prompt at the bottom, each new message on top.</p>
   </div>
   <div class="slide-content">
     <div class="cw">
       <div>
         <div class="panel-h"><span class="kicker">what's in it</span><span class="resend">↻ all of it, every turn</span></div>
-        <div class="win">
-          <div class="m sys"><b>system</b>agent prompt + MCP instructions</div>
-          <div class="m tools"><b>tools</b>every tool's schema<span class="tag"><strong>16,807</strong> tokens · 13-tool probe</span></div>
-          <div class="m user"><b>user</b>how does auth work here?</div>
-          <div class="grp">
-            <div class="m call"><b>call</b>localSearch "auth"</div>
-            <div class="m res"><b>result</b>20 hits, line numbers</div>
+        <div class="stackwrap">
+          <div class="axis" aria-hidden="true">
+            <span class="lbl top">newest ↑</span>
+            <span class="line"></span>
+            <span class="lbl">first in</span>
           </div>
-          <div class="grp">
-            <div class="m call"><b>call</b>read the whole file</div>
-            <div class="m bad"><b>result</b>1,200 lines, mostly noise</div>
+          <div class="win">
+            <div class="m free"><b>free</b>what's left for the answer</div>
+            <div class="grp">
+              <div class="m bad" data-step="7"><b>result</b>1,200 lines, mostly noise</div>
+              <div class="m call" data-step="6"><b>call</b>read the whole file</div>
+            </div>
+            <div class="grp">
+              <div class="m res" data-step="5"><b>result</b>20 hits, line numbers</div>
+              <div class="m call" data-step="4"><b>call</b>localSearch "auth"</div>
+            </div>
+            <div class="m user" data-step="3"><b>user</b>how does auth work here?</div>
+            <div class="m tools" data-step="2"><b>tools</b>all tool schemas<span class="tag"><strong>16,807</strong> tokens · 13 tools</span></div>
+            <div class="m sys" data-step="1"><b>system</b>agent prompt + MCP instructions</div>
           </div>
-          <div class="m free"><b>free</b>what's left for the answer</div>
         </div>
       </div>
-      <div data-step="3" data-anim="rise">
-        <div class="panel-h"><span class="kicker">context window · per model</span></div>
-        <div class="sizes">
-          <div class="sz small"><span>GPT-4o</span><strong>128K tokens</strong></div>
-          <div class="sz"><span>Claude Sonnet 5.5</span><strong>1M tokens</strong></div>
-          <div class="sz"><span>Gemini 3.1 Pro</span><strong>1.05M tokens</strong></div>
-          <div class="sz"><span>GPT-6 Astra</span><strong>1.05M tokens</strong></div>
-          <div class="sz"><span>Llama 4 Scout</span><strong>up to 10M tokens</strong></div>
+      <div>
+        <div class="tstream" data-step="8" data-anim="fade">
+          <div class="panel-h"><span class="kicker">what the model actually sees</span></div>
+          <div class="flat" data-stagger style="--stagger: 110ms" aria-label="system, tools, user, call, result, call, result, as one stream into the model">
+            <span class="tk sys">system</span>
+            <span class="tk tools">tools</span>
+            <span class="tk user">user</span>
+            <span class="tk call">call</span>
+            <span class="tk res">result</span>
+            <span class="tk call">call</span>
+            <span class="tk bad">result</span>
+          </div>
+          <p class="cap">→ <strong>one flat token stream</strong>, read from the start every turn</p>
         </div>
-        <div class="rule" style="--rule-color: var(--warm)" data-step="4"><span class="k">// NoLiMa test, at 32K:</span> <strong>11 of 13 models fall below half</strong> their short-context score.</div>
+        <div data-step="9" data-anim="rise">
+          <div class="panel-h"><span class="kicker">context window · per model</span></div>
+          <div class="sizes">
+            <div class="sz small"><span>GPT-4o</span><strong>128K tokens</strong></div>
+            <div class="sz"><span>Claude Sonnet 5.5</span><strong>1M tokens</strong></div>
+            <div class="sz"><span>Gemini 3.1 Pro</span><strong>1.05M tokens</strong></div>
+            <div class="sz"><span>GPT-6 Astra</span><strong>1.05M tokens</strong></div>
+            <div class="sz"><span>Llama 4 Scout</span><strong>up to 10M tokens</strong></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </div>
-<aside class="speaker-notes">The model has no memory between calls: every turn, the whole array is sent again. That means the system prompt, the MCP server's instructions, every tool's name, description and schema, then all messages and tool results so far. Left side, what's in it. The first blocks are a real measurement: Octocode's own benchmark probe found 16,807 tokens in the first request with its 13 MCP tools, against 5,029 with a single Bash tool. That 13 is the set the probe measured (Sep 2026), not the tool count on the what-is-Octocode slide: today's dev default is 12 MCP tools, 13 with clasify; the exact count moves with the build; "≈11.8k extra tokens re-sent on every request" (octocode repo, .octocode/rfc/tool-improvement-2026-10/RFC.md:24, probe results/dedup-20260930, Sep 2026). Point to the search call and its 20 hits with line numbers. Then show the cost of "read the whole file" (1,200 lines, most of it noise), and how the free space at the bottom shrinks. Block heights are illustrative, not measurements (ledger D1). Next click: how big the window is depends on the model. GPT-4o 128,000 (developers.openai.com/api/docs/models/gpt-4o); Claude Opus/Sonnet/Haiku 5.5 1M (platform.claude.com/docs/en/about-claude/models/overview); Gemini 3.1 Pro 1,048,576 input tokens (ai.google.dev, gemini-3.1-pro-preview); GPT-6 Astra 1,050,000 (developers.openai.com/api/docs/models/gpt-6-astra); Llama 4 Scout "up to 10M" per Meta, many hosts serve less (dev.meta.ai/llama/models/llama-4); re-checked Oct 2026 (ledger B3). Last click: bigger isn't sharper. NoLiMa (Adobe, arXiv:2502.05167, 7 Feb 2025): "We evaluate 13 popular LLMs that claim to support contexts of at least 128K tokens … At 32K, for instance, 11 models drop below 50% of their strong short-length baselines"; GPT-4o fell "from an almost-perfect baseline of 99.3% to 69.7%" (often misquoted as "10 of 12"). Chroma's LongMemEval run: focused prompts of ~300 tokens scored significantly higher than the full 113k-token input (trychroma.com/research/context-rot, 14 Jul 2025). Claude's own docs: "more context isn't automatically better. As token count grows, accuracy and recall degrade, a phenomenon known as context rot" (platform.claude.com/docs/en/build-with-claude/context-windows, 9 Oct 2026) (ledger B4). Extra fact: in Octocode's clasify A/B run, 30 questions delivered 313,115 characters of tool output, yet the Sonnet worker consumed 2.26M input tokens including cache (packages/octocode-benchmark/results/mcp-clasify-ab-111154-2026-10-09.md); that multiplier is the re-sending. Tool-builder lesson: your results stay in the window for every later turn, so size them like they'll be paid for again and again. Next: how the model actually reads this window: Q, K and V.</aside>
+<aside class="speaker-notes">Build the stack one click per message, bottom up. The model has no memory between calls: every turn, the whole stack is sent again. Click 1, the system prompt: the agent's prompt plus the MCP server's instructions, laid down first and always there. Click 2, the tools: every tool's name, description and schema. That block is a real measurement: Octocode's own benchmark probe found 16,807 tokens in the first request with its 13 MCP tools, against 5,029 with a single Bash tool. That 13 is the set the probe measured (Sep 2026), not the tool count on the what-is-Octocode slide: today's dev default is 12 MCP tools, 13 with clasify; the exact count moves with the build; "≈11.8k extra tokens re-sent on every request" (octocode repo, .octocode/rfc/tool-improvement-2026-10/RFC.md:24, probe results/dedup-20260930, Sep 2026). Click 3, the user's question. Clicks 4 and 5: the search call and its 20 hits with line numbers, small and useful. Clicks 6 and 7: "read the whole file" and its 1,200 lines, mostly noise. It piles onto the stack and squeezes the free space at the top, which is all that's left for the answer. Block heights are illustrative, not measurements (ledger D1). Click 8: the stack is only our way of drawing it. What the model actually receives is one flat stream of tokens, system first, newest last, and it reads all of it from the start on every turn. Click 9: how big that stream may get depends on the model. GPT-4o 128,000 (developers.openai.com/api/docs/models/gpt-4o); Claude Opus/Sonnet/Haiku 5.5 1M (platform.claude.com/docs/en/about-claude/models/overview); Gemini 3.1 Pro 1,048,576 input tokens (ai.google.dev, gemini-3.1-pro-preview); GPT-6 Astra 1,050,000 (developers.openai.com/api/docs/models/gpt-6-astra); Llama 4 Scout "up to 10M" per Meta, many hosts serve less (dev.meta.ai/llama/models/llama-4); re-checked Oct 2026 (ledger B3). If asked whether bigger is better: NoLiMa (Adobe, arXiv:2502.05167, 7 Feb 2025): "We evaluate 13 popular LLMs that claim to support contexts of at least 128K tokens … At 32K, for instance, 11 models drop below 50% of their strong short-length baselines"; GPT-4o fell "from an almost-perfect baseline of 99.3% to 69.7%" (often misquoted as "10 of 12"). Chroma's LongMemEval run: focused prompts of ~300 tokens scored significantly higher than the full 113k-token input (trychroma.com/research/context-rot, 14 Jul 2025). Claude's own docs: "more context isn't automatically better. As token count grows, accuracy and recall degrade, a phenomenon known as context rot" (platform.claude.com/docs/en/build-with-claude/context-windows, 9 Oct 2026) (ledger B4). Extra fact: in Octocode's clasify A/B run, 30 questions delivered 313,115 characters of tool output, yet the Sonnet worker consumed 2.26M input tokens including cache (packages/octocode-benchmark/results/mcp-clasify-ab-111154-2026-10-09.md); that multiplier is the re-sending. Tool-builder lesson: your results stay in the stream for every later turn, so size them like they'll be paid for again and again. Next: how the model actually reads this stream: Q, K and V.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

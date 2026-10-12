@@ -7,17 +7,21 @@
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
-    .sc { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr); gap: 32px; flex: 1; min-height: 0; align-items: center; }
-    .sc-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-    .sc .code { font-size: var(--t-code); line-height: 1.4; margin: 0; }
-    .sc .pipe--v { --gap: 10px; }
-    .sc .pipe--v > li { padding: 8px 16px; align-items: center; }
-    .sc .pipe--v .n { min-width: 5.4em; font-size: var(--t-small); font-weight: 500; }
+    .sc { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 32px; flex: 1; min-height: 0; align-items: center; }
+    .sc-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .sc .code { font-size: var(--t-code); line-height: 1.28; margin: 0; }
     .sc .code .hl-soft { color: var(--code-string); background: color-mix(in srgb, var(--accent) 16%, transparent); border-radius: 6px; padding: 1px 4px; margin: 0 -4px; }
+    .sc .pipe--v { --gap: 8px; }
+    .sc .pipe--v > li { padding: 6px 16px; align-items: center; }
+    .sc .pipe--v .n { min-width: 5.2em; font-size: var(--t-small); font-weight: 500; }
     .sc .pipe--v h3 { font-size: var(--t-mid); font-family: var(--font-body); font-weight: 600; }
     .sc .pipe--v p { font-size: var(--t-small); color: var(--text); }
-    .pw { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); }
-    .pw span { color: var(--text-strong); border: 1px solid var(--warm); border-radius: var(--radius-sm); padding: 4px 12px; }
+    .tl { list-style: none; margin: 12px 0 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+    .tl li { border-top: 2px solid var(--warm); padding: 8px 4px 0; min-width: 0; }
+    .tl li.is-catch { border-top-color: var(--negative); }
+    .tl li.is-key { border-top-color: var(--accent); }
+    .tl .d { display: block; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); }
+    .tl b { display: block; font-size: var(--t-small); color: var(--text-strong); font-weight: 600; line-height: 1.25; }
   </style>
 </head>
 <body>
@@ -25,7 +29,7 @@
   <div class="slide-header">
     <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 · schemas, protocols, tools</span>
     <h2 class="title" data-slide-title>Schemas let the LLM call real code</h2>
-    <p class="description" data-slide-subtitle>A schema describes a function's input, so the model can ask deterministic code to do the work.</p>
+    <p class="description" data-slide-subtitle>The model reads only the schema, writes a valid call, and deterministic code does the work.</p>
   </div>
   <div class="slide-content">
     <div class="sc">
@@ -33,23 +37,29 @@
         <div class="code" data-label="SCHEMA · WHAT THE MODEL READS" data-step="1">{
   <span class="tk-key">"name"</span>: <span class="tk-str">"get_time"</span>,
   <span class="tk-key">"description"</span>: <span class="tk-str hl-soft">"Current time in a timezone"</span>,
-  <span class="tk-key">"parameters"</span>: {
-    <span class="tk-key">"tz"</span>: { <span class="tk-key">"type"</span>: <span class="tk-str">"string"</span> }
-  }
+  <span class="tk-key">"input"</span>: { <span class="tk-key">"tz"</span>: {
+    <span class="tk-key">"enum"</span>: [<span class="tk-str" data-anim="mark">"UTC", "Asia/Jerusalem"</span>] } },
+  <span class="tk-key">"output"</span>: { <span class="tk-key">"time"</span>: <span class="tk-str">"string"</span> }
 }</div>
         <div class="code" data-label="CALL · WHAT THE MODEL WRITES" data-step="2">get_time({ <span class="tk-key">"tz"</span>: <span class="tk-str">"Asia/Jerusalem"</span> })</div>
       </div>
       <ol class="pipe pipe--v pipe--warm">
-        <li data-step="1"><span class="n">schema</span><div><h3>Function input</h3><p>name, purpose, typed fields</p></div></li>
+        <li data-step="1"><span class="n">schema</span><div><h3>Describes the function</h3><p>description = prompt · enum = no invented values</p></div></li>
         <li data-step="2"><span class="n">LLM</span><div><h3>Writes the call</h3><p>valid JSON that fits the schema</p></div></li>
         <li data-step="3"><span class="n">code</span><div><h3>Runs deterministically</h3><p>same input, same output</p></div></li>
-        <li data-step="4" class="is-key"><span class="n">result</span><div><h3>Back into context</h3><p>the model answers from real data</p></div></li>
+        <li data-step="4" class="is-key"><span class="n">result</span><div><h3>Back into context</h3><p>typed output: time, web, files, databases</p></div></li>
       </ol>
     </div>
-    <p class="pw" data-step="5">// new powers for the model: <span>get the time</span><span>search the web</span><span>read a file</span><span>query a database</span></p>
+    <ol class="tl">
+      <li data-step="5"><span class="d">Jun 2023</span><b>Function calling</b></li>
+      <li data-step="5" class="is-catch"><span class="d">the catch</span><b>Rebuilt per app</b></li>
+      <li data-step="6"><span class="d">Nov 2024</span><b>MCP: one protocol</b></li>
+      <li data-step="6"><span class="d">Mar 2025</span><b>OpenAI adopts MCP</b></li>
+      <li data-step="7" class="is-key"><span class="d">Dec 2025</span><b>Linux Foundation</b></li>
+    </ol>
   </div>
 </div>
-<aside class="speaker-notes">The previous slide ended on structure inside prompts. Schemas took that structure one step further: they let the model talk to code. The point: a schema is the input of a function, written so the model can read it. Once the model learned to fill that input, it could ask real code to do things it cannot do alone. Click 1: the schema. A name, a description and typed parameters. The model never sees the function body; it reads only this, and the description string works as the prompt for when to use it. Click 2: the model doesn't run anything. It writes a call, valid JSON that matches the schema, here get_time with a timezone. Click 3: your code runs it. That part is deterministic: same input, same output, no guessing. A model can't know the current time; a clock function can. Click 4: the result goes back into the context window, and the model answers from real data instead of predicting it. Click 5: this is what gave LLMs new powers: the time, a web search, reading a file, querying a database. It's also why we could build protocols on top: once every tool is described by a schema, any agent can call any tool the same way. Source for the mechanism: OpenAI, "Function calling and other API updates" (openai.com/blog/function-calling-and-other-api-updates, 13 Jun 2023), where the model returns a JSON object with the arguments and the developer's code calls the function. Next: how to write a schema the model fills reliably, and where function calling led.</aside>
+<aside class="speaker-notes">The previous slide ended on structure inside prompts. Schemas took that structure one step further: they let the model talk to code, in a predictable way. The point: a schema is the contract of a function, written so the model can read it. The model never sees the function body; it reads only this. Click 1: the schema. A name, a description, a typed input and a typed output. The description string IS the prompt the model reads when it decides to call and fills the arguments. The enum removes a whole class of invented values: the model can only pick a listed timezone. The output tells it what comes back, so it can read the result and plan the next step. A vague schema gets invented arguments; a typed schema gets reliable calls. Quote to say aloud: Anthropic, "Writing effective tools for agents" (anthropic.com/engineering/writing-tools-for-agents, 11 Sep 2025): "Even small refinements to tool descriptions can yield dramatic improvements"; "think of how you would describe your tool to a new hire on your team". Their later tool-use examples raised accuracy "from 72% to 90% on complex parameter handling" (anthropic.com/engineering/advanced-tool-use, 24 Nov 2025). Click 2: the model doesn't run anything. It writes a call, valid JSON that matches the schema, here get_time with a timezone. Click 3: your code runs it. That part is deterministic: same input, same output, no guessing. A model can't know the current time; a clock function can. Click 4: the result goes back into the context window, and the model answers from real data instead of predicting it: the time, a web search, a file, a database query. Clicks 5 to 7: where it led (ledger H6). June 2023, OpenAI function calling (gpt-4-0613): the model returns a JSON object with the arguments and the developer's code calls the function (openai.com/blog/function-calling-and-other-api-updates, 13 Jun 2023). The catch: every integration was built again, custom per model and per app. 25 Nov 2024, Anthropic publishes the Model Context Protocol, one protocol for tools and the subject of the MCP arrival section (anthropic.com/news/model-context-protocol). 26 Mar 2025, OpenAI adopts MCP, so the rival lab joins (simonwillison.net/2025/Mar/26/openaidevs). Click 7: 9 Dec 2025, MCP is donated to the Agentic AI Foundation under the Linux Foundation (anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation). Once every tool is described by a schema, any agent can call any tool the same way. We come back to how MCP works later. Next: the lesson those prompt and tool experiments pointed to: choosing the right context.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

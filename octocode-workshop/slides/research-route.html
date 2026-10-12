@@ -3,44 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Instructions explain how the tools connect</title>
+  <title>MCP instructions teach the agent the whole workflow</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
-    .rr { display: flex; flex-direction: column; gap: 26px; }
-    .rr .pipe { --gap: 44px; }
-    .rr .pipe > li { padding: 14px 16px; }
-    .rr .pipe h3 { font-family: var(--font-mono); }
-    .rr .pipe .hand { margin-top: auto; font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent-2); }
-    .rr-low { display: grid; grid-template-columns: 1.35fr 1fr; gap: 26px; align-items: center; }
-    .rr-low .code { font-size: var(--t-small); line-height: 1.5; }
-    .rr-low .code .tg { color: var(--accent); }
-    .rr-low .rule { align-self: stretch; display: flex; align-items: center; }
+    .wf { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; align-items: stretch; }
+    .wc { padding: 22px 24px; border: 1px solid var(--border-strong); border-top: 4px solid var(--wc); border-radius: var(--radius-sm); background: linear-gradient(165deg, var(--surface-2), var(--surface)); display: flex; flex-direction: column; gap: 12px; }
+    .wc .q { font-family: var(--font-mono); font-size: var(--t-small); color: var(--wc); letter-spacing: .06em; text-transform: uppercase; }
+    .wc h3 { font-size: var(--t-sub); color: var(--text-strong); margin: 0; line-height: 1.2; }
+    .wc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .wc li { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); line-height: 1.4; }
+    .wc li b { color: var(--wc); font-weight: 600; }
+    .w1 { --wc: var(--accent); } .w2 { --wc: var(--violet); } .w3 { --wc: var(--positive); }
+    .slide-content > .rule { margin-top: 30px; }
   </style>
 </head>
 <body>
 <div class="slide slide--content" data-step-focus>
   <div class="slide-header">
     <span class="eyebrow"><span class="pip"></span>Octocode V1 · context engineering</span>
-    <h2 class="title" data-slide-title>Instructions explain how the tools connect</h2>
-    <p class="description" data-slide-subtitle>The agent needs a research route as well as a description of each individual tool.</p>
+    <h2 class="title" data-slide-title>MCP instructions teach the agent the whole workflow</h2>
+    <p class="description" data-slide-subtitle>Tool descriptions explain one tool; the instructions explain how they work together.</p>
   </div>
   <div class="slide-content slide-content--middle">
-    <div class="rr">
-      <ol class="pipe" data-anim="draw" data-stagger style="--stagger: 220ms">
-        <li><span class="n">1</span><h3>ghSearchRepo</h3><p>repo unknown</p><span class="hand">→ owner/repo</span></li>
-        <li><span class="n">2</span><h3>ghSearchCode</h3><p>repo known</p><span class="hand">→ path · commitSha · line</span></li>
-        <li><span class="n">3</span><h3>ghGetFileContent</h3><p>path known, at that commitSha</p><span class="hand">→ exact lines</span></li>
-        <li class="is-key"><span class="n">4</span><h3>cite</h3><p>source lines by number</p><span class="hand">→ the answer</span></li>
-      </ol>
-      <div class="rr-low">
-<div class="code code--wrap" data-label="MCP INSTRUCTIONS · &lt;github&gt; (VERBATIM, CUT)" data-step="1" data-anim="land"><span class="tg">&lt;github&gt;</span>Unknown repo: ghSearchRepo. Known repo: ghSearchCode | ghStructure. Known path: ghGetFileContent at a commitSha. …<span class="tg">&lt;/github&gt;</span></div>
-        <p class="rule" data-step="2" data-anim="land"><span class="k">//</span><span>the loop's rule: <strong>copy row values, never guess</strong>, so results stay thin</span></p>
-      </div>
+    <div class="wf">
+      <div class="wc w1" data-step="1" data-anim="land"><span class="q">1 · Tool mechanics</span><h3>How results work</h3>
+        <ul><li>Rows: <b>path · commitSha · line</b></li><li>Copy row values, <b>never guess</b></li></ul></div>
+      <div class="wc w2" data-step="2" data-anim="land"><span class="q">2 · Flows between tools</span><h3>Which tool comes next</h3>
+        <ul><li>Unknown repo → <b>ghSearchRepo</b></li><li>Known repo → <b>ghSearchCode</b></li><li>Known path → <b>ghGetFileContent</b></li></ul></div>
+      <div class="wc w3" data-step="3" data-anim="land"><span class="q">3 · The research loop</span><h3>How to reach an answer</h3>
+        <ul><li>Zoom out → <b>search narrow</b></li><li>Zoom in → <b>prove</b></li><li>Then <b>cite</b> the lines</li></ul></div>
     </div>
+    <p class="rule" data-step="4"><span class="k">//</span><span>sent once per session, so the agent sees <strong>the big picture</strong> before its first call</span></p>
   </div>
 </div>
-<aside class="speaker-notes">The protocol slide named the four layers; this is how they add up to one route. The instructions explain the system at the macro level: the workflows between tools, which tool comes next, and how results and hints connect one call to the next. Octocode MCP was all about context engineering: understand how an agent "sees" MCP (the server instructions once per session, the tool descriptions and schemas on every request, then the results) and use each of those to make the workflow obvious. Walk the pipe as it draws: (1) don't know the repo → ghSearchRepo, it hands over owner/repo; (2) know the repo → ghSearchCode, each hit row carries path, commitSha and line; (3) know the path → ghGetFileContent at that commitSha, the exact lines only; (4) cite the lines by number. Click 1: that route is written into the MCP instructions verbatim: "Unknown repo: ghSearchRepo. Known repo: ghSearchCode | ghStructure. Known path: ghGetFileContent at a commitSha. PR, issue, commit: ghSearchHistory → ghGetHistoryItem. Grep/AST remotely: ghStructure materialize → local tools at localPath." (&lt;github&gt; in the live instructions of the dev build 20.2.0, 12 Oct 2026; `octocode | jq -r .instructions`). The same instructions have the local route (&lt;local&gt;: Unknown path: structureSearch (names) | localSearch (text) | astSearch (syntax). Known path: localFetch. Identity: lspSearch) and a &lt;flow&gt; loop: "1 zoom out (tree, outline, summary); 2 search narrow (names, text, syntax, history); 3 zoom in on exact lines (matchString, ranges, block); 4 prove identity (lspSearch) and behavior (code, diffs), not names or claims; 5 cite." Click 2: the rule that keeps results thin, the end of the &lt;flow&gt; line: "Copy row values (path, commitSha, line, localPath); never guess." Each row carries the fields the next call needs, and nothing else; ghSearch* rows even take fields:[keys] to pick columns. Together with reasoning + goal on every call (two slides back), the agent sees the bigger picture: why it's calling, what it's looking for, and where the next hop goes. Ledger X33. Next: a new section, Octocode in scale: what happened when real usage grew.</aside>
+<aside class="speaker-notes">Tool descriptions explain one tool at a time. The MCP instructions explain the whole system: how the tools work, how they connect, and the loop that reaches an answer. Octocode MCP was all about context engineering: the server instructions arrive once per session, the tool descriptions and schemas on every request, then the results. Click 1, tool mechanics: each result row carries the fields the next call needs (path, commitSha, line, localPath), and the rule is "Copy row values (path, commitSha, line, localPath); never guess." Click 2, flows between tools: written verbatim in the &lt;github&gt; block: "Unknown repo: ghSearchRepo. Known repo: ghSearchCode | ghStructure. Known path: ghGetFileContent at a commitSha. PR, issue, commit: ghSearchHistory → ghGetHistoryItem." There's a matching &lt;local&gt; route: structureSearch, localSearch, astSearch, then localFetch, lspSearch for identity. Click 3, the research loop, from the &lt;flow&gt; block: "1 zoom out (tree, outline, summary); 2 search narrow (names, text, syntax, history); 3 zoom in on exact lines; 4 prove identity (lspSearch) and behavior, not names or claims; 5 cite." Source: live instructions of the dev build 20.2.0, 12 Oct 2026 (`octocode | jq -r .instructions`), ledger X33. Click 4: together with goal and reasoning on every call and hints in every result, the agent sees the big picture: why it's calling, and where the next hop goes. Next: a new section, Octocode in scale: what happened when real usage grew.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>

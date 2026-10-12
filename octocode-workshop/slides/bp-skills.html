@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The description is the agent's trigger</title>
+  <title>It's all about the triggers, attention and a clean, unified context</title>
   <link rel="stylesheet" href="../css/base.css">
   <link rel="stylesheet" href="../css/theme.css">
   <style>
@@ -24,18 +24,16 @@
     .cmp .use { color: var(--warm-soft); }
     .cmp .good { color: var(--positive); }
     .cmp .weak { color: var(--negative); }
-    .proof { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center; padding: 12px 22px; border-radius: var(--radius); border: 1px solid var(--border-strong); border-left: 4px solid var(--negative); background: var(--code-bg); }
-    .proof .num { font-family: var(--font-head); font-size: 48px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--negative); white-space: nowrap; }
-    .proof p { font-size: var(--t-mid); color: var(--text); line-height: 1.35; }
-    .proof p strong { color: var(--text-strong); }
+    .takeaway { padding: 14px 22px; border-radius: var(--radius); border: 1px solid var(--border-strong); border-left: 4px solid var(--accent); background: var(--code-bg); font-size: var(--t-mid); color: var(--text); line-height: 1.35; }
+    .takeaway strong { color: var(--accent); }
   </style>
 </head>
 <body>
 <div class="slide slide--content" data-step-focus>
   <div class="slide-header">
     <span class="eyebrow eyebrow--positive"><span class="pip"></span>Recap · triggers</span>
-    <h2 class="title" data-slide-title>The description is the agent's trigger</h2>
-    <p class="description" data-slide-subtitle>Tools and skills run only when the agent picks them, so a better description prompt changes selection drastically.</p>
+    <h2 class="title" data-slide-title>It's all about the triggers, attention and a clean, unified context</h2>
+    <p class="description" data-slide-subtitle>The agent picks tools and skills from their descriptions alone: a sharp trigger in one clean context gets its attention.</p>
   </div>
   <div class="slide-content slide-content--middle">
     <div class="trg">
@@ -61,11 +59,11 @@ description: "<span class="use">Use when a code or repository
           <div class="verdict">✓ intent + concrete tasks · test near-misses</div>
         </div>
       </div>
-      
+      <p class="takeaway" data-step="3">In the end, it's about <strong>giving the agent the ability to ask the right questions</strong>.</p>
     </div>
   </div>
 </div>
-<aside class="speaker-notes">This slide is about triggers. Tools and skills don't run because they exist; they run because the agent decides to call them, and it decides from very little: "At startup, the agent pre-loads the name and description of every installed skill into its system prompt" (anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills, 16 Oct 2025). MCP tools work the same way: the model sees the tool name, description and schema and chooses. So the description is a prompt, and writing it well is the biggest lever you have on whether the tool or skill ever fires. Press → for the weak version (illustrative, not a real file): it repeats the name and never says when to use it, so the agent has no reason to pick it. Press → for the real one, octocode-research (skills/octocode-research/SKILL.md:3, wrapped and trimmed here): "Use when…" names the intent, "good for…" lists concrete tasks in the words people type. Every Octocode skill follows that shape (octocode-skills/SKILL.md:31); the description may be up to 1,024 characters "explaining the capability and relevant user intents" (skills/octocode-skills/references/frontmatter.md:8). Then test that it fires: "Check activation against realistic requests with varied phrasing, implicit intent, and near-misses that belong to neighboring skills. Fix the intent boundary rather than adding exact keyword exceptions" (octocode-skills/SKILL.md:53). Press → for the callback; don't retell it: in the October A/B, clasify was offered in 30 of 30 sessions and called 0 times (packages/octocode-benchmark/results/mcp-clasify-ab-111154-2026-10-09.md:8-15). A tool the agent never picks does nothing. Tooling: `node skills/octocode-skills/scripts/skill-review.mjs &lt;dir&gt;` lints a skill; the octocode-skills skill reviews and tunes triggers. Next: three habits for the data your tools return: flexible queries, pagination and measurement.</aside>
+<aside class="speaker-notes">This slide is about triggers, attention and context. Tools and skills don't run because they exist; they run because the agent decides to call them, and it decides from very little: "At startup, the agent pre-loads the name and description of every installed skill into its system prompt" (anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills, 16 Oct 2025). MCP tools work the same way: the model sees the tool name, description and schema and chooses. So the description is a prompt competing for the agent's attention, and it works best in one clean, unified context rather than buried among overlapping, noisy descriptions. Press → for the weak version (illustrative, not a real file): it repeats the name and never says when to use it, so the agent has no reason to pick it. Press → for the real one, octocode-research (skills/octocode-research/SKILL.md:3, wrapped and trimmed here): "Use when…" names the intent, "good for…" lists concrete tasks in the words people type. Every Octocode skill follows that shape (octocode-skills/SKILL.md:31); the description may be up to 1,024 characters "explaining the capability and relevant user intents" (skills/octocode-skills/references/frontmatter.md:8). Then test that it fires: "Check activation against realistic requests with varied phrasing, implicit intent, and near-misses that belong to neighboring skills. Fix the intent boundary rather than adding exact keyword exceptions" (octocode-skills/SKILL.md:53). Callback, don't retell it: in the October A/B, clasify was offered in 30 of 30 sessions and called 0 times (packages/octocode-benchmark/results/mcp-clasify-ab-111154-2026-10-09.md:8-15). A tool the agent never picks does nothing. Press → for the takeaway: all of this is about giving the agent the ability to ask the right questions — the right trigger, in a clean context, lets it choose the right tool and frame the right query. Tooling: `node skills/octocode-skills/scripts/skill-review.mjs &amp;lt;dir&amp;gt;` lints a skill; the octocode-skills skill reviews and tunes triggers. Next: three habits for the data your tools return: flexible queries, pagination and measurement.</aside>
   <script src="../js/animation.js"></script>
   <script src="../js/navbridge.js"></script>
 </body>
