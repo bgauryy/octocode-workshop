@@ -1,3 +1,5 @@
-# Octocode Workshop
+# Octocode workshop
 
-Start with the [workshop overview](./WORKSHOP.md), then follow the five [practice pages](./workshop/).
+- [Workshop guide](./WORKSHOP.md): setup, schedule, and troubleshooting.
+- [Practice pages](./workshop/): one page per hands-on slide.
+- [Slides](./octocode-workshop/): serve the folder (`npx serve octocode-workshop`) and open it in a browser.
