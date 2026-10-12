@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jev scores every file against two questions</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cm { display: grid; grid-template-columns: 1.45fr 1fr; gap: 48px; align-items: center; height: 100%; }
+    .mxw { display: flex; flex-direction: column; gap: 10px; }
+    .mx { display: grid; grid-template-columns: minmax(0, 1fr) 120px 120px; gap: 6px 8px; font-family: var(--font-mono); font-size: var(--t-body); }
+    .mx .h { color: var(--muted-2); text-align: center; letter-spacing: 0.06em; font-size: var(--t-mid); padding-bottom: 2px; }
+    .mx .h.f { text-align: left; }
+    .mx .f { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 3px 0; }
+    .mx .s { --a: 0%; text-align: center; padding: 3px 0; border-radius: var(--radius-sm); border: 1px solid var(--border); background: color-mix(in srgb, var(--violet) var(--a), var(--surface)); color: var(--text-strong); }
+    .mx .s.lo { color: var(--muted-2); }
+    .mx .s.top { border-color: var(--positive); background: color-mix(in srgb, var(--positive) 30%, var(--surface)); }
+    .mx .f.top { color: var(--text-strong); }
+    .mx .f.out, .mx .s.out { opacity: 0.45; }
+    .cap { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); }
+    .tri { display: flex; flex-direction: column; gap: 18px; }
+    .tri .card { padding: 18px 22px; gap: 6px; }
+    .tri .card h3 { font-size: var(--t-mid); font-family: var(--font-mono); letter-spacing: 0.06em; }
+    .tri .card p { font-size: var(--t-body); color: var(--muted); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · clasify · Scout</span>
+    <h2 class="title" data-slide-title>Jev scores every file against two questions</h2>
+    <p class="description" data-slide-subtitle>Each file gets a relevant and a sufficient score; the scores decide what the agent reads next.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="cm">
+      <div class="mxw">
+        <div class="mx">
+          <span class="h f">file</span><span class="h">relevant</span><span class="h">sufficient</span>
+          <span class="f top">replacer/template.rs</span><span class="s top">0.97</span><span class="s top">0.86</span>
+          <span class="f">config/src/fixer.rs</span><span class="s" style="--a: 40%">0.94</span><span class="s lo">≤.43</span>
+          <span class="f">core/src/replacer.rs</span><span class="s" style="--a: 38%">0.93</span><span class="s lo">≤.43</span>
+          <span class="f">replacer/indent.rs</span><span class="s" style="--a: 30%">0.85</span><span class="s lo">≤.43</span>
+          <span class="f">outline/extractor.rs</span><span class="s" style="--a: 22%">0.75</span><span class="s lo">≤.43</span>
+          <span class="f out">cli/src/run.rs</span><span class="s lo out">0.31</span><span class="s lo out">≤.43</span>
+          <span class="f out">matcher/pattern.rs</span><span class="s lo out">0.15</span><span class="s lo out">≤.43</span>
+        </div>
+        <p class="cap">ast-grep · 9 files × 2 questions · 1 call</p>
+      </div>
+      <div class="tri">
+        <div class="card card--positive" data-step="1" data-anim="land"><h3>READ</h3><p>top 3 ranks or sufficient ≥ 0.7 carry <code>hints.read</code></p></div>
+        <div class="card card--violet" data-step="2" data-anim="land"><h3>KEEP SCREENING</h3><p>high relevant, low sufficient: near the answer</p></div>
+        <div class="card card--plain" data-step="3" data-anim="land"><h3>DEFER</h3><p>low scores wait: deferred, never discarded</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Without Scout, a search returns many hits and the agent reads them one by one. With Scout (Octocode docs/OCTOCODE_CLASIFY.md, measured 2026-10-08 on ast-grep): the agent sends a mainGoal ("the ast-grep code that expands a rule's fix template…"), the resources (one localSearch for "fix" in files that also mention "template", 9 files) and two questions, each one checkable fact: relevant ("builds replacement text from a fix template and matched metavariables") and sufficient ("shows where metavariables are replaced"). The Jev model scores every file against every question. All questions about one page share a single provider request, up to 25 cells per query and 50 per call (OCTOCODE_CLASIFY.md:262, :401-402). The matrix shows real numbers: template.rs relevant 0.97, sufficient 0.86. The next-best sufficient was 0.43, so every other cell in that column is at most .43 (the doc doesn't list each one). Click 1, READ: ranks 1–3, or any page with sufficient ≥ 0.7, carry hints.read, the exact read to run next (:65). Click 2, KEEP SCREENING: a high-relevant, low-sufficient page is near the answer, so read it and keep screening; a mid-band best score (about 0.4–0.7) means narrow the source or follow next.clasify (:205-216). Click 3, DEFER: low scores are deferred, never discarded ("low | defer, never discard", :277; "A low score defers a candidate; it never discards one", :344). Elimination here means not read now, not deleted. Clasify ranks attention; it never proves absence. One call, 1.9 KB, 0.7 s for 9 files; without fileHas, 54 files in 2 calls, 11.8 KB, same top two. Ledger X13, X34. Next: what this saves — and why scouting more files costs more tokens.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

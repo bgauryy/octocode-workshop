@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attention connects a word to its context</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .att { display: flex; flex-direction: column; gap: 14px; }
+    .sent { display: flex; justify-content: center; align-items: flex-end; gap: 10px; }
+    .wd { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .scol { height: 104px; min-width: 44px; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+    .scol .sb { display: block; width: 32px; height: var(--h); border-radius: 6px 6px 0 0; background: color-mix(in srgb, var(--warm) 70%, transparent); }
+    .scol .pct { font-family: var(--font-head); font-size: var(--t-small); font-weight: 600; color: var(--warm); line-height: 1.2; }
+    .wd.best .sb { background: var(--positive); }
+    .wd.best .pct { color: var(--positive); }
+    .ask { padding: 5px 10px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 20%, transparent); border: 1px solid var(--accent); color: var(--text-strong); font-size: var(--t-small); white-space: nowrap; line-height: 1.2; }
+    .chip { padding: 6px 14px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--surface); font-family: var(--font-head); font-size: var(--t-body); color: var(--text-strong); white-space: nowrap; }
+    .wd.q .chip { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 22%, transparent); font-weight: 700; }
+    .after { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .after .note { height: 104px; display: flex; align-items: flex-end; justify-content: center; text-align: center; font-size: var(--t-small); color: var(--muted); line-height: 1.2; white-space: nowrap; }
+    .after .row { display: flex; gap: 10px; }
+    .after .chip { opacity: 0.4; border-style: dashed; color: var(--muted); }
+    .illus { text-align: center; font-size: var(--t-small); color: var(--muted); font-style: italic; margin: -4px 0 0; line-height: 1.2; }
+    .pipe { display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr) 56px minmax(0, 1fr); align-items: stretch; }
+    .stp { display: flex; flex-direction: column; gap: 4px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--qc); background: color-mix(in srgb, var(--qc) 12%, transparent); }
+    .stp .nm { font-family: var(--font-head); font-size: var(--t-body); font-weight: 700; color: var(--qc); line-height: 1.2; }
+    .stp .ln { font-size: var(--t-small); color: var(--text); line-height: 1.3; }
+    .stp .ln strong { color: var(--text-strong); }
+    .arw { position: relative; align-self: center; height: 24px; }
+    .arw::before { content: ""; position: absolute; left: 6px; right: 14px; top: 50%; height: 4px; transform: translateY(-50%); background: var(--muted); border-radius: 2px; }
+    .arw::after { content: ""; position: absolute; right: 4px; top: 50%; transform: translateY(-50%); border-left: 12px solid var(--muted); border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+    .formula { display: flex; flex-direction: column; gap: 6px; padding: 12px 22px; border-radius: 12px; background: var(--code-bg); border: 1px solid var(--border); }
+    .formula code { font-family: var(--font-mono); font-size: var(--t-code); color: var(--code-text); line-height: 1.3; }
+    .formula .fn { color: var(--code-keyword); }
+    .formula .v { color: var(--code-key); }
+    .formula .p { color: var(--code-punct); }
+    .formula .c { font-family: var(--font-mono); font-size: var(--t-small); color: var(--code-comment); line-height: 1.3; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
+    <h2 class="title" data-slide-title>Attention connects a word to its context</h2>
+    <p class="description" data-slide-subtitle>In this example, “it” compares its query with earlier keys and gives “cat” the most weight.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="att">
+      <div class="sent" aria-label="Example sentence: The cat drank milk because it was thirsty. The word it gives 90% of its attention to cat, 8% to milk, 2% to drank.">
+        <div class="wd"><div class="scol"><span class="sb" data-step="3" style="--h: 3px"></span></div><span class="chip">The</span></div>
+        <div class="wd best"><div class="scol"><span class="pct" data-step="3">90%</span><span class="sb" data-step="3" style="--h: 72px"></span></div><span class="chip">cat</span></div>
+        <div class="wd"><div class="scol"><span class="pct" data-step="3">2%</span><span class="sb" data-step="3" style="--h: 5px"></span></div><span class="chip">drank</span></div>
+        <div class="wd"><div class="scol"><span class="pct" data-step="3">8%</span><span class="sb" data-step="3" style="--h: 12px"></span></div><span class="chip">milk</span></div>
+        <div class="wd"><div class="scol"><span class="sb" data-step="3" style="--h: 3px"></span></div><span class="chip">because</span></div>
+        <div class="wd q"><div class="scol"><span class="ask" data-step="1">Q: which thing am I?</span></div><span class="chip">it</span></div>
+        <div class="after"><span class="note" data-step="2">comes after "it": not visible yet</span><div class="row"><span class="chip">was</span><span class="chip">thirsty</span></div></div>
+      </div>
+      <p class="illus" data-step="2">Illustrative weights, not real model output.</p>
+      <div class="pipe">
+        <div class="stp" style="--qc: var(--accent)" data-step="2" data-anim="rise"><span class="nm">1 · Q × K</span><span class="ln">Compare what "it" looks for with each word's label: <strong>a match score</strong>.</span></div>
+        <div class="arw" data-step="3" aria-hidden="true"></div>
+        <div class="stp" style="--qc: var(--warm)" data-step="3" data-anim="rise"><span class="nm">2 · softmax</span><span class="ln">Turn scores into <strong>weights that add up to 100%</strong>.</span></div>
+        <div class="arw" data-step="4" aria-hidden="true"></div>
+        <div class="stp" style="--qc: var(--positive)" data-step="4" data-anim="rise"><span class="nm">3 · × V</span><span class="ln">Blend each word's content by its weight: <strong>"it" now carries "the cat"</strong>.</span></div>
+      </div>
+      <div class="formula" data-step="5" data-anim="rise">
+        <code><span class="fn">Attention</span><span class="p">(</span><span class="v">Q</span>, <span class="v">K</span>, <span class="v">V</span><span class="p">)</span> = <span class="fn">softmax</span><span class="p">(</span><span class="v">Q</span>·<span class="v">K</span>ᵀ / √d_k<span class="p">)</span> · <span class="v">V</span></code>
+        <span class="c">// √d_k just keeps the scores at a manageable size.</span>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Same lookup, on one sentence: "The cat drank milk because it was thirsty." To make sense of the sentence, "it" must know what it refers to. Click 1: "it" builds its Query, roughly: which thing am I? Notice "was" and "thirsty" are greyed out: GPT-style models only look back (the causal mask), so "it" cannot see "thirsty" yet. It has to work it out from the earlier words. Click 2: step 1, Q times K. "it" compares its question with the Key, the label, of every earlier word, and gets a raw match score for each. Click 3: step 2, softmax turns those scores into percentages that add up to 100%, and the bars appear: cat 90, milk 8, drank 2, the rest about zero. These numbers are drawn for this slide, not measured from a real model. Click 4: step 3, times V. "it" blends each word's content, its Value, by those weights, so now "it" carries "the cat". That is the soft dict lookup from the last slide. Click 5: the whole thing in one line, Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V, from Vaswani et al. 2017, "Attention Is All You Need", arXiv:1706.03762, Equation 1. For engineers: Q·Kᵀ is a matrix of dot products, one score for every query and key pair. Dividing by √d_k just keeps the scores at a manageable size. Real models run many of these "heads" in parallel, in every layer. Hand-off: notice the K and V of cat, drank and milk never change once computed. So the model keeps them.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

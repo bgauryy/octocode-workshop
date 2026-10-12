@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>octocode-documentation</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* skill series (11 slides, one layout): example + rule | steps */
+    .skx .slide-header { margin-bottom: 22px; }
+    .sk { display: grid; grid-template-columns: 1fr 1.2fr; gap: 44px; width: 100%; align-items: stretch; }
+    .sk .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .sk .col > .kicker { padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .sk .bubble { font-size: var(--t-mid); }
+    .sk .bubble code { color: var(--accent-2); font-size: 0.92em; }
+    .sk .rule { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 4px solid var(--violet); background: color-mix(in srgb, var(--violet) 7%, var(--code-bg)); }
+    .sk .rule .kicker { color: var(--violet); }
+    .sk .rule blockquote { font-size: var(--t-mid); line-height: 1.38; color: var(--text-strong); }
+    .sk .rule cite { font-style: normal; color: var(--muted-2); letter-spacing: 0; text-transform: none; }
+    .sk .pipe--v { --gap: 14px; }
+    .sk .pipe--v > li { padding: 8px 16px; align-items: center; }
+    .sk .pipe--v > li > div { gap: 0; }
+    .sk .pipe h3 { font-size: var(--t-mid); letter-spacing: 0.02em; }
+    .sk .pipe p { line-height: 1.3; }
+    .sk .out { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--code-bg); font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); overflow-wrap: anywhere; }
+    .sk .out span { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content skx">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>V2 · Skills</span>
+    <h2 class="title" data-slide-title>octocode-documentation</h2>
+    <p class="description" data-slide-subtitle>Use when docs are missing, stale or unclear: it checks every command and path against the repo, then writes the page.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sk">
+      <div class="col">
+        <span class="kicker">Example ask</span>
+        <div class="bubble"><span class="who">You</span>Update the README install section and check it against the CLI.</div>
+        <p class="out"><span>Edits →</span> README.md in place</p>
+        <div class="rule" data-step="1" data-anim="land">
+          <span class="kicker">The rule</span>
+          <blockquote>“Take commands only from manifests, Makefiles, or CI; never invent scripts.”</blockquote>
+          <cite>octocode-documentation/SKILL.md:21</cite>
+        </div>
+      </div>
+      <div class="col">
+        <span class="kicker">What it does</span>
+        <ol class="pipe pipe--v pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><span class="n">1</span><div><h3>Understand</h3><p>deliverable, audience, approved paths</p></div></li>
+          <li class="is-key"><span class="n">2</span><div><h3>Research</h3><p>verify commands, paths, APIs, env</p></div></li>
+          <li><span class="n">3</span><div><h3>Classify</h3><p>one mode per target page</p></div></li>
+          <li><span class="n">4</span><div><h3>Write</h3><p>outline when useful, then the page</p></div></li>
+          <li><span class="n">5</span><div><h3>Style · Verify</h3><p>word list; loop back on any gap</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The problem: agent-written docs invent commands that don't exist and drift from the code. This skill verifies every claim against the repo and applies a real style guide. Walk the pipe: UNDERSTAND the deliverable, audience and approved paths; RESEARCH: verify commands, paths, APIs, env vars and behavior in the repo; CLASSIFY: one mode per target: agent-docs (AGENTS.md, CLAUDE.md), human-docs (README, how-to, API docs, runbook), adr, codebase-pack (one page per package) or style-pass (wording only) (SKILL.md:28; references/modes.md:12); WRITE, with an outline when useful; STYLE, then VERIFY: a fact change or a gap loops back to RESEARCH (skills/octocode-documentation/SKILL.md:8-14). Press → for the rule: "Take commands only from manifests, Makefiles, or CI; never invent scripts." (SKILL.md:21). Extra: it has the largest reference set of any skill, 12 files and 727 lines, including a local Google word list (assets/google-word-list.tsv) and optional STE-80 controlled English (SKILL.md:40, :55-68). An ADR is only for a choice that is already decided; an open choice goes to octocode-rfc-generator (SKILL.md:33). Shipped docs are edited at their own path; reviews go to .octocode/octocode-documentation/ (SKILL.md:79). Invoke: npx octocode skill install octocode-documentation, then, for example (illustrative prompt): "Update the README install section and check it against the CLI." Hand-off: command and API facts → octocode-research; instruction wording that changes agent behavior → octocode-agentic-prompts (Related skills). Next: octocode-roast, the blunt one.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

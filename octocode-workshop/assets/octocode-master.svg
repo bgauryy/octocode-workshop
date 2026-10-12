@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 560" role="img" aria-label="A purple cartoon Octocode octopus dressed as a tiny Jedi master: big droopy ears, one raised eyebrow and a smug half-closed eye behind slipping round glasses, a beige robe, a coffee mug in one tentacle and a glowing staff in another">
+  <defs>
+    <radialGradient id="aura" cx="50%" cy="42%" r="55%">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.32"/>
+      <stop offset="60%" stop-color="#a78bfa" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#a78bfa" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="skin" gradientUnits="userSpaceOnUse" cx="200" cy="120" r="240">
+      <stop offset="0%" stop-color="#ddd0ff"/>
+      <stop offset="40%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#8466ee"/>
+    </radialGradient>
+    <radialGradient id="shade" gradientUnits="userSpaceOnUse" cx="210" cy="150" r="200">
+      <stop offset="60%" stop-color="#050d1c" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#050d1c" stop-opacity="0.32"/>
+    </radialGradient>
+    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f6c794"/>
+      <stop offset="100%" stop-color="#c98e58"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#f6c794"/>
+      <stop offset="100%" stop-color="#b9824e"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="35%" stop-color="#a6e8f2"/>
+      <stop offset="100%" stop-color="#5cd0ec" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- aura and sparkles -->
+  <circle cx="240" cy="250" r="235" fill="url(#aura)"/>
+  <g fill="#c9b6ff" opacity="0.8">
+    <path d="M70 70 l5 13 l13 5 l-13 5 l-5 13 l-5 -13 l-13 -5 l13 -5 Z"/>
+    <path d="M440 300 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4 Z"/>
+    <path d="M36 360 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3 Z"/>
+  </g>
+  <g fill="#a6e8f2" opacity="0.6">
+    <circle cx="130" cy="44" r="3"/><circle cx="452" cy="230" r="2.5"/><circle cx="60" cy="300" r="2.5"/><circle cx="446" cy="440" r="3"/>
+  </g>
+
+  <!-- ground shadow -->
+  <ellipse cx="240" cy="540" rx="185" ry="14" fill="#050d1c" opacity="0.55"/>
+
+  <!-- staff -->
+  <path d="M392 104 C384 170 400 230 388 290 C378 350 392 430 382 534" fill="none" stroke="#050d1c" stroke-width="22" stroke-linecap="round"/>
+  <path d="M392 104 C384 170 400 230 388 290 C378 350 392 430 382 534" fill="none" stroke="url(#wood)" stroke-width="12" stroke-linecap="round"/>
+  <path d="M392 106 C366 96 364 62 388 54 C410 48 420 74 404 86 C398 90 392 86 394 80" fill="none" stroke="#050d1c" stroke-width="16" stroke-linecap="round"/>
+  <path d="M392 106 C366 96 364 62 388 54 C410 48 420 74 404 86 C398 90 392 86 394 80" fill="none" stroke="url(#wood)" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="391" cy="72" r="38" fill="url(#orb)" opacity="0.9"/>
+  <circle cx="391" cy="72" r="8" fill="#ffffff"/>
+
+  <!-- lower tentacles -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g stroke="#050d1c" stroke-width="32">
+      <path d="M164 458 C124 478 98 500 72 492 C56 486 60 468 74 470"/>
+      <path d="M206 468 C200 500 186 522 164 526 C150 528 148 512 160 512"/>
+      <path d="M240 472 C240 504 246 524 262 530 C276 534 280 518 268 516"/>
+      <path d="M274 468 C282 500 298 520 318 522 C332 522 332 506 320 508"/>
+      <path d="M316 458 C356 478 382 500 408 492 C424 486 420 468 406 470"/>
+    </g>
+    <g stroke="#9a7cf6" stroke-width="20">
+      <path d="M164 458 C124 478 98 500 72 492 C56 486 60 468 74 470"/>
+      <path d="M206 468 C200 500 186 522 164 526 C150 528 148 512 160 512"/>
+      <path d="M240 472 C240 504 246 524 262 530 C276 534 280 518 268 516"/>
+      <path d="M274 468 C282 500 298 520 318 522 C332 522 332 506 320 508"/>
+      <path d="M316 458 C356 478 382 500 408 492 C424 486 420 468 406 470"/>
+    </g>
+  </g>
+  <g fill="#ddd0ff" stroke="#050d1c" stroke-width="1.5">
+    <circle cx="118" cy="486" r="4.5"/><circle cx="96" cy="494" r="4"/>
+    <circle cx="194" cy="508" r="4.5"/><circle cx="180" cy="520" r="4"/>
+    <circle cx="243" cy="504" r="4.5"/><circle cx="250" cy="520" r="4"/>
+    <circle cx="288" cy="506" r="4.5"/><circle cx="302" cy="518" r="4"/>
+    <circle cx="362" cy="486" r="4.5"/><circle cx="384" cy="494" r="4"/>
+  </g>
+
+  <!-- robe -->
+  <path d="M168 292 C150 350 140 416 132 466 Q240 492 348 466 C340 416 330 350 312 292 Z" fill="url(#robe)" stroke="#050d1c" stroke-width="6" stroke-linejoin="round"/>
+  <g fill="none" stroke="#050d1c" stroke-width="3" stroke-linecap="round" opacity="0.35">
+    <path d="M182 368 C176 404 172 436 170 466"/><path d="M298 368 C304 404 308 436 310 466"/><path d="M240 372 L240 480"/>
+  </g>
+  <path d="M146 410 Q240 434 334 410" fill="none" stroke="#050d1c" stroke-width="14" stroke-linecap="round"/>
+  <path d="M146 410 Q240 434 334 410" fill="none" stroke="#7c5cd6" stroke-width="7" stroke-linecap="round"/>
+  <rect x="228" y="412" width="24" height="18" rx="5" fill="#f0a45c" stroke="#050d1c" stroke-width="3"/>
+
+  <!-- tentacle holding the staff -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M304 344 C338 334 362 316 388 302" stroke="#050d1c" stroke-width="32"/>
+    <path d="M304 344 C338 334 362 316 388 302" stroke="#9a7cf6" stroke-width="20"/>
+    <path d="M384 290 C404 286 408 312 386 318" stroke="#050d1c" stroke-width="20"/>
+    <path d="M384 290 C404 286 408 312 386 318" stroke="#9a7cf6" stroke-width="10"/>
+  </g>
+  <g fill="#ddd0ff" stroke="#050d1c" stroke-width="1.5"><circle cx="336" cy="338" r="4.5"/><circle cx="358" cy="326" r="4"/></g>
+
+  <!-- tentacle holding a coffee mug -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M176 344 C132 344 112 314 116 270" stroke="#050d1c" stroke-width="32"/>
+    <path d="M176 344 C132 344 112 314 116 270" stroke="#9a7cf6" stroke-width="20"/>
+  </g>
+  <g fill="#ddd0ff" stroke="#050d1c" stroke-width="1.5"><circle cx="128" cy="322" r="4.5"/><circle cx="146" cy="338" r="4.5"/><circle cx="120" cy="298" r="4"/></g>
+  <g fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" opacity="0.75">
+    <path d="M78 206 C70 196 84 188 76 176"/><path d="M96 204 C88 192 102 186 94 172"/>
+  </g>
+  <path d="M60 230 C42 230 40 256 60 256" fill="none" stroke="#050d1c" stroke-width="12" stroke-linecap="round"/>
+  <path d="M60 230 C42 230 40 256 60 256" fill="none" stroke="#a6e8f2" stroke-width="5" stroke-linecap="round"/>
+  <rect x="60" y="216" width="50" height="54" rx="9" fill="#a6e8f2" stroke="#050d1c" stroke-width="5"/>
+  <g fill="none" stroke="#050d1c" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M76 236 l-7 7 l7 7"/><path d="M90 232 l-6 22"/><path d="M96 236 l7 7 l-7 7"/>
+  </g>
+  <g fill="none" stroke-linecap="round">
+    <path d="M118 272 C100 266 96 248 112 242" stroke="#050d1c" stroke-width="20"/>
+    <path d="M118 272 C100 266 96 248 112 242" stroke="#9a7cf6" stroke-width="10"/>
+  </g>
+
+  <!-- big droopy ears -->
+  <g stroke="#050d1c" stroke-width="6" stroke-linejoin="round" fill="url(#skin)">
+    <path d="M150 172 C110 150 60 140 14 152 C40 192 90 232 152 242 Z"/>
+    <path d="M330 172 C370 150 420 140 466 152 C440 192 390 232 328 242 Z"/>
+  </g>
+  <g fill="#f08585" opacity="0.5">
+    <path d="M146 184 C112 170 76 164 44 168 C66 194 104 218 146 228 Z"/>
+    <path d="M334 184 C368 170 404 164 436 168 C414 194 376 218 334 228 Z"/>
+  </g>
+
+  <!-- head -->
+  <path d="M240 72 C322 72 356 132 354 202 C352 264 306 302 240 304 C174 302 128 264 126 202 C124 132 158 72 240 72 Z" fill="url(#skin)"/>
+  <path d="M240 72 C322 72 356 132 354 202 C352 264 306 302 240 304 C174 302 128 264 126 202 C124 132 158 72 240 72 Z" fill="url(#shade)" stroke="#050d1c" stroke-width="7"/>
+  <ellipse cx="196" cy="110" rx="46" ry="20" fill="#ffffff" opacity="0.28" transform="rotate(-24 196 110)"/>
+
+  <!-- three stubborn hairs -->
+  <g fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round">
+    <path d="M236 74 C226 52 236 36 250 30"/><path d="M246 74 C254 56 270 52 282 56"/><path d="M230 76 C218 62 204 60 194 66"/>
+  </g>
+
+  <!-- forehead wrinkles -->
+  <g fill="none" stroke="#5b3fb0" stroke-width="3" stroke-linecap="round" opacity="0.6">
+    <path d="M206 112 Q240 102 274 112"/><path d="M214 126 Q240 118 266 126"/>
+  </g>
+
+  <!-- freckles -->
+  <g fill="#6a4cd0" opacity="0.55">
+    <circle cx="150" cy="248" r="4"/><circle cx="162" cy="260" r="3.5"/><circle cx="146" cy="264" r="3"/>
+    <circle cx="330" cy="248" r="4"/><circle cx="318" cy="260" r="3.5"/><circle cx="334" cy="264" r="3"/>
+  </g>
+
+  <!-- eyes: left wide open, right half-lidded and smug -->
+  <ellipse cx="196" cy="206" rx="30" ry="33" fill="#ffffff" stroke="#050d1c" stroke-width="3"/>
+  <ellipse cx="284" cy="206" rx="30" ry="33" fill="#ffffff" stroke="#050d1c" stroke-width="3"/>
+  <circle cx="205" cy="213" r="16" fill="#050d1c"/>
+  <circle cx="292" cy="216" r="15" fill="#050d1c"/>
+  <circle cx="211" cy="206" r="5.5" fill="#ffffff"/><circle cx="200" cy="220" r="2.5" fill="#ffffff"/>
+  <circle cx="297" cy="212" r="4.5" fill="#ffffff"/>
+  <path d="M250 204 C262 190 306 190 318 204 L318 166 L250 166 Z" fill="url(#skin)"/>
+  <path d="M252 203 C264 192 304 192 316 203" fill="none" stroke="#050d1c" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- round glasses, slipping a little -->
+  <g transform="rotate(-5 240 210)">
+    <circle cx="196" cy="212" r="44" fill="#a6e8f2" fill-opacity="0.12" stroke="#050d1c" stroke-width="7"/>
+    <circle cx="284" cy="212" r="44" fill="#a6e8f2" fill-opacity="0.12" stroke="#050d1c" stroke-width="7"/>
+    <path d="M236 208 Q240 200 244 208" fill="none" stroke="#050d1c" stroke-width="6"/>
+    <path d="M152 206 L132 200" stroke="#050d1c" stroke-width="5" stroke-linecap="round"/>
+    <path d="M328 206 L348 200" stroke="#050d1c" stroke-width="5" stroke-linecap="round"/>
+    <path d="M168 188 Q178 178 192 176" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+    <path d="M256 188 Q266 178 280 176" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.6"/>
+  </g>
+
+  <!-- bushy white brows: one raised, one skeptical -->
+  <g fill="none" stroke="#ffffff" stroke-linecap="round">
+    <path d="M156 152 C170 128 204 122 228 138" stroke-width="8"/>
+    <path d="M160 142 C166 128 180 122 192 124" stroke-width="5"/>
+    <path d="M258 168 C278 158 304 158 326 164" stroke-width="8"/>
+    <path d="M318 158 C326 152 334 152 340 156" stroke-width="5"/>
+  </g>
+
+  <!-- blush and smirk -->
+  <ellipse cx="156" cy="272" rx="17" ry="9" fill="#f08585" opacity="0.45"/>
+  <ellipse cx="324" cy="272" rx="17" ry="9" fill="#f08585" opacity="0.45"/>
+  <path d="M212 262 C228 276 254 274 272 254" fill="none" stroke="#050d1c" stroke-width="5.5" stroke-linecap="round"/>
+  <path d="M268 250 q10 2 10 12" fill="none" stroke="#050d1c" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- hood collar -->
+  <path d="M156 288 C190 318 220 328 240 330 C260 328 290 318 324 288 C338 302 342 320 338 334 C300 354 270 362 240 364 C210 362 180 354 142 334 C138 320 142 302 156 288 Z" fill="#c98e58" stroke="#050d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M208 338 L240 364 L272 338" fill="none" stroke="#050d1c" stroke-width="4" stroke-linejoin="round" opacity="0.5"/>
+</svg>

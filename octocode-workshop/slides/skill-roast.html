@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>octocode-roast</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* skill series (11 slides, one layout): example + rule | steps */
+    .skx .slide-header { margin-bottom: 22px; }
+    .sk { display: grid; grid-template-columns: 1fr 1.2fr; gap: 44px; width: 100%; align-items: stretch; }
+    .sk .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .sk .col > .kicker { padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .sk .bubble { font-size: var(--t-mid); }
+    .sk .bubble code { color: var(--accent-2); font-size: 0.92em; }
+    .sk .rule { margin-top: auto; display: flex; flex-direction: column; gap: 10px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 4px solid var(--violet); background: color-mix(in srgb, var(--violet) 7%, var(--code-bg)); }
+    .sk .rule .kicker { color: var(--violet); }
+    .sk .rule cite { font-style: normal; color: var(--muted-2); letter-spacing: 0; text-transform: none; }
+    .sk .tiers { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 6px; }
+    .sk .tiers .tier { font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.3; padding: 3px 10px; border-radius: 6px; border: 1px solid color-mix(in srgb, var(--negative) var(--w), var(--border-strong)); background: color-mix(in srgb, var(--negative) calc(var(--w) * 0.18), transparent); color: color-mix(in srgb, var(--negative) var(--w), var(--muted)); white-space: nowrap; }
+    .sk .tiers .gt { color: var(--muted-2); font-family: var(--font-mono); font-size: var(--t-small); }
+    .sk .pipe--v { --gap: 14px; }
+    .sk .pipe--v > li { padding: 8px 16px; align-items: center; }
+    .sk .pipe--v > li > div { gap: 0; }
+    .sk .pipe h3 { font-size: var(--t-mid); letter-spacing: 0.02em; }
+    .sk .pipe p { line-height: 1.3; }
+    .sk .out { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--code-bg); font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); overflow-wrap: anywhere; }
+    .sk .out span { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content skx">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>V2 · Skills</span>
+    <h2 class="title" data-slide-title>octocode-roast</h2>
+    <p class="description" data-slide-subtitle>Use when you want a blunt code critique: it ranks defects by impact and cites the code behind each one.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sk">
+      <div class="col">
+        <span class="kicker">Example ask</span>
+        <div class="bubble"><span class="who">You</span>Roast <code>packages/core</code>. Be savage.</div>
+        <p class="out"><span>Saves →</span> .octocode/octocode-roast/&lt;date&gt;-&lt;slug&gt;.md</p>
+        <div class="rule" data-step="1" data-anim="land">
+          <span class="kicker">The sin catalog · <cite>references/sin-catalog.md:7-13</cite></span>
+          <div class="tiers"><span class="tier" style="--w: 100%">Capital offense</span><span class="gt">›</span><span class="tier" style="--w: 78%">Felony</span><span class="gt">›</span><span class="tier" style="--w: 58%">Crime</span><span class="gt">›</span><span class="tier" style="--w: 36%">Slop</span><span class="gt">›</span><span class="tier" style="--w: 16%">Misdemeanor</span></div>
+        </div>
+      </div>
+      <div class="col">
+        <span class="kicker">What it does</span>
+        <ol class="pipe pipe--v pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><span class="n">1</span><div><h3>Target</h3><p>your paths first, never wider</p></div></li>
+          <li><span class="n">2</span><div><h3>Inspect</h3><p>read, then verify with research</p></div></li>
+          <li class="is-key"><span class="n">3</span><div><h3>Inventory</h3><p>rank every sin by impact</p></div></li>
+          <li><span class="n">4</span><div><h3>Autopsy</h3><p>the worst offender, not the funniest</p></div></li>
+          <li><span class="n">5</span><div><h3>Checkpoint · Redeem</h3><p>fixes only when authorized</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Why I built it, in my words: "VladT idea: best for roasting". The crowd favourite. The problem: code reviews are either polite and vague or harsh and unproven. This one is harsh and cited, with a repair path for every finding. Walk the pipe: TARGET: explicit user targets first, widen only when none exist or the user approves; INSPECT the code and verify each significant finding with octocode-research (SKILL.md:40); INVENTORY: rank by demonstrated impact; AUTOPSY the highest-impact offender, "not the funniest one" (references/roast-playbook.md:29); CHECKPOINT: critique only stops here, authorized fixes go to REDEEM (skills/octocode-roast/SKILL.md:10-15). Press → for the sin catalog: Capital offense (critical) → Felony (high) → Crime (medium) → Slop (low) → Misdemeanor (minor) (references/sin-catalog.md:7-13). Two rules make it safe to use: "Punch the code, not the coder" and "Cite or drop it: every major finding needs an exact anchor, mechanism, impact, confidence, and repair move" (SKILL.md:19-20). Savage or nuclear tone only on explicit request (:24). Each finding ends with "Roast: {one evidence-specific line}" (roast-playbook.md:17-25); big targets can be split across parallel workers per domain: security, architecture, performance (references/parallel-roasting.md:8-21). Story: the idea came from VladT (speaker's note). Invoke: npx octocode skill install octocode-roast, then, for example (illustrative prompt): "Roast packages/core. Be savage." Hand-off: when the user authorizes behavior-preserving cleanup → octocode-clean-agentic-code (SKILL.md:41). Next: octocode-eval-benchmark: how do you know a change helped?</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

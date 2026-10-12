@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Every extra file Scout judges costs more tokens</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .wrap { width: 100%; text-align: left; }
+    .cost { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; width: 100%; align-items: stretch; }
+    .bars { display: flex; flex-direction: column; gap: 14px; padding: 20px 24px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+    .bars .head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-mono); color: var(--muted-2); font-size: var(--t-small); }
+    .bar-row { display: grid; grid-template-columns: 150px 1fr; gap: 12px; align-items: center; }
+    .bar-row .label { color: var(--text-strong); font-size: var(--t-small); }
+    .bar-line { display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0; }
+    .bar-row .val { display: block; }
+    .bar { height: 26px; border-radius: 4px; background: var(--muted-2); flex: none; }
+    .bar-row .val { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); white-space: nowrap; }
+    .bar-row .val small { color: var(--muted); font-size: var(--t-small); }
+    .bar-row.neg .bar { background: var(--negative); width: 72%; }
+    .bar-row.neg .val { color: var(--negative); }
+    .bar-row.mid1 .bar { width: 44%; }
+    .bar-row.mid2 .bar { width: 22%; background: var(--violet); }
+    .bar-row .meta { grid-column: 2; color: var(--muted); font-family: var(--font-mono); font-size: var(--t-small); margin-top: -6px; }
+    .bar-row.pos { padding: 8px 10px; margin: 0 -10px; border-radius: var(--radius-sm); background: color-mix(in srgb, var(--positive) 12%, transparent); border: 1px solid var(--positive); }
+    .bar-row.pos .bar { width: 6%; background: var(--positive); }
+    .bar-row.pos .val { color: var(--positive); font-weight: 600; }
+    .side { display: flex; flex-direction: column; gap: 18px; }
+    .callout { flex: 1; padding: 22px 24px; background: var(--surface-2); border: 1px solid var(--warm); border-left: 6px solid var(--warm); border-radius: var(--radius-sm); }
+    .callout h3 { margin: 0 0 14px; color: var(--text-strong); font-family: var(--font-head); font-size: var(--t-sub); line-height: 1.2; }
+    .callout ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 10px; }
+    .callout li { color: var(--text); font-size: var(--t-small); line-height: 1.32; }
+    .callout b { color: var(--text-strong); }
+    .rule { padding: 14px 20px; border-radius: 999px; background: color-mix(in srgb, var(--positive) 14%, transparent); border: 1px solid var(--positive); color: var(--text-strong); font-family: var(--font-mono); font-size: var(--t-small); text-align: center; }
+    .rule code { color: var(--positive); }
+    .src { display: block; margin-top: 10px; color: var(--muted); font-size: var(--t-small); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · clasify Scout · beta</span>
+    <h2 class="title" data-slide-title>Every extra file Scout judges costs more tokens</h2>
+    <p class="description" data-slide-subtitle>Same question, four ways: narrow the candidates first, then let Scout rank them.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="wrap">
+      <div class="cost">
+        <div class="bars" data-step="1">
+          <div class="head"><span>bytes returned to the agent</span><span>bars not to scale</span></div>
+          <div class="bar-row neg"><span class="label">Read all 54 files</span><div class="bar-line"><span class="bar"></span><span class="val">644 KB</span></div></div>
+          <div class="bar-row mid1"><span class="label">Search hits only</span><div class="bar-line"><span class="bar"></span><span class="val">58 KB</span></div></div>
+          <div class="bar-row mid2"><span class="label">Scout over 54 files</span><div class="bar-line"><span class="bar"></span><span class="val">11.8 KB</span></div><span class="meta">2 calls · 3.4 s (warm)</span></div>
+          <div class="bar-row pos"><span class="label">fileHas + Scout over 9 files</span><div class="bar-line"><span class="bar"></span><span class="val">1.9 KB</span></div><span class="meta">1 call · 0.7 s</span></div>
+        </div>
+        <div class="side">
+          <div class="callout" data-step="2">
+            <h3>More approaches = more judgments = more tokens</h3>
+            <ul>
+              <li>Each extra file or question is <b>another Jev judgment</b>.</li>
+              <li>54 files cost <b>~6× the bytes</b> and <b>~5× the time</b> of 9.</li>
+              <li>Jev's provider tokens are <b>billed on top</b>, separately from your agent.</li>
+            </ul>
+          </div>
+          <div class="rule" data-step="3">Narrow first (<code>fileHas</code>), then scout.</div>
+        </div>
+      </div>
+      <span class="src">Source: Octocode docs/OCTOCODE_CLASIFY.md, ast-grep example</span>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Walk the bars. For the same ast-grep question, reading all 54 files returned 644 KB to the agent. Search hits alone returned 58 KB. Scout over all 54 files returned 11.8 KB in 2 calls and 3.4 seconds, warm. Adding fileHas:["template"] first narrowed to 9 files: 1 call, 1.9 KB, 0.7 seconds, with the answer ranked first. That is about 6× fewer bytes and 5× less time than scouting all 54 (derived: 11.8/1.9, 3.4/0.7). My point: when I tested more approaches — more files, more questions — it cost more tokens. Every file-by-question cell is a judgment, and Jev's provider tokens are billed by the classification provider, separately from the host model, so they are not in these bytes. These are bytes returned to the agent, not total provider tokens. If you know a literal name, just search it. Adoption caveat: in one October A/B run, clasify was offered in 30 sessions and called 0 times (ledger X10). Scout is beta per my brief (X39). Sources: docs/OCTOCODE_CLASIFY.md:90-95 and speed table; ledger X6, X14, X40. Next: other ways to cut tokens at every research step.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

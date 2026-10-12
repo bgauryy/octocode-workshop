@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Measure, critique, change, repeat</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .bl { display: flex; flex-direction: column; gap: 34px; }
+    .bl .pipe > li { padding: 14px 16px; }
+    .bl-lap { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 18px; align-items: center; }
+    .bl-lap > .kicker { color: var(--warm); line-height: 1.3; }
+    .bl .pipe p { font-size: var(--t-mid); }
+    .bl .delta .v { font-size: 48px; line-height: 1.1; }
+    .bl .delta p { font-size: var(--t-mid); }
+    .bl .delta p code { font-size: 1em; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · benchmark loop</span>
+    <h2 class="title" data-slide-title>Measure, critique, change, repeat</h2>
+    <p class="description" data-slide-subtitle>Reflection and critique guide each change against a real benchmark.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="bl">
+      <div>
+        <ol class="pipe pipe--violet" data-anim="draw" data-stagger style="--stagger: 220ms">
+          <li><span class="n">1</span><h3>30 questions</h3><p>real GitHub research</p></li>
+          <li><span class="n">2</span><h3>fresh agent × arm</h3><p>Octocode · gh · gh-lean · RTK · Headroom</p></li>
+          <li><span class="n">3</span><h3>blind judge</h3><p>tool names redacted</p></li>
+          <li class="is-key"><span class="n">4</span><h3>the score</h3><p>chars, at equal correctness</p></li>
+        </ol>
+        <div class="loopback" style="--pc: var(--warm); --delay: 900ms" data-anim="draw"><span>losing transcripts → critique → change one thing → rerun</span></div>
+      </div>
+      <div class="bl-lap" data-step="1">
+        <span class="kicker">one real<br>lap</span>
+        <div class="delta">
+          <div class="before"><span class="k">found · Sep 30 run</span><span class="v" data-step="1" data-anim="rise count">82%</span><p>of Octocode's tokens: fixed overhead</p></div>
+          <span class="to"></span>
+          <div class="after"><span class="k">fixed · by Oct 9</span><span class="v" data-step="1" data-anim="rise count" data-from="30.1">15.9 KB</span><p><code>tools/list</code>, from ≈30.1 KB</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The harness is packages/octocode-benchmark: "Every arm answers the same questions with a fresh headless agent, a blind judge grades correctness, and each agent's transcript says how many characters went through the model" (README.md:3-7). Walk the pipe as it draws (the slide keeps only the labels; say the rest): (1) 30 real GitHub research questions (canonical v2 set), refs frozen to SHAs; (2) one fresh agent per question per arm, empty working directory, no settings, CLAUDE.md, skills or memory. Arms are Octocode MCP, plain gh, a disciplined gh-lean (--json/--jq plus grep/sed -n), gh + RTK (an output compressor) and gh + Headroom (compare/arms/); (3) the judge, gpt-5.5, sees two answers as X and Y in a seeded shuffle with tool names redacted, and scores correctness 0–10 against a ground truth rebuilt with read-only gh; (4) the metric is total characters through the model (tool calls written, results read, final answer), and it only counts at equal correctness. The amber line underneath is the part that matters: read the transcripts where I lost, critique, change one thing, rerun. Press → for one real lap: the 2026-09-30 run showed "≈82% of octocode tokens are fixed overhead, not tool output": tool schemas re-sent every turn, 16,807 vs 5,029 first-request tokens, 13 MCP tools vs 1 Bash tool (.octocode/rfc/tool-improvement-2026-10/RFC.md:23-24). So the change targeted overhead: tools/list went from ≈30.1 KB (RFC.md:25, 2026-10-01) to 15,939 B for the same 13 tools (measured 2026-10-09), and OCTOCODE_DEFER_TOOLS can put rarely-used tools behind one run tool. Next: what the numbers said in August.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

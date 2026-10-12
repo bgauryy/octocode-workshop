@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 6: let a critic challenge the plan</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+    .lab .code { font-size: var(--t-small); }
+    .lab .card p { font-size: var(--t-mid); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content slide--lab" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Lab 6 · stretch / take-home · 5 min demo · teaches: RDD · critique loop</span>
+    <h2 class="title" data-slide-title>Lab 6: let a critic challenge the plan</h2>
+    <p class="description" data-slide-subtitle>Repeat the research loop until the plan has no unsupported claims.</p>
+  </div>
+  <div class="slide-content">
+    <div class="lab">
+      <div class="code" data-label="run"><span class="tk-cmt"># 1 · generator</span>
+idea-scout → pick one idea
+octocode-rfc-generator → plan.md
+
+<span class="tk-cmt"># 2 · discriminator, fresh session</span>
+"Verify every claim in plan.md
+ against the code with Octocode.
+ List unsupported claims."
+
+<span class="tk-cmt"># 3 · fix → repeat (≤3 rounds)</span></div>
+      <div class="stack">
+        <div class="prompt" data-step="1"><span class="kicker">how to run it</span>Run the critic in a <strong>new session</strong> each round — a /loop or a shell loop. Stop at 0 unsupported claims or 3 rounds.</div>
+        <div class="card card--positive" data-step="2"><span class="kicker">done when</span><p>A plan where every claim cites code — and a count of claims removed per round.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Lesson: RDD (MANIFEST.md): separate sessions, minimal context, a Verifier attacking the Generator. The loop from the brief: idea skill → plan → critique → fix. /loop is a Claude Code feature; elsewhere use a 3-pass shell loop around your agent CLI. The payoff is the number of unsupported claims each round removes — that is what "evidence, not guesses" looks like in a plan. Next: further reading.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

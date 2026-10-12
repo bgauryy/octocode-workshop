@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>octocode-skills</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* skill series (11 slides, one layout): example + rule | steps */
+    .skx .slide-header { margin-bottom: 22px; }
+    .sk { display: grid; grid-template-columns: 1fr 1.2fr; gap: 44px; width: 100%; align-items: stretch; }
+    .sk .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .sk .col > .kicker { padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .sk .bubble { font-size: var(--t-mid); }
+    .sk .bubble code { color: var(--accent-2); font-size: 0.92em; }
+    .sk .rule { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 4px solid var(--violet); background: color-mix(in srgb, var(--violet) 7%, var(--code-bg)); }
+    .sk .rule .kicker { color: var(--violet); }
+    .sk .rule blockquote { font-size: var(--t-mid); line-height: 1.38; color: var(--text-strong); }
+    .sk .rule cite { font-style: normal; color: var(--muted-2); letter-spacing: 0; text-transform: none; }
+    .sk .pipe--v { --gap: 10px; }
+    .sk .pipe--v > li { padding: 7px 16px; align-items: center; }
+    .sk .pipe--v > li > div { gap: 0; }
+    .sk .pipe h3 { font-size: var(--t-mid); letter-spacing: 0.02em; }
+    .sk .pipe p { line-height: 1.3; }
+    .sk .out { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--code-bg); font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); overflow-wrap: anywhere; }
+    .sk .out span { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content skx">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>V2 · Skills</span>
+    <h2 class="title" data-slide-title>octocode-skills</h2>
+    <p class="description" data-slide-subtitle>Use when creating, reviewing, installing or tuning Agent Skills: it checks structure and triggers, then fixes when the skill activates.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sk">
+      <div class="col">
+        <span class="kicker">Example ask</span>
+        <div class="bubble"><span class="who">You</span>Review my octocode-slides skill and make it trigger on “make me a talk”.</div>
+        <p class="out"><span>Saves →</span> .octocode/octocode-skills/&lt;date&gt;-&lt;slug&gt;.md</p>
+        <div class="rule" data-step="1" data-anim="land">
+          <span class="kicker">The rule</span>
+          <blockquote>“Fix the intent boundary rather than adding exact keyword exceptions.”</blockquote>
+          <cite>octocode-skills/SKILL.md:53</cite>
+        </div>
+      </div>
+      <div class="col">
+        <span class="kicker">What it does</span>
+        <ol class="pipe pipe--v pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><span class="n">1</span><div><h3>Understand</h3><p>review, create, or install?</p></div></li>
+          <li><span class="n">2</span><div><h3>Inspect</h3><p>the skill and every file it routes</p></div></li>
+          <li class="is-key"><span class="n">3</span><div><h3>Review</h3><p>structure, triggers and docs</p></div></li>
+          <li><span class="n">4</span><div><h3>Edit · Install · Sync</h3><p>owning files, or vendor folders</p></div></li>
+          <li><span class="n">5</span><div><h3>Verify</h3><p>Ready or Needs work</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The problem: skills fail silently. They don't trigger, they link to files that aren't there, or their lobby is bloated. This skill is the authoring standard for the whole collection, plus a linter and installer guidance. Walk the pipe: Understand the request; Inspect the skill and its files; Review structure, triggers and docs; then by outcome: review reports findings and readiness (verdict Ready or Needs work), create or improve edits the owning files, install or sync inspects destinations and applies; Verify changed behavior and links, looping back on an unresolved defect (skills/octocode-skills/SKILL.md:10-22). Press → for the rule: "Check activation against realistic requests with varied phrasing, implicit intent, and near-misses that belong to neighboring skills. Fix the intent boundary rather than adding exact keyword exceptions." (SKILL.md:53). Keep three verdicts apart: "Lint checks files and structure. Editorial review checks meaning. Host activation tests check actual selection." (:63). Extra: scripts/skill-review.mjs is the structural lint (with --self-test to check the checker) and scripts/skill-sync.mjs links a local skill into vendor folders (SKILL.md:51, :72-73); this skill also owns the canonical render-report.mjs that every other skill copies byte-identical (skills/README.md:7). Invoke: npx octocode skill install octocode-skills, then, for example (illustrative prompt): "Review my octocode-slides skill and make it trigger on 'make me a talk'." Hand-off: description and trigger wording → octocode-agentic-prompts; prose → octocode-documentation; measured activation claims → octocode-eval-benchmark (SKILL.md:79-82). That closes the tour of 11 skills. Next: where Octocode keeps the installed skills and the results they produce.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ghStructure shows what lives around a file</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .gs { display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: stretch; width: 100%; }
+    .gs-left { display: flex; flex-direction: column; gap: 12px; }
+    .gs-top { display: flex; align-items: center; gap: 14px; }
+    .tool { flex: none; font-family: var(--font-mono); font-size: var(--t-small); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--positive); color: var(--positive); background: color-mix(in srgb, var(--positive) 10%, transparent); }
+    .hit { flex: 1; white-space: nowrap; font-family: var(--font-mono); font-size: var(--t-small); color: var(--code-text); background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 14px; }
+    .hit .k { color: var(--code-comment); margin-right: 10px; }
+    .hit .p { color: var(--code-string); }
+    .hit .n { color: var(--code-num); }
+    .tree { flex: 1; font-family: var(--font-mono); font-size: var(--t-code); line-height: 1.32; color: var(--code-text); background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 22px; margin: 0; list-style: none; }
+    .tree li { white-space: pre; }
+    .tree .d { color: var(--code-key); }
+    .tree .g { color: var(--code-punct); }
+    .tree .t { color: var(--muted); }
+    .tree .found { color: var(--text-strong); background: color-mix(in srgb, var(--positive) 18%, transparent); border-left: 3px solid var(--positive); margin-left: -22px; padding-left: 19px; }
+    .tree .found .tag { color: var(--positive); }
+    .learn { display: flex; flex-direction: column; gap: 14px; justify-content: center; margin: 0; padding: 0; list-style: none; }
+    .learn li { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--positive); border-radius: var(--radius-sm); padding: 14px 20px; display: flex; flex-direction: column; gap: 6px; }
+    .learn h3 { font-size: var(--t-mid); color: var(--text-strong); margin: 0; }
+    .learn p { font-size: var(--t-body); color: var(--text); margin: 0; line-height: 1.35; }
+    .learn code { font-family: var(--font-mono); font-size: var(--t-small); color: var(--positive); }
+    .gs + .rule { --rule-color: var(--positive); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · more context</span>
+    <h2 class="title" data-slide-title>ghStructure shows what lives around a file</h2>
+    <p class="description" data-slide-subtitle>A file alone doesn't say where it belongs; the tree around it does.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="gs">
+      <div class="gs-left">
+        <div class="gs-top"><span class="tool">ghStructure</span>
+        <div class="hit" data-step="1"><span class="k">// ghSearchCode:</span><span class="p">core/src/parser.ts</span>:<span class="n">42</span></div></div>
+        <ul class="tree" data-step="2" data-anim="draw" aria-label="Repository tree around parser.ts">
+          <li><span class="d">repo/</span></li>
+          <li><span class="g">└─ </span><span class="d">packages/</span></li>
+          <li><span class="g">   └─ </span><span class="d">core/</span></li>
+          <li><span class="g">      ├─ </span><span class="d">src/</span></li>
+          <li class="found"><span class="g">      │  ├─ </span>parser.ts  <span class="tag">← found</span></li>
+          <li><span class="g">      │  ├─ </span><span class="t">types.ts</span></li>
+          <li><span class="g">      │  ├─ </span><span class="t">errors.ts</span></li>
+          <li><span class="g">      │  └─ </span><span class="t">index.ts</span></li>
+          <li><span class="g">      └─ </span><span class="d">tests/</span>  <span class="t">parser.test.ts</span></li>
+        </ul>
+      </div>
+      <ul class="learn" data-step="2">
+        <li><h3>Where it sits</h3><p>Package <code>core</code>, folder <code>src/</code>, at any ref.</p></li>
+        <li><h3>What lives next to it</h3><p>Siblings like <code>types.ts</code>, and the <code>tests/</code> nearby.</p></li>
+        <li><h3>Where to read next</h3><p>The next <code>ghGetFileContent</code> call.</p></li>
+      </ul>
+    </div>
+    <div class="rule" data-step="3"><span class="k">// search finds the line;</span> structure tells the agent <strong>where it is</strong>.</div>
+  </div>
+</div>
+<aside class="speaker-notes">The three main tools find the repo, the line and the file; but a file on its own doesn't say where it belongs. Click 1: ghSearchCode hands us a path and a line, parser.ts. Click 2: ghStructure gives the agent visibility into the context of a file or folder: the repository tree around it at any ref (branch or commit), and what lives next to it: siblings like types.ts, errors.ts, index.ts, and a nearby tests folder. From that the agent learns where the file sits, what lives next to it, and where to read next with ghGetFileContent. Click 3: search finds the line; structure tells the agent where it is. Source: tool name from packages/octocode-config/contract/tool-contract.json (ledger V21); an early form existed in 1.0.0 (6 Jun 2025) as view_repository_structure (36f55ae3c:src/tools/contstants.ts:2-15); it became central as usage grew. The tree on the slide is an illustrative example. Next: the second tool, from a package name to its code.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

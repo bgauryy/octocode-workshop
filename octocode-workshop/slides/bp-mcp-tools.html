@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tool design is prompt design</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .bp .pipe > li { padding: 28px 26px; gap: 18px; }
+    .bp .pipe h3 { font-size: var(--t-sub); }
+    .rl { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    .rl li { font-size: var(--t-body); line-height: 1.35; color: var(--text); }
+    .rl li strong { color: var(--text-strong); font-weight: 600; }
+    .rl li.ex { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-muted); line-height: 1.5; }
+    .ex .bad { color: var(--negative); text-decoration: line-through; }
+    .ex .good { color: var(--positive); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Recap · best practices for building tools</span>
+    <h2 class="title" data-slide-title>Tool design is prompt design</h2>
+    <p class="description" data-slide-subtitle>Every word the model sees from your tool steers its next move.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="bp">
+      <ol class="pipe pipe--positive" data-anim="draw" data-stagger style="--stagger: 220ms">
+        <li><h3>Description</h3>
+          <ul class="rl" data-step="1"><li><strong>When</strong> to call it</li><li><strong>What</strong> it does and returns</li></ul></li>
+        <li><h3>Schema</h3>
+          <ul class="rl" data-step="2"><li><strong>Fields explain themselves</strong>, not their name</li>
+            <li class="ex"><span class="bad">query: "The query"</span><br><span class="good">query: "Regex to search"</span></li></ul></li>
+        <li class="is-key"><h3>Result</h3>
+          <ul class="rl" data-step="3"><li><strong>Lean</strong>: only what's needed</li><li><strong>Paginate</strong> when it's large</li><li><strong>Smart errors</strong> say how to fix</li></ul></li>
+      </ol>
+      <div class="loopback" style="--pc: var(--positive)" data-step="4" data-anim="draw"><span>then measure and refine</span></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">General rules for any tool an agent calls, whether MCP, CLI or function calling. The model only knows your tool through the text you give it, so tool design is prompt design. Press → (description): say when to call the tool and what it does and returns. Octocode writes descriptions in one grammar: prose says what the tool does and when it is right, an optional &lt;empty&gt; gives the repair, and one &lt;workflow&gt; names where the output goes next (docs/OCTOCODE_PROTOCOL.md:66). Press → (schema): every field description adds meaning beyond its name. "query: The query" tells the model nothing; "Regex to search" tells it how to fill it. Keep inputs minimal and typed, enums over free strings. Press → (result): lean results, only what the next step needs. Octocode returns matching windows, not whole files, with gap markers like "... [lines 22-875 not requested] ..." (crates/runtime/src/tools/local_fetch/extraction.rs:46-48). Paginate large results instead of dumping them. Smart errors: on empty or failed results, one short hint that says how to fix it, for example an empty localSearch says "No matches in 12 files searched." (crates/runtime/src/tools/local_search/leads.rs:1246-1252) and its description carries the repair: "Lowercase/shorter term, regex:"rust", includeIgnored." (octocode schema localSearch; ledger V8), not a stack trace. Press → (the loop back): then measure with a fresh agent and refine. Next: writing skills, where the trigger comes first.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

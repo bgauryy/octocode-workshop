@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My first MCP needed only two tools</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .fm { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 16px; }
+    .srv { align-self: center; display: inline-flex; align-items: center; gap: 12px; padding: 10px 22px; border: 1px solid var(--accent); border-radius: 999px; background: var(--surface-2); font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); }
+    .srv .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+    .srv .m { color: var(--muted); }
+    .pair { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .tl { display: flex; flex-direction: column; gap: 10px; padding: 20px 26px; border: 1px solid var(--border-strong); border-top: 4px solid var(--accent); border-radius: var(--radius-md, 12px); background: linear-gradient(165deg, var(--surface-2), var(--surface)); }
+    .tl .no { font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent); letter-spacing: .08em; text-transform: uppercase; }
+    .tl h3 { font-family: var(--font-mono); font-size: 36px; font-weight: 600; color: var(--text-strong); margin: 0; line-height: 1.1; }
+    .tl .d { font-size: 22px; color: var(--text); margin: 0; line-height: 1.4; }
+    .sch { margin-top: auto; padding: 14px 18px; border-radius: var(--radius-sm); background: var(--bg); border: 1px solid var(--border); font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.6; color: var(--muted); }
+    .sch .k { color: var(--accent); }
+    .sch .v { color: var(--text-strong); }
+    .slide-content > .rule { margin-top: 28px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · where it started</span>
+    <h2 class="title" data-slide-title>My first MCP needed only two tools</h2>
+    <p class="description" data-slide-subtitle>getContext taught the method; executeQuery ran SQL and returned results.</p>
+  </div>
+  <div class="slide-content">
+    <div class="fm">
+      <div class="srv"><span class="dot"></span>my first MCP server<span class="m">· 2 tools</span></div>
+      <div class="pair">
+        <div class="tl" data-step="1">
+          <span class="no">Tool 1 · the method</span>
+          <h3>getContext</h3>
+          <p class="d">Best practices for being a good analyst, which I wrote together with AI.</p>
+          <div class="sch"><span class="k">input</span> <span class="v">none</span><br><span class="k">returns</span> <span class="v">how to analyze, no data</span></div>
+        </div>
+        <div class="tl" data-step="2">
+          <span class="no">Tool 2 · the action</span>
+          <h3>executeQuery</h3>
+          <p class="d">Runs a query on the database and returns the result.</p>
+          <div class="sch"><span class="k">input</span> <span class="v">query</span>: "SQL to execute"<br><span class="k">returns</span> <span class="v">rows, or the error</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="rule" data-step="3"><span class="k">// the lesson:</span> descriptions and schemas are how I <strong>talk to</strong> the agent.</div>
+  </div>
+</div>
+<aside class="speaker-notes">This is the first MCP server I ever created, built for data analysts. It had only two tools. Click 1: getContext. It returned no data at all, only method: best practices for how to be a good analyst, which I wrote together with AI. Click 2: executeQuery. Its input was described simply as SQL to execute, and it returned the rows or the error. With just that, the agent wrote sensible queries, and when one failed it read the error and fixed the query itself. Click 3: the lesson. The descriptions and the schemas were how I communicated with the agent and steered it. That is the seed of Octocode's server instructions and hints, which still open every session today. Next: the real problem that created Octocode.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

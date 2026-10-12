@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octocode researches code with evidence</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .slide-content > .rule { padding-block: 10px; margin-block: 0; }
+    .hub-wrap { flex: 1; min-height: 0; display: flex; align-items: center; }
+    .hub { width: 100%; height: auto; max-height: 100%; }
+    .hub .box { fill: var(--surface); stroke: var(--border-strong); stroke-width: 1.5; }
+    .hub .core { fill: color-mix(in srgb, var(--accent) 14%, var(--surface)); stroke: var(--accent); stroke-width: 2.5; }
+    .hub .sk { stroke: var(--violet); }
+    .hub .ln { fill: none; stroke: var(--muted-2); stroke-width: 2; }
+    .hub .ln-acc { stroke: var(--accent); }
+    .hub .dot { fill: var(--muted-2); stroke: none; }
+    .hub .dot-acc { fill: var(--accent); }
+    .hub .t-acc { fill: var(--accent); }
+    .hub .t-vio { fill: var(--violet); }
+    .hub .lbl, .hub .lbl-strong { font-size: 21px; }
+    .hub .cap { font-size: 21px; fill: var(--muted-2); letter-spacing: 0.12em; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Intro · what is Octocode</span>
+    <h2 class="title" data-slide-title>Octocode researches code with evidence</h2>
+    <p class="description" data-slide-subtitle>An agentic toolkit finds the relevant source and cites it in the answer.</p>
+  </div>
+  <div class="slide-content">
+    <div class="rule"><span class="k">// why:</span> agents need a <strong>reliable way to research code</strong> across public repos and orgs.</div>
+    <div class="hub-wrap">
+      <svg class="dg hub" viewBox="-20 0 1188 330" role="img" aria-label="Your agent reaches one Rust engine through the MCP server, the CLI, or skills that drive either; the engine reads local code, GitHub and package registries">
+        <g data-anim="draw">
+          <rect class="core" x="650" y="90" width="250" height="150" rx="18" pathLength="1"/>
+          <text class="lbl-strong t-acc" x="666" y="132">one Rust engine</text>
+          <text class="lbl" x="666" y="168">search · AST · LSP</text>
+          <text class="lbl" x="666" y="194">GitHub · cache</text>
+          <text class="lbl" x="666" y="220">secret redaction</text>
+        </g>
+        <g data-anim="draw" style="--delay: 350ms">
+          <rect class="box" x="290" y="5" width="280" height="84" rx="14" pathLength="1"/>
+          <text class="lbl-strong" x="312" y="40">MCP server</text>
+          <text class="lbl" x="312" y="70">12 tools · any host</text>
+          <rect class="box" x="290" y="123" width="280" height="84" rx="14" pathLength="1"/>
+          <text class="lbl-strong" x="312" y="158">CLI · npx octocode</text>
+          <text class="lbl" x="312" y="188">13 tools · terminal</text>
+          <rect class="box sk" x="290" y="241" width="280" height="84" rx="14" pathLength="1"/>
+          <text class="lbl-strong t-vio" x="312" y="276">Skills</text>
+          <text class="lbl" x="312" y="306">13 · run MCP or CLI</text>
+          <path class="ln" d="M570 47 C 615 47, 605 145, 650 145" pathLength="1"/>
+          <path class="ln" d="M570 165 L 650 165" pathLength="1"/>
+          <path class="ln" d="M570 283 C 615 283, 605 185, 650 185" pathLength="1"/>
+          <circle class="dot" cx="650" cy="145" r="4"/><circle class="dot" cx="650" cy="165" r="4"/><circle class="dot" cx="650" cy="185" r="4"/>
+        </g>
+        <g data-anim="draw" style="--delay: 700ms">
+          <rect class="box" x="-20" y="100" width="250" height="130" rx="14" pathLength="1"/>
+          <text class="cap" x="-2" y="132">YOUR AGENT</text>
+          <text class="lbl" x="-2" y="162">Claude · Cursor</text>
+          <text class="lbl" x="-2" y="188">Codex · VS Code</text>
+          <text class="lbl" x="-2" y="214">Pi · any MCP host</text>
+          <path class="ln" d="M230 150 C 262 150, 258 47, 290 47" pathLength="1"/>
+          <path class="ln" d="M230 165 L 290 165" pathLength="1"/>
+          <path class="ln" d="M230 180 C 262 180, 258 283, 290 283" pathLength="1"/>
+          <rect class="box" x="970" y="15" width="198" height="70" rx="14" pathLength="1"/>
+          <text class="lbl-strong" x="992" y="58">local code</text>
+          <rect class="box" x="970" y="130" width="198" height="70" rx="14" pathLength="1"/>
+          <text class="lbl-strong" x="992" y="173">GitHub</text>
+          <rect class="box" x="970" y="245" width="198" height="70" rx="14" pathLength="1"/>
+          <text class="lbl-strong" x="992" y="288">packages</text>
+          <path class="ln ln-acc" d="M900 145 C 940 145, 930 50, 970 50" pathLength="1"/>
+          <path class="ln ln-acc" d="M900 165 L 970 165" pathLength="1"/>
+          <path class="ln ln-acc" d="M900 185 C 940 185, 930 280, 970 280" pathLength="1"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Start with why: I built Octocode because agents need a good, reliable way to research code, across public repositories and across the organizations they work in, instead of guessing from training data. The diagram builds from the middle out. First the engine: README.md:17 says "One Rust engine, two interfaces: an MCP server and the npx octocode CLI." It does search, AST and LSP navigation, the GitHub client, caching and secret redaction (ledger X2). Then the three ways in: the MCP server gives any MCP host 12 tools; the CLI gives 13 (README.md:124, "Your agent gets 12 tools over MCP and 13 in the CLI; clasify joins both when you add its key"; ledger S3). The CLI's 13 are the MCP 12 plus ghCloneRepo. The full catalog is 16: those 13, plus clasify, plus the beta-only astTopology and astRewrite (CLI-only; packages/octocode-config/contract/tool-contract.json). All of this is the dev build, 20.2.0. And skills, 13 encoded playbooks (research, architecture, RFCs, roasts, evals…), drive either one (ledger S4). Last, who asks and what it reads: your agent (README.md:17 names Cursor, Claude, VS Code, Codex and Pi) and the sources: local code, GitHub, package registries. Say the line to remember all day, from README.md:21: "Evidence, not guesses: every answer cites exact files and lines." Extra: skills are portable. agentskills.io lists 46 client products that read SKILL.md, among them Claude Code, Codex, GitHub Copilot, VS Code, Cursor, Gemini CLI, OpenCode, Goose, Kiro and pi (agentskills.io/clients, 46 entries in the client list, re-counted 11 Oct 2026; Codex is listed as "ChatGPT & Codex"). Next: a hands-on pause for the intro.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

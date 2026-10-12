@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>We started moving our workflows into skills</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .wf { display: flex; flex-direction: column; gap: 20px; }
+    .flow { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 48px; }
+    .st { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 16px 22px; border-radius: var(--radius); border: 1px solid var(--border); border-top: 3px solid var(--muted-2); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .st:not(:last-child)::after { content: '→'; position: absolute; right: -36px; top: 50%; transform: translateY(-50%); font-family: var(--font-mono); font-size: var(--t-mid); color: var(--violet); }
+    .st .k { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .st h3 { font-size: var(--t-mid); font-weight: 500; color: var(--text-strong); line-height: 1.3; }
+    .st p { font-size: var(--t-small); color: var(--muted); line-height: 1.45; }
+    .st.now { border-color: var(--violet); border-top-color: var(--violet); background: linear-gradient(160deg, color-mix(in srgb, var(--violet) 16%, var(--surface-2)), var(--surface)); }
+    .st.now .k { color: var(--violet); }
+    .moved { display: flex; flex-direction: column; gap: 10px; }
+    .moved .k { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px 10px; }
+    .chip { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); padding: 4px 12px; border: 1px solid var(--border); border-radius: 999px; background: var(--surface); }
+    .wf .term { padding: 14px 22px; }
+    .wf .term .ok { color: var(--muted); }
+    .wf .term .ok b { color: var(--text-strong); font-weight: 500; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · skills</span>
+    <h2 class="title" data-slide-title>We started moving our workflows into skills</h2>
+    <p class="description" data-slide-subtitle>The prompts I kept retyping into the agent now ship as installable skills.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="wf">
+      <ol class="flow" data-anim="rise" data-stagger style="--stagger: 160ms">
+        <li class="st">
+          <span class="k">Before</span>
+          <h3>A repeated workflow</h3>
+          <p>The same instructions, typed into the agent every time.</p>
+        </li>
+        <li class="st now">
+          <span class="k">Now</span>
+          <h3>A skill</h3>
+          <p>A folder with SKILL.md, loaded only when the request matches.</p>
+        </li>
+        <li class="st">
+          <span class="k">Everywhere</span>
+          <h3>Installed once</h3>
+          <p>One command links it into every agent host.</p>
+        </li>
+      </ol>
+      <div class="moved" data-anim="rise">
+        <span class="k">Moved so far</span>
+        <div class="chips">
+          <span class="chip">research</span><span class="chip">brainstorming</span><span class="chip">architect</span><span class="chip">rfc-generator</span><span class="chip">documentation</span><span class="chip">roast</span><span class="chip">eval-benchmark</span><span class="chip">clean-agentic-code</span><span class="chip">agentic-prompts</span><span class="chip">skills</span><span class="chip">chrome-devtools</span><span class="chip">scraping</span>
+        </div>
+      </div>
+      <div class="term" data-step="1" data-anim="rise" data-label="install all · every host">
+        <span class="cmd">npx octocode skill install --all --platform all</span>
+        <span class="ok">  copied once to <b>~/.octocode/skills/</b> · linked into 7 agent hosts</span>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The message here is simple: we started moving workflows into skills. From the brief: "Octocode started to be my own toolkit, and I was missing important stuff: my own skills." I kept typing the same workflow into my agent, so each one became a skill (speaker's one-liners, ledger K2). A skill is a folder: SKILL.md plus optional references/ and scripts/, loaded only when its description matches the request (claude.com/blog/skills, 16 Oct 2025; open standard at agentskills.io since 18 Dec 2025, ledger K1). 13 ship in skills/ (ledger S4); the 12 chips are the ones we cover, and only agents-communication is out of scope today. Research is the hub every other skill routes its code facts through. Press → for install: `npx octocode skill install &lt;name&gt;|--all --platform …` (packages/octocode/README.md:24,104; ledger K3). The installer copies each skill once into ~/.octocode/skills/&lt;name&gt; and symlinks it into each host's folder: pi, cursor, claude, codex, opencode, copilot, gemini (packages/octocode-skill-installer/src/index.ts:52-99). Every skill saves its results under .octocode/&lt;skill-name&gt;/ and can render one local HTML report (skills/README.md:5-7). Next: the difference between an MCP capability and a skill workflow, then octocode-research.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

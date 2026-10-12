@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>octocode-research</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* skill series (11 slides, one layout): when | steps */
+    .skx .slide-header { margin-bottom: 22px; }
+    .sk { display: grid; grid-template-columns: 1fr 1.2fr; gap: 44px; width: 100%; align-items: stretch; }
+    .sk .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .sk .col > .kicker { padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .sk .bubble { font-size: var(--t-mid); }
+    .sk .bubble code { color: var(--accent-2); font-size: 0.92em; }
+    .sk .rule { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 4px solid var(--violet); background: color-mix(in srgb, var(--violet) 7%, var(--code-bg)); }
+    .sk .rule .kicker { color: var(--violet); }
+    .sk .rule blockquote { font-size: var(--t-mid); line-height: 1.38; color: var(--text-strong); }
+    .sk .rule cite { font-style: normal; color: var(--muted-2); letter-spacing: 0; text-transform: none; }
+    .sk .pipe--v { --gap: 14px; }
+    .sk .pipe--v > li { padding: 8px 16px; align-items: center; }
+    .sk .pipe--v > li > div { gap: 0; }
+    .sk .pipe h3 { font-size: var(--t-mid); letter-spacing: 0.02em; }
+    .sk .pipe p { line-height: 1.3; }
+    .sk .out { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--code-bg); font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); overflow-wrap: anywhere; }
+    .sk .out span { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content skx">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>V2 · Skills</span>
+    <h2 class="title" data-slide-title>octocode-research</h2>
+    <p class="description" data-slide-subtitle>Use when a code claim needs proof: it traces callers, wiring and history, then cites an exact anchor for every claim.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sk">
+      <div class="col">
+        <span class="kicker">Example ask</span>
+        <div class="bubble"><span class="who">You</span>Who calls <code>resolveSkillDestination</code>? Safe to delete?</div>
+        <p class="out"><span>Saves →</span> .octocode/octocode-research/&lt;date&gt;-&lt;slug&gt;.md</p>
+        <div class="rule" data-step="1" data-anim="land">
+          <span class="kicker">The rule</span>
+          <blockquote>“Empty is not absent. First repair scope, filters, ref/index, and synonyms.”</blockquote>
+          <cite>octocode-research/SKILL.md:27</cite>
+        </div>
+      </div>
+      <div class="col">
+        <span class="kicker">What it does</span>
+        <ol class="pipe pipe--v pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><span class="n">1</span><div><h3>Frame</h3><p>bug, feature or unknown</p></div></li>
+          <li><span class="n">2</span><div><h3>Model</h3><p>entry → output → consumers</p></div></li>
+          <li><span class="n">3</span><div><h3>Search · Read</h3><p>text · AST · LSP · history</p></div></li>
+          <li class="is-key"><span class="n">4</span><div><h3>Prove</h3><p>an anchor for every claim</p></div></li>
+          <li><span class="n">5</span><div><h3>Decide · Verify</h3><p>cite only checks that ran</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Why I built it, in my words: "help research using octocode tools", and "I needed a unified prompt for local/external workflows". Real questions cross boundaries: lspSearch finds who calls a function in my code, artifactSearch gives the package version and its release source, ghGetFileContent reads that exact ref, ghSearchHistory finds the PR that changed it. One skill, one contract, every hop carrying a precise handle (symbol:line, name@version, repo@sha, PR #). The flagship, and the evidence backbone the other skills call. The problem: agents assert code facts without proof ("nothing calls this, safe to delete"). This skill forces claim → evidence → confidence with exact anchors. Walk the pipe as it draws: FRAME the claim and CLASSIFY it (bug / feature / enhancement / unknown); MODEL the flow: entry → transformations → state → output → consumers; SEARCH/READ with the strongest handle: text search, AST, LSP, graph, or commit/PR history (an optional semantic locate via clasify comes first); PROVE with exact anchors; DECIDE or PATCH; then VERIFY, citing only checks that actually ran (skills/octocode-research/SKILL.md:12-19, :35-43). Press → for the rule: "Empty is not absent. First repair scope, filters, ref/index, and synonyms." (SKILL.md:27). Same idea one line later: a row with status error is a broken call, never absence, and "Exit 0 does not mean every row succeeded" (SKILL.md:28). Extra: repo topology comes from npx octocode graph ingest|query (SKILL.md:58); substantial results are saved under .octocode/octocode-research/&lt;date&gt;-&lt;slug&gt;.md and rendered as a local HTML page by the shared render-report.mjs (SKILL.md:85; output.md:13). Invoke: npx octocode skill install octocode-research, then ask, for example (illustrative prompt): "Who calls resolveSkillDestination? Is the --path branch safe to delete?" Hand-off: ten of the other skills route their code facts back through research; research itself hands architecture decisions to octocode-architect and still-open ideas to octocode-brainstorming (Related skills, SKILL.md). Next: skill 2, octocode-architect.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

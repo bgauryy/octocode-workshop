@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search locates; fetch adds context</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .zm { display: grid; grid-template-columns: 262px minmax(0, 1fr); gap: 34px; flex: 1; min-height: 0; align-items: center; }
+    /* the file: one line = --lh px; overlays are placed by line number */
+    .file { --lh: 7px; position: relative; display: flex; flex-direction: column; gap: 8px; }
+    .strip { position: relative; width: 168px; padding: 10px 12px; background: var(--code-bg); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); }
+    .strip i { display: block; height: var(--lh); padding: 1px 0; }
+    .strip i::before { content: ''; display: block; height: 100%; width: var(--w); border-radius: 2px; background: var(--muted-2); opacity: 0.5; }
+    .dim { position: absolute; left: 0; right: 0; background: color-mix(in srgb, var(--code-bg) 78%, transparent); }
+    .dim.top { top: 0; height: calc(10px + 30 * var(--lh)); border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+    .dim.bot { top: calc(10px + 37 * var(--lh)); bottom: 0; border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+    .hit { position: absolute; left: 8px; right: 8px; top: calc(10px + 33 * var(--lh) - 1px); height: calc(var(--lh) + 2px); border-radius: 3px; background: var(--positive); }
+    .br { position: absolute; left: -6px; right: -6px; border: 2px solid var(--bc); border-radius: 6px; }
+    .br.win { --bc: var(--text-strong); top: calc(10px + 30 * var(--lh) - 3px); height: calc(7 * var(--lh) + 6px); }
+    .br.wide { --bc: var(--violet); top: calc(10px + 22 * var(--lh) - 5px); height: calc(23 * var(--lh) + 10px); }
+    .note { position: absolute; left: 182px; font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.2; color: var(--nc); white-space: nowrap; }
+    .note.n1 { --nc: var(--positive); top: calc(10px + 33 * var(--lh) - 10px); }
+    .note.n2 { --nc: var(--text-strong); top: calc(10px + 37 * var(--lh) + 6px); }
+    .note.n3 { --nc: var(--violet); top: calc(10px + 22 * var(--lh) - 14px); }
+    .file .src { padding-left: 2px; }
+    .rt { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
+    .rt .pipe { --gap: 40px; }
+    .rt .pipe > li { padding: 12px 16px; }
+    .rt .pipe h3 { font-size: var(--t-mid); }
+    .rt .pipe p { font-size: var(--t-mid); }
+    .rt .pipe p code { font-size: 1em; }
+    .rt .hbars { grid-template-columns: 270px minmax(0, 1fr) 96px; gap: 10px 14px; }
+    .rt .hbars > .lbl code { color: inherit; }
+    .z2 { --pc: var(--text-strong); } .z3 { --pc: var(--violet); } .z1 { --pc: var(--positive); }
+    .bar-sym { --bc: var(--violet); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · zoom in, zoom out</span>
+    <h2 class="title" data-slide-title>Search locates; fetch adds context</h2>
+    <p class="description" data-slide-subtitle>Read the matching line's window instead of loading the whole file.</p>
+  </div>
+  <div class="slide-content">
+    <div class="zm">
+      <div class="file">
+        <div class="strip">
+          <i style="--w:66%"></i><i style="--w:44%"></i><i style="--w:75%"></i><i style="--w:31%"></i><i style="--w:54%"></i><i style="--w:93%"></i><i style="--w:37%"></i><i style="--w:71%"></i><i style="--w:32%"></i><i style="--w:89%"></i>
+          <i style="--w:52%"></i><i style="--w:29%"></i><i style="--w:36%"></i><i style="--w:80%"></i><i style="--w:78%"></i><i style="--w:33%"></i><i style="--w:55%"></i><i style="--w:36%"></i><i style="--w:95%"></i><i style="--w:79%"></i>
+          <i style="--w:32%"></i><i style="--w:40%"></i><i style="--w:53%"></i><i style="--w:62%"></i><i style="--w:75%"></i><i style="--w:31%"></i><i style="--w:53%"></i><i style="--w:70%"></i><i style="--w:42%"></i><i style="--w:62%"></i>
+          <i style="--w:48%"></i><i style="--w:38%"></i><i style="--w:49%"></i><i style="--w:72%"></i><i style="--w:37%"></i><i style="--w:95%"></i><i style="--w:33%"></i><i style="--w:32%"></i><i style="--w:51%"></i><i style="--w:88%"></i>
+          <i style="--w:63%"></i><i style="--w:79%"></i><i style="--w:65%"></i><i style="--w:84%"></i><i style="--w:43%"></i><i style="--w:71%"></i><i style="--w:63%"></i><i style="--w:56%"></i><i style="--w:48%"></i><i style="--w:56%"></i>
+          <i style="--w:35%"></i><i style="--w:63%"></i><i style="--w:92%"></i><i style="--w:68%"></i>
+          <span class="dim top" data-step="2" data-anim="fade"></span>
+          <span class="dim bot" data-step="2" data-anim="fade"></span>
+          <span class="br wide" data-step="3" data-anim="draw"></span>
+          <span class="br win" data-step="2" data-anim="draw"></span>
+          <span class="hit" data-step="1" data-anim="land"></span>
+        </div>
+        <span class="note n1" data-step="1">hit</span>
+        <span class="note n2" data-step="2">window<br>7 lines</span>
+        <span class="note n3" data-step="3">block</span>
+        <span class="src">a 2,075-line file</span>
+      </div>
+      <div class="rt">
+        <ol class="pipe">
+          <li class="z1" data-step="1" data-anim="draw"><span class="n">1</span><h3>zoom out</h3><p>search: path + line, no body</p></li>
+          <li class="z2 is-key" data-step="2" data-anim="draw"><span class="n">2</span><h3>zoom in</h3><p><code>matchString</code> + <code>contextLines</code></p></li>
+          <li class="z3" data-step="3" data-anim="draw"><span class="n">3</span><h3>widen on purpose</h3><p><code>ranges</code> · <code>block</code> · <code>minify</code></p></li>
+        </ol>
+        <div>
+          <span class="kicker">bytes returned · same file, 11 hits · dev 20.2.0, 12 Oct 2026</span>
+          <div class="hbars" style="margin-top: 10px">
+            <span class="lbl">full read, first page</span><span class="trk"><i style="--v: 100%; --bc: var(--negative)"></i></span><span class="val">~19,400</span>
+            <span class="lbl" data-step="3"><code>minify: "symbols"</code></span><span class="trk" data-step="3" data-anim="draw"><i style="--v: 38.2%; --bc: var(--violet)"></i></span><span class="val" data-step="3">~7,400</span>
+            <span class="lbl" data-step="2"><code>contextLines: 10</code> (old)</span><span class="trk" data-step="2" data-anim="draw"><i style="--v: 39.8%"></i></span><span class="val" data-step="2">~7,700</span>
+            <span class="lbl" data-step="2" style="color: var(--text-strong)"><code>contextLines: 3</code> (now)</span><span class="trk hot" data-step="2" data-anim="draw"><i style="--v: 18.1%"></i></span><span class="val" data-step="2" style="color: var(--accent)">~3,500</span>
+            <span class="lbl" data-step="2"><code>contextLines: 0</code></span><span class="trk" data-step="2" data-anim="draw"><i style="--v: 5.3%"></i></span><span class="val" data-step="2">~1,000</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The "context grew" fix as a picture. Left: one file drawn as a strip of lines (a drawing, not the real file). Click 1, zoom out: search returns the path and the hit line (green), no body. Click 2, zoom in: matchString with contextLines fetches just a window around the hit (white bracket; its bar is the cyan one below); everything else stays out of the context, and the result marks the gaps as "… [lines A-B not requested] …" (crates/runtime/src/tools/numbered.rs:81-86). Click 3, widen only on purpose: ranges (up to 10), block (the hit's whole declaration, ≤400 lines: BLOCK_MAX_LINES in local_fetch/block.rs:10), or minify "symbols" for an outline (ledger V18). The tool descriptions teach this order. ghGetFileContent, live on the dev build: "Read a GitHub file at a ref: matchString windows, ranges, a named declaration (matchString+block), or a minify:"symbols" outline. A path alone: first 50 lines of a file over 16 KiB; fullContent: all." And ghSearchCode: "A hit line can be the answer." (`octocode schema ghGetFileContent`, 2026-10-12; ledger V11). The bars are measured (re-measured 12 Oct 2026 with the dev build's local CLI, bytes of JSON output, rounded; the first run on 9 Oct used an earlier copy of the file): crates/runtime/src/tools/clasify/run/hydrate.rs, 2,075 lines / 85 KB on disk, matchString "MAX_HYDRATED" with 11 hits. contextLines 0 = 1,037 B, 3 = 3,514 B, 10 = 7,734 B; a full read's first page alone = 19,422 B; the whole symbols outline = 7,412 B. So the new default of 3 is about −55% vs the old 10, and about −80% vs the full read. The repo has an older, different measurement in a code comment: "A default read cost 4.9 KB at 10 and 1.3 KB at 2" (octocode-core 20.0.1, dist/toolContract/limits.js:71; ledger V19). The default is now 3 (contextLines: "default 3" in the live schema), changed from 10 on 2026-10-09. History: partial reads (startLine/endLine) landed on 5 Jul 2025 (commit 4a31fd816, "support partial fetching") and shipped in 2.3.10 on npm on 6 Jul 2025; matchString in 3.0.0 (27 Jul 2025). Honest caveat from the October benchmark: agents set contextLines themselves in 31 of 32 reads. The real cost is whole-file reads and wide windows, which is why the description teaches the order. Outside evidence that agents over-read: ContextBench (1,136 tasks, 66 repos): "LLMs consistently favor recall over precision" and "substantial gaps exist between explored and utilized context" (arXiv:2602.05892, 5 Feb 2026). Next: minify up close — fewer tokens, and what it costs.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

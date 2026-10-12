@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 4: prove who calls a function</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+    .lab .code { font-size: var(--t-small); }
+    .lab .card p { font-size: var(--t-mid); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content slide--lab" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Lab 4 · 15 min · teaches: local tools · LSP · zoom</span>
+    <h2 class="title" data-slide-title>Lab 4: prove who calls a function</h2>
+    <p class="description" data-slide-subtitle>Use language-server relationships to distinguish symbol identity from text matches.</p>
+  </div>
+  <div class="slide-content">
+    <div class="lab">
+      <div class="code" data-label="run"><span class="tk-cmt"># map → search → prove  (prefix: npx)</span>
+octocode structureSearch '{"queries":[{
+  "operation":"tree", "path":"src"}]}'
+octocode localSearch '{"queries":[{
+  "path":"src", "matchString":"loadConfig",
+  "resultView":"matchOnly"}]}'
+octocode lspSearch '{"queries":[{
+  "path":"src/config.ts", "lineHint":12,
+  "operation":"references",
+  "symbolName":"loadConfig"}]}'</div>
+      <div class="stack">
+        <div class="prompt" data-step="1"><span class="kicker">prompt your agent</span>"I want to change loadConfig's signature. Who breaks? Prove each caller with LSP, not text matches."</div>
+        <div class="card card--positive" data-step="2"><span class="kicker">done when</span><p>Your agent separates real callers from same-named text hits — and lists the files that break.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Lesson: the same contract locally, and "text hits are not identity" (instructions.ts). Use any TypeScript repo of your own; replace loadConfig, path and lineHint with a real function (the starter repo, when created, plants a same-name symbol so grep over-counts). Forms from OCTOCODE_CLI.md:118-121 and 170-176 (graph). If LSP is missing: npx octocode lsp-server status &lt;file&gt;. Next: what makes a skill work.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

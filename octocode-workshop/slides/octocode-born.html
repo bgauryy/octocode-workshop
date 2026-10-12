@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octocode began as a code research loop</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .comic { display: flex; align-items: center; justify-content: space-between; gap: 0; flex: 1; min-height: 0; }
+    .panel { display: flex; flex-direction: column; align-items: center; gap: 10px; min-height: 0; }
+    .panel img { height: 330px; width: auto; display: block; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); box-shadow: var(--shadow-soft); }
+    .panel span { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); }
+    .cx { flex: 1 1 0; min-width: 26px; max-width: 54px; height: 2px; background: var(--muted-2); position: relative; margin: 0 6px 34px; }
+    .cx::after { content: ''; position: absolute; right: -2px; top: -6px; border: 7px solid transparent; border-left: 9px solid var(--muted-2); border-right: 0; }
+    .birth { width: 250px; align-self: center; margin-bottom: 34px; border-color: var(--accent); }
+    .birth .kicker { color: var(--accent); }
+    .birth .ver { font-family: var(--font-head); font-size: var(--t-sub); font-weight: 700; color: var(--text-strong); line-height: 1.1; }
+    .birth li { font-size: var(--t-small); }
+    .birth li code { font-size: 1em; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · why it exists</span>
+    <h2 class="title" data-slide-title>Octocode began as a code research tool</h2>
+    <p class="description" data-slide-subtitle>I needed an agent to search large amounts of code and follow the evidence.</p>
+  </div>
+  <div class="slide-content">
+    <div class="comic">
+      <div class="panel" data-step="1"><img src="../assets/octocode_1.png" alt="Comic: a colleague asks for every reference to our project, internally and externally; the developer says Sure"><span>the ask</span></div>
+      <span class="cx" data-step="2" data-anim="draw"></span>
+      <div class="panel" data-step="2"><img src="../assets/octocode_2.png" alt="Comic: A few moments later, the developer slumped over the keyboard, exhausted"><span>a few moments later</span></div>
+      <span class="cx" data-step="3" data-anim="draw"></span>
+      <div class="panel" data-step="3"><img src="../assets/octocode_3.png" alt="Comic: baby Octocode in a stroller, surrounded by file and search icons"><span>Octocode</span></div>
+      <span class="cx" data-step="4" data-anim="draw"></span>
+      <div class="artifact birth" data-step="4" data-anim="land">
+        <span class="kicker">born on npm</span>
+        <span class="ver">octocode-mcp 1.0.0</span>
+        <span class="path">6 Jun 2025</span>
+        <ul>
+          <li>14 tools: GitHub search, files, PRs, issues + npm</li>
+          <li>GitHub via the <code>gh</code> CLI</li>
+          <li>results cached 1 h</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">From the brief: "I needed to search a lot of code in GitHub; this is how Octocode was created; started as research loop." The pain: large repos and many repos, public GitHub, organizations. The comic is the real moment: "find all references to our project and all usages of our internal logic, internally and externally", then hours of manual searching. Agents at the time would read one or two files and then confidently guess: sycophancy again, now with code. Click 4, the birth certificate: octocode-mcp 1.0.0 was published to npm on 2025-06-06 (npm view octocode-mcp time, run 2026-10-09; first commit "Initial commit" 2025-06-05). It shipped 14 snake_case tools: search_github_code, fetch_github_file_content, view_repository_structure, search_github_repos / commits / pull_requests / issues / discussions / topics / users, get_user_organizations, npm_search, npm_view, plus view_repository, the 14th (36f55ae3c:src/tools/contstants.ts:2-15). GitHub calls went through the gh CLI, and results sat in an in-memory cache with a 1-hour TTL (36f55ae3c:src/impl.ts:27-28; still 1 h in the published 1.0.1; raised to 24 h in cc85f5f96 later that day, 6 Jun 2025). Before the rename the project was called "Colombus MCP" (b2509f856). So Octocode's first shape was a loop over live tools, not an index. Next: why a loop and not RAG, the choice everyone told me was wrong.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

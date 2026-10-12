@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I chose a search loop over RAG</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rl { position: relative; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(min-content, 1fr) auto; column-gap: 72px; row-gap: 10px; flex: 1; min-height: 0; }
+    .rl::before { content: ''; position: absolute; left: 50%; top: 4px; bottom: 4px; width: 1px; background: var(--border); }
+    .vs { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--surface-2); border: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: var(--t-small); font-weight: 700; color: var(--muted); z-index: 1; }
+    .side { display: grid; grid-row: span 3; grid-template-rows: subgrid; min-height: 0; }
+    .side .kicker { font-size: var(--t-mid); align-self: end; }
+    .side .kicker b { color: var(--sc); font-weight: 600; }
+    .rag { --sc: var(--warm); } .loop { --sc: var(--positive); }
+    .vis { display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+    .rag .pipe--v { --gap: 10px; margin: 0; }
+    .rag .pipe--v > li { padding: 6px 16px; align-items: center; }
+    .rag .pipe--v h3 { font-size: var(--t-mid); }
+    .rag .pipe--v p { font-size: var(--t-small); }
+    .rag .pipe--v .n { min-width: 1.6em; height: 1.6em; }
+    .pipe p.flaw { color: color-mix(in srgb, var(--negative) 80%, var(--text)); }
+    .loop svg { height: 204px; width: 100%; }
+    .dg .lbl-strong { font-size: 22px; }
+    .dg .node { fill: var(--surface-2); stroke: var(--positive); stroke-width: 1.5; }
+    .dg .arc { fill: none; stroke: var(--positive); stroke-width: 2.5; }
+    .dg .hd { fill: var(--positive); stroke: var(--positive); stroke-width: 1; }
+    .dg .core { fill: color-mix(in srgb, var(--positive) 8%, var(--code-bg)); stroke: var(--border-strong); stroke-width: 1.5; }
+    .dg .ok { font-size: 22px; fill: var(--positive); }
+    .pc { list-style: none; margin: 0; padding: 8px 16px; display: flex; flex-direction: column; gap: 2px; font-size: var(--t-small); line-height: 1.35; color: var(--text); background: color-mix(in srgb, var(--sc) 6%, var(--surface)); border: 1px solid color-mix(in srgb, var(--sc) 30%, var(--border)); border-radius: var(--radius-sm); }
+    .pc li { display: flex; gap: 10px; }
+    .pc li::before { font-family: var(--font-mono); font-weight: 700; flex-shrink: 0; width: 1em; }
+    .pc .pro::before { content: '+'; color: var(--positive); }
+    .pc .con::before { content: '−'; color: var(--negative); }
+    .pc .con { margin-top: 3px; padding-top: 4px; border-top: 1px dashed var(--border); }
+    .pc strong { color: var(--text-strong); }
+    .pick { margin-top: 12px; padding: 12px 20px; border: 1px solid var(--border-strong); border-left: 4px solid var(--accent); border-radius: var(--radius-sm); background: var(--surface); font-size: var(--t-mid); color: var(--text); flex-shrink: 0; }
+    .pick b { color: var(--accent); font-weight: 600; }
+    /* nested steps: dim only the outer one when it is past */
+    [data-step-focus] [data-step] [data-step].step-visible.step-past { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · RAG vs loop</span>
+    <h2 class="title" data-slide-title>I chose a search loop over RAG</h2>
+    <p class="description" data-slide-subtitle>The agent follows evidence through code instead of relying only on retrieved chunks.</p>
+  </div>
+  <div class="slide-content">
+    <div class="rl">
+      <span class="vs" aria-hidden="true">vs</span>
+      <div class="side rag" data-step="1">
+        <span class="kicker"><b>RAG</b> · index first, ask later</span>
+        <div class="vis">
+          <ol class="pipe pipe--v pipe--warm" data-step="1" data-anim="draw" data-stagger style="--stagger: 160ms">
+            <li><span class="n">1</span><div><h3>crawl + chunk the repo</h3><p class="flaw">loses file relations</p></div></li>
+            <li><span class="n">2</span><div><h3>embed or BM25 index</h3><p class="flaw">misses names or meaning</p></div></li>
+            <li><span class="n">3</span><div><h3>top-k chunks to the model</h3><p class="flaw">stale index, one shot</p></div></li>
+          </ol>
+        </div>
+        <ul class="pc" data-step="3">
+          <li class="pro">one fast lookup that finds code by meaning</li>
+          <li class="pro">grep + semantic search gave Cursor <strong>+12.5%</strong> accuracy</li>
+          <li class="con">an index to build, store and keep fresh</li>
+        </ul>
+      </div>
+      <div class="side loop" data-step="2">
+        <span class="kicker"><b>Loop</b> · search the live code</span>
+        <div class="vis">
+          <svg class="dg" viewBox="0 0 520 232" data-step="2" data-anim="draw" role="img" aria-label="A loop: the model plans, searches the live code, reads a window around the hit, gets a hint, and plans again">
+            <path class="arc" d="M332 26 C 410 26, 450 46, 453 80"/><polygon class="hd" points="453,92 446,80 460,80"/>
+            <path class="arc" d="M453 138 C 450 182, 410 204, 352 204"/><polygon class="hd" points="340,204 352,197 352,211"/>
+            <path class="arc" d="M180 204 C 110 204, 70 184, 67 148"/><polygon class="hd" points="67,136 60,148 74,148"/>
+            <path class="arc" d="M67 92 C 70 48, 110 26, 178 26"/><polygon class="hd" points="190,26 178,19 178,33"/>
+            <rect class="node" x="190" y="4" width="140" height="44" rx="10"/>
+            <rect class="node" x="390" y="92" width="126" height="46" rx="10"/>
+            <rect class="node" x="180" y="182" width="160" height="44" rx="10"/>
+            <rect class="node" x="4" y="92" width="126" height="46" rx="10"/>
+            <circle class="core" cx="260" cy="115" r="62"/>
+            <text class="lbl-strong" x="260" y="33" text-anchor="middle">plan</text>
+            <text class="lbl-strong" x="453" y="122" text-anchor="middle">search</text>
+            <text class="lbl-strong" x="260" y="211" text-anchor="middle">read window</text>
+            <text class="lbl-strong" x="67" y="122" text-anchor="middle">hint</text>
+            <text class="ok" x="260" y="110" text-anchor="middle">live code</text>
+            <text class="ok" x="260" y="134" text-anchor="middle">any ref</text>
+          </svg>
+        </div>
+        <ul class="pc" data-step="3">
+          <li class="pro">no index: always the current code, at any ref</li>
+          <li class="pro">follows names and hints across files, step by step</li>
+          <li class="con">more calls, more latency and re-read tokens</li>
+        </ul>
+      </div>
+    </div>
+    <p class="pick" data-step="4"><b>My pick: the loop.</b> It felt right (it is how I research), and for me it was cheaper.</p>
+  </div>
+</div>
+<aside class="speaker-notes">Click 1: the RAG pipeline draws top-down: index first, ask later (crawl and chunk, index, retrieve, hand top-k to the model). RAG (Lewis et al. 2020, arXiv:2005.11401) pairs a model with a retrieval index: parametric plus non-parametric memory. Sparse retrieval matches exact terms (BM25); dense retrieval uses learned embeddings (DPR, Karpukhin et al. 2020, arXiv:2004.04906). For code my problems were exactly the red lines: chunks lose the file and how it connects; dense misses exact identifiers, sparse misses meaning; and every index goes stale on the next commit. And it is one shot: the model gets whatever top-k returns. Click 2: the loop searches the live code instead: plan, search the live code at any ref, read only the window around the hit, take the hint, plan again. People told me loops (repeated tool calls) were wasteful. Click 3: the honest pros and cons. RAG's plus: one fast lookup that finds code by meaning; Cursor measured "on average 12.5% higher accuracy" (6.5–23.5% by model) when semantic search is added to grep, and "the combination of these two leads to the best outcomes" (cursor.com/en-US/blog/semsearch, 6 Nov 2025); and Oskooei et al. found semantic search answered 65.2% vs 46.2% for subagent agentic search at under half the cost on read-only Q&amp;A (arXiv:2608.01507, 2 Aug 2026), a different setup from a main agent with hints. RAG's minus: an index to build, store and keep fresh. The loop's plus: no index, always the current code at any ref, and it follows names and hints across files. The loop's minus: more calls, more latency and re-read tokens. Cherny himself called the early evidence "mostly vibes" and said agentic search costs latency and tokens (latent.space/p/claude-code, 7 May 2025). The Claude Code team still landed on the loop: "Early versions of Claude Code used RAG + a local vector db, but we found pretty quickly that agentic search generally works better. It is also simpler…" (Boris Cherny, x.com/bcherny/status/2017824286489383315, Feb 2026). Also in the loop camp: Cline ("when you chunk code for embeddings, you're literally tearing apart its logic", 27 May 2025), the OpenAI Codex prompt ("prefer using rg or rg --files"), Sourcegraph Cody (its Feb 2024 blog: "we're leaving them [embeddings] behind (for now)"; sourcegraph.com/blog/how-cody-understands-your-codebase). Click 4: my pick: the loop. It felt right, because it is how I research, and for my use it was cheaper: no index to build or keep fresh (my own experience, not a benchmark). An index is a tool, not the architecture. Measure, don't believe. The rest of V1 is about making each lap cheap. Each web source is named inline above (fetched 2026-10-09). Next: the algorithm I offloaded into the tools.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

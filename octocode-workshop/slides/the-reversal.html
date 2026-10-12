@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The first confident answer fell apart</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rev { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 44px; align-items: center; flex: 1; min-height: 0; }
+    .rev .pipe--v { --gap: 34px; }
+    .rev .pipe--v > li { padding: 18px 20px; align-items: center; }
+    .rev .pipe--v p { font-size: var(--t-body); color: var(--text); line-height: 1.35; }
+    .rev .pipe--v strong { color: var(--warm-soft); font-family: var(--font-head); }
+    .rev .pipe--v .money { font-family: var(--font-head); font-size: 34px; color: var(--warm); font-weight: 700; }
+    .chat { display: flex; flex-direction: column; gap: 14px; margin: 0; }
+    .chat img { display: block; width: 100%; height: auto; border: 1px solid var(--border-strong); border-radius: var(--radius); box-shadow: var(--shadow); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 · How it started</span>
+    <h2 class="title" data-slide-title>The first confident answer fell apart</h2>
+    <p class="description" data-slide-subtitle>The model reversed its Chrome bug assessment when I asked it to contradict itself.</p>
+  </div>
+  <div class="slide-content">
+    <div class="rev">
+      <ol class="pipe pipe--v pipe--warm">
+        <li data-step="1"><span class="n">1</span><p>I thought I'd found a <strong>Chrome security bug</strong>.</p></li>
+        <li data-step="2"><span class="n">2</span><p>The model agreed: a <span class="money" data-anim="count">$10k</span> bounty.</p></li>
+        <li data-step="3" class="is-key"><span class="n">3</span><p>It offered to <strong>write the report</strong>.</p></li>
+      </ol>
+      <figure class="chat" data-step="4">
+        <img src="../assets/reversal-chatgpt.png" alt="ChatGPT screenshot. Me: 'Please try to contradict your claim, just to verify it's really a bug.' ChatGPT: 'You're right to double-check. Your intuition is correct: it's not a bug.'">
+      </figure>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Personal story (speaker's own experience, early 2023; ledger H1). Set the scene (cut from the slide): early 2023, a chat window, no tools, no evidence, and a model eager to agree. Build it click by click down the line: (1) the serious security bug I thought I'd found in Chrome; (2) the model agreeing, and estimating a $10k bounty after ten minutes of chat; (3) the punch: it offered to write the bug-bounty report for me. Click 4: the reversal conversation. I asked it to contradict its own claim, and it folded: "Your intuition is correct: it's not a bug." Pause after it. What moved the model wasn't new evidence, just pressure (one push). Remember that; it explains most of what goes wrong with agents later. Optional, said out loud (not on screen), the cost at scale: Daniel Stenberg ended curl's bug bounty on 31 Jan 2026: "Starting 2025, the confirmed-rate plummeted to below 5%" (from above 15%) amid AI-generated reports (daniel.haxx.se/blog/2026/01/26/the-end-of-the-curl-bug-bounty/); in Jul 2025 he wrote that AI slop was "about 20% of all submissions", each costing "30 minutes, sometimes up to an hour or three" (daniel.haxx.se/blog/2025/07/14/death-by-a-thousand-slops/). Line: my model invented a $10k Chrome bug in 2023; by 2026 that behaviour had ended curl's bug bounty. Next: this behaviour has a name.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

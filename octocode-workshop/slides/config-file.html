@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keys go in .env; features go in .octocoderc</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cf { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; }
+    .cf .col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+    .cf .code { flex: 1; font-size: var(--t-small); line-height: 1.75; padding: 50px 20px 18px; white-space: pre; overflow: hidden; }
+    .cf .code[data-label]::before { top: 14px; }
+    .cf .cap { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .cf .cap b { color: var(--violet); font-weight: 600; }
+    .rule { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: var(--t-small); color: var(--code-comment); white-space: nowrap; }
+    .rule code { font-family: var(--font-mono); color: var(--text-strong); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · the config files</span>
+    <h2 class="title" data-slide-title>Keys go in .env; features go in .octocoderc</h2>
+    <p class="description" data-slide-subtitle>Two files in ~/.octocode: keys and tokens, switches for the tools.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="cf">
+      <div class="col">
+        <div class="code" data-label="~/.octocode/.env · API keys"><span class="tk-key">TAVILY_API_KEY</span><span class="tk-pn">=</span><span class="tk-str">…</span>
+<span class="tk-key">EXA_API_KEY</span><span class="tk-pn">=</span><span class="tk-str">…</span>
+<span class="tk-key">SERPER_API_KEY</span><span class="tk-pn">=</span><span class="tk-str">…</span>
+<span class="tk-cm"># any key your skills need</span></div>
+        <div class="cap"><b>→</b> loaded by the CLI, MCP server and skills</div>
+      </div>
+      <div class="col" data-step="1">
+        <div class="code" data-label="~/.octocode/.octocoderc · JSONC · features"><span class="tk-pn">{</span>
+  <span class="tk-key">"github"</span>: { <span class="tk-key">"apiUrl"</span>: <span class="tk-str">"https://api.github.com"</span> },
+  <span class="tk-key">"local"</span>: { <span class="tk-key">"enabled"</span>: <span class="tk-kw">true</span> },
+  <span class="tk-key">"tools"</span>: { <span class="tk-key">"disabled"</span>: [<span class="tk-str">"ghSearchRepo"</span>] },
+  <span class="tk-key">"network"</span>: { <span class="tk-key">"timeout"</span>: <span class="tk-num">30000</span> }
+<span class="tk-pn">}</span></div>
+        <div class="cap"><b>→</b> read by the MCP server and the CLI</div>
+      </div>
+    </div>
+    <div class="rule" data-step="2">// .octocoderc never holds tokens · edit both from one page: <code>octocode config view</code></div>
+  </div>
+</div>
+<aside class="speaker-notes">Per docs/CONFIGURATION.md (github.com/bgauryy/octocode/blob/main/docs/CONFIGURATION.md). Left: ~/.octocode/.env holds third-party API keys: TAVILY_API_KEY, SERPER_API_KEY, EXA_API_KEY, and any other keys your skills need. The CLI and the MCP server load it too, and it can also hold GH_TOKEN or GITHUB_TOKEN. Press → for the right file: ~/.octocode/.octocoderc is JSONC, read by the MCP server and the CLI. github.apiUrl points at GitHub Enterprise. local.enabled turns local + LSP tools on; ghCloneRepo is CLI-only and needs persistent storage, the default; the old local.enableClone key is unknown and ignored (docs/OCTOCODE_TOOLS.md:57). tools.disabled removes tools; tools.enabled is a strict allowlist. network.timeout defaults to 30000 ms (range 5000–300000). Restart the MCP server or start a new session after editing. Press → for the rule: .octocoderc never supplies GitHub tokens (docs/AUTHENTICATION.md:35); a token comes from a token variable (shell or .env), octocode auth login, or gh auth token. octocode config view opens a local settings page on 127.0.0.1 where you edit both. That closes V2. Next: the V2 hands-on pause, then V3: the CLI, the Rust engine and clasify.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Long research can carry a goal and a reason</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .sc { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 36px; align-items: center; flex: 1; min-height: 0; }
+    .sc .code { font-size: var(--t-small); line-height: 1.6; }
+    .fields { display: flex; flex-direction: column; gap: 18px; }
+    .fd { padding: 18px 22px; border: 1px solid var(--border-strong); border-left: 4px solid var(--accent); border-radius: var(--radius-sm); background: linear-gradient(165deg, var(--surface-2), var(--surface)); }
+    .fd.r { border-left-color: var(--violet); }
+    .fd .q { font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent); letter-spacing: .06em; text-transform: uppercase; }
+    .fd.r .q { color: var(--violet); }
+    .fd h3 { font-family: var(--font-mono); font-size: 30px; color: var(--text-strong); margin: 6px 0 6px; }
+    .fd p { font-size: 22px; color: var(--text); margin: 0; line-height: 1.35; }
+    .slide-content > .rule { margin-top: 28px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · input schema</span>
+    <h2 class="title" data-slide-title>Long research can carry a goal and a reason</h2>
+    <p class="description" data-slide-subtitle>These optional fields keep a multi-call search on track; simple lookups omit them.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sc">
+      <div class="code" data-label="ghSearchCode · MCP input"><span class="tk-pn">{</span>
+  <span class="tk-key">"queries"</span>: [{
+    <span class="tk-key">"mainGoal"</span>: <span class="tk-str" data-step="1" data-anim="mark">"How does zod parse objects?"</span>,
+    <span class="tk-key">"reasoning"</span>: <span class="tk-str" data-step="2" data-anim="mark">"Find the parser class first"</span>,
+    <span class="tk-key">"keywords"</span>: [<span class="tk-str">"ZodObject"</span>],
+    <span class="tk-key">"owner"</span>: <span class="tk-str">"colinhacks"</span>,
+    <span class="tk-key">"repo"</span>: <span class="tk-str">"zod"</span>
+  }]
+<span class="tk-pn">}</span></div>
+      <div class="fields">
+        <div class="fd" data-step="1"><span class="q">Optional · what for</span><h3>mainGoal</h3><p>The question the research serves.</p></div>
+        <div class="fd r" data-step="2"><span class="q">Optional · why now</span><h3>reasoning</h3><p>Why this call advances the goal.</p></div>
+      </div>
+    </div>
+    <div class="rule" data-step="3"><span class="k">// use for:</span> multi-call research; <strong>omit for a simple lookup</strong>.</div>
+  </div>
+</div>
+<aside class="speaker-notes">The ghSearchCode MCP input is a queries array with one to five query objects (packages/octocode-config/contract/tool-contract.json, ghSearchCode inputSchema; ledger V5). This is one valid call. Click 1: mainGoal, the research question. Click 2: reasoning, why this query advances it. Both are optional per-query fields, each at most 500 characters. Use them when the agent is following an unknown across calls; omit them for a simple lookup. They make the purpose visible again in subsequent tool context, but that benefit is a design intent, not a measured improvement here. Octocode can carry them into suggested next queries. Next: what comes back.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

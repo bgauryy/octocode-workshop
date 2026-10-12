@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 3: trace a package to its source</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+    .lab .code { font-size: var(--t-small); }
+    .lab .card p { font-size: var(--t-mid); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content slide--lab" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Lab 3 · 10 min · teaches: npm search · pagination</span>
+    <h2 class="title" data-slide-title>Lab 3: trace a package to its source</h2>
+    <p class="description" data-slide-subtitle>Start with an npm package and find the exact code that version ships.</p>
+  </div>
+  <div class="slide-content">
+    <div class="lab">
+      <div class="code" data-label="run">npx octocode artifactSearch '{"queries":[{
+  "ecosystem": "npm",
+  "packageName": "zod"
+}]}'
+
+npx octocode ghSearchCode '{"queries":[{
+  "keywords": ["ZodObject"],
+  "owner": "colinhacks", "repo": "zod"
+}]}'</div>
+      <div class="stack">
+        <div class="prompt" data-step="1"><span class="kicker">prompt your agent</span>"Should we use zod or valibot for runtime validation? Get versions, dependencies and the source of each one's object parser. Evidence only."</div>
+        <div class="card card--positive" data-step="2"><span class="kicker">done when</span><p>A comparison table where every row cites a registry fact or a source line. Bonus: a <code>next</code> page you followed.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Lesson: the V1 "packages" fix (artifactSearch) and pagination. Commands from OCTOCODE_CLI.md:516-517 ("Package to source"). Teach: "Registry rows are leads; read release source at its ref" (descriptions.ts) — a repo link is not proof of the published version. In the CLI, exit code 6 means a page remains: run the next call. Next: Lab 4.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

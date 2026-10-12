@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go back to the original sources</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .frw { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; counter-reset: fr; }
+    .frw .grp { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .frw .gh { font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent-2); letter-spacing: 0.02em; }
+    .fr { list-style: none; display: flex; flex-direction: column; }
+    .fr li { counter-increment: fr; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 2px 12px; padding: 12px 0; border-top: 1px solid var(--border); }
+    .fr li::before { content: counter(fr, decimal-leading-zero); grid-row: 1 / span 2; font-family: var(--font-mono); font-size: var(--t-small); color: var(--fc, var(--accent)); padding-top: 3px; }
+    .fr b { font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); font-weight: 600; line-height: 1.25; }
+    .fr span { font-size: var(--t-small); color: var(--muted); line-height: 1.35; }
+    .fr span code { font-family: var(--font-mono); color: var(--accent-2); font-size: 1em; }
+    .fr .std { --fc: var(--violet); } .fr .res { --fc: var(--warm); }
+    .fr-foot { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid var(--border); padding-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Close · further reading</span>
+    <h2 class="title" data-slide-title>Go back to the original sources</h2>
+    <p class="description" data-slide-subtitle>Eight references explain the ideas behind this workshop.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="frw">
+      <div class="grp">
+        <span class="gh">anthropic.com/engineering</span>
+        <ol class="fr" data-anim="rise" data-stagger style="--stagger: 70ms">
+          <li><b>Effective context engineering</b><span>context is a finite budget</span></li>
+          <li><b>Writing tools for agents</b><span>tools as prompts</span></li>
+          <li><b>Building effective agents</b><span>workflows vs agents</span></li>
+          <li><b>Code execution with MCP</b><span>results out of the window</span></li>
+        </ol>
+      </div>
+      <div class="grp">
+        <span class="gh" style="color: var(--muted)">specs · research</span>
+        <ol class="fr" data-anim="rise" data-stagger style="--stagger: 70ms; --delay: 280ms">
+          <li class="std"><b>Agent Skills specification</b><span><code>agentskills.io/specification</code> · SKILL.md</span></li>
+          <li class="std"><b>MCP specification</b><span><code>modelcontextprotocol.io</code> · the protocol</span></li>
+          <li class="res"><b>The lethal trifecta</b><span><code>simonwillison.net</code> · Jun 2025 · fetched text is data</span></li>
+          <li class="res"><b>Context Rot · Lost in the Middle</b><span><code>trychroma.com</code> · <code>arXiv:2307.03172</code></span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="fr-foot"><span class="src">and Octocode's own: MANIFEST.md · OCTOCODE_PROTOCOL.md · octocode-benchmark</span><span class="src">github.com/bgauryy/octocode</span></div>
+  </div>
+</div>
+<aside class="speaker-notes">All links checked 9 Oct 2026. (1) anthropic.com/engineering/effective-context-engineering-for-ai-agents — context as a finite budget, compaction, just-in-time retrieval. (2) anthropic.com/engineering/writing-tools-for-agents — naming, response shaping, token-efficient results: closest to "tools as prompts". (3) anthropic.com/engineering/building-effective-agents — workflows vs agents (19 Dec 2024). (4) anthropic.com/engineering/code-execution-with-mcp — keeping tool definitions and results out of the window; the case for a CLI next to MCP. (5) agentskills.io/specification — the SKILL.md format (also anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills). (6) modelcontextprotocol.io/specification/latest. (7) simonwillison.net/2025/Jun/16/the-lethal-trifecta — the threat model behind "fetched text is data"; plus invariantlabs.ai/blog/mcp-github-vulnerability as a case study. (8) trychroma.com/research/context-rot and arxiv.org/abs/2307.03172. And Octocode's own, in github.com/bgauryy/octocode: MANIFEST.md (Research-Driven Development), docs/OCTOCODE_PROTOCOL.md (where Octocode wins and where plain tools win) and packages/octocode-benchmark (every campaign, including the rounds it lost). Next: the close.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

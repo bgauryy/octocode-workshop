@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V3 made performance measurable</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rc { display: flex; flex-direction: column; gap: 8px; }
+    .rc-head { display: grid; grid-template-columns: 250px 190px minmax(0, 1fr); gap: 24px; padding: 0 22px; font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; }
+    .rc-head .n { color: var(--violet); } .rc-head .g { color: var(--positive); grid-column: 2 / 4; }
+    .rc .newgain { grid-template-columns: 250px 190px minmax(0, 1fr); gap: 24px; padding: 4px 22px; }
+    .rc .newgain > b.new { text-transform: none; letter-spacing: 0; font-size: var(--t-body); }
+    .rc .newgain > b.gain { text-transform: none; letter-spacing: -0.02em; font-size: 38px; line-height: 1.05; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .rc .newgain > b.gain small { font-size: 0.5em; margin-left: 4px; }
+    .rc .newgain > span { color: var(--text); font-size: var(--t-mid); }
+    .rc-loss { display: grid; grid-template-columns: 250px 190px minmax(0, 1fr); gap: 24px; align-items: center; padding: 4px 22px; margin-top: 6px; border: 1px solid var(--border-strong); border-left: 3px solid var(--negative); border-radius: var(--radius-sm); background: var(--surface); }
+    .rc-loss > b.new { font-family: var(--font-head); font-size: var(--t-body); color: var(--negative); }
+    .rc-loss > b.gain { font-family: var(--font-head); font-size: 38px; line-height: 1.05; letter-spacing: -0.02em; text-align: right; color: var(--negative); font-variant-numeric: tabular-nums; }
+    .rc-loss > span { font-size: var(--t-mid); color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · recap</span>
+    <h2 class="title" data-slide-title>V3 made performance measurable</h2>
+    <p class="description" data-slide-subtitle>A faster engine and smarter reads were tested against benchmarks that could disprove the gains.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="rc">
+      <div class="rc-head"><span class="n">new in V3</span><span class="g">the advantage, measured</span></div>
+      <div class="rc" data-anim="rise" data-stagger style="--stagger: 160ms">
+        <div class="newgain"><b class="new">agentic CLI</b><b class="gain" data-anim="count" data-from="1">1.99×</b><span>fewer chars than plain gh (Aug)</span></div>
+        <div class="newgain"><b class="new">Rust engine</b><b class="gain" data-anim="count" data-from="120" style="--delay: 160ms">8<small>ms</small></b><span>start, vs ~120 ms</span></div>
+        <div class="newgain"><b class="new">clasify + Jev</b><b class="gain" data-anim="count" data-from="1" style="--delay: 320ms">339×</b><span>less to read, when called (0 / 30 in Oct)</span></div>
+        <div class="newgain"><b class="new">token savers</b><b class="gain" data-anim="count" style="--delay: 480ms">−83%</b><span>schema bytes per request</span></div>
+        <div class="newgain"><b class="new">benchmark loop</b><b class="gain" data-anim="count" data-from="1" style="--delay: 640ms">0.73×</b><span>Octocode ÷ its own earlier chars, 2 laps</span></div>
+      </div>
+      <div class="rc-loss" data-anim="land" style="--delay: 1000ms"><b class="new">the loss</b><b class="gain">0.71×</b><span>gh-lean ÷ Octocode chars, Oct head-to-head</span></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">V3 in one slide: what's new, and what it bought. Each number counts in as the row lands. Agentic CLI: the catalog on a bare pipe, next.* continuations with exit 6, and errors that name the fix; in August the Octocode v18 CLI used 1.99× fewer characters than plain gh (CI 1.52–2.61) at 9.19 vs 9.27 correctness (results/SUMMARY.md:28-30; X8). Rust engine: one native engine behind both surfaces; ~8 ms vs ~120 ms start through the Node launcher, and a warm per-workspace language server takes a TypeScript hover from ~3 s to ~0.1 s (packages/octocode-native/README.md:266-276; CHANGELOG.md:182-184; X3). clasify + Jev: 1.9 KB instead of 644 KB in the docs' example (docs/OCTOCODE_CLASIFY.md:92-95; X6). But honestly: offered in 30 of 30 October sessions and called 0 times (X10). Token savers: deferring 9 rarely-used tools behind one run tool cuts their schema bytes from 10,865 to 1,805 per request, measured 2026-10-09 on the core dist (−83%); plus minimal-by-default rows, matchString windows, contextLines 3 and symbol outlines, as on the previous token slide. Benchmark loop: on 2026-10-09 two laps took Octocode to 0.79× then 0.73× of its own characters on the same 10 questions, correctness 8.4 → 8.6 → 8.5 (results/lean-vs-mcp-114934-2026-10-09.md:388-395, 452-456). And the line at the bottom is the reason I trust the rest: in the same October campaign a disciplined gh with --jq and sed -n used 0.71× of Octocode's characters at tied correctness (X9). Two different ratios, say it out loud: 0.73× is Octocode against its own earlier self (lap 2 vs lap 0); 0.71× is gh-lean against Octocode in the October head-to-head. Moved off the slide: the CLI is the catalog on a bare pipe with next.* continuations and exit 6; the Rust engine is one engine behind MCP and the CLI, and a warm LSP takes a hover from ~3 s to ~0.1 s; clasify + Jev means a judge reads and the agent gets scores + lines; token savers are deferred tools (9 deferred), minimal rows and windows; the benchmark loop has a blind judge and every round is published. That closes V3. Next: the V3 hands-on pause, then recap and gotchas.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

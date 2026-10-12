@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Schemas make tool calls predictable</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .why { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); margin: 0 0 14px; }
+    .why b { color: var(--text-strong); font-weight: 600; }
+    .sp { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 32px; flex: 1; min-height: 0; align-items: center; }
+    .sp .pipe--v { --gap: 10px; }
+    .sp .pipe--v > li { padding: 8px 16px; align-items: center; }
+    .sp .pipe--v .n { min-width: 6.2em; font-size: var(--t-small); }
+    .sp .pipe--v h3 { font-size: var(--t-mid); }
+    .sp .pipe--v p { font-size: 20px; color: var(--text); }
+    .sp .code { font-size: var(--t-code); line-height: 1.4; }
+    .codecol { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 · schemas, protocols, tools</span>
+    <h2 class="title" data-slide-title>Schemas make tool calls predictable</h2>
+    <p class="description" data-slide-subtitle>Typed inputs and outputs gave agents a structured way to use functions and protocols.</p>
+  </div>
+  <div class="slide-content">
+    <p class="why">// once tools had schemas: <b>function calls</b> → <b>many protocols</b> (MCP, A2A…)</p>
+    <div class="sp">
+      <div class="codecol" data-step="1"><div class="code" data-label="search-tool.ts"><span class="tk-kw">const</span> SearchIn = z.<span class="tk-key">object</span>({
+  query: z.<span class="tk-key">string</span>()
+    .<span class="tk-key">describe</span>(<span class="tk-str" data-anim="mark">"keywords to find in code"</span>),
+  lang: z.<span class="tk-key">enum</span>([<span class="tk-str">"ts"</span>, <span class="tk-str">"py"</span>, <span class="tk-str">"go"</span>]),
+});
+<span class="tk-kw">const</span> SearchOut = z.<span class="tk-key">object</span>({
+  files: z.<span class="tk-key">array</span>(z.<span class="tk-key">string</span>()),
+});</div></div>
+      <ol class="pipe pipe--v pipe--warm">
+        <li data-step="2"><span class="n">Jun 2023</span><div><h3>OpenAI function calling</h3></div></li>
+        <li data-step="3"><span class="n">the catch</span><div><h3>Rebuilt per model, per app</h3></div></li>
+        <li data-step="4"><span class="n">Nov 2024</span><div><h3>MCP</h3><p>one protocol for tools</p></div></li>
+        <li data-step="5"><span class="n">Mar 2025</span><div><h3>OpenAI adopts MCP</h3></div></li>
+        <li data-step="6" class="is-key"><span class="n">Dec 2025</span><div><h3>Linux Foundation</h3><p>Agentic AI Foundation</p></div></li>
+      </ol>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The previous slide showed the mechanism: the model writes a call, the code runs it. This slide is about writing that schema well, and where it led. The point: a schema was the next step in communicating with agents in a predictable way. It led to function calls, and it ended up with many protocols: MCP, A2A and more. The model never sees your code; all it reads is the schema. The input schema tells it what a valid call looks like; the output schema tells it what comes back, so it can read the result and plan the next step. That contract is what made tool calls possible, and once everyone described tools the same way, a shared protocol could follow. Click 1: the lesson, in code. The description strings ARE the prompt the model reads when it fills arguments, an enum removes a whole class of invented values (the highlighted string is what the model sees), and SearchOut is the shape of what comes back. A vague schema gets invented arguments; a typed schema gets reliable calls. Quote to say aloud: Anthropic, "Writing effective tools for agents" (anthropic.com/engineering/writing-tools-for-agents, 11 Sep 2025): "Even small refinements to tool descriptions can yield dramatic improvements"; "think of how you would describe your tool to a new hire on your team". Their later tool-use examples raised accuracy "from 72% to 90% on complex parameter handling" (anthropic.com/engineering/advanced-tool-use, 24 Nov 2025). Then the line builds down the right (ledger H6). Click 2: June 2023, OpenAI function calling (gpt-4-0613): typed tool arguments, so schemas become tool calls. Click 3: the catch. Every integration was built again, custom per model and per app. Click 4: 25 Nov 2024, Anthropic publishes the Model Context Protocol: one protocol for tools, and the subject of the MCP arrival section (anthropic.com/news/model-context-protocol). Click 5: 26 Mar 2025, OpenAI adopts MCP, so the rival lab joins (simonwillison.net/2025/Mar/26/openaidevs). Click 6: 9 Dec 2025, MCP is donated to the Agentic AI Foundation under the Linux Foundation (anthropic.com/news/donating-the-model-context-protocol-and-establishing-of-the-agentic-ai-foundation). We come back to how MCP works next. Next: the lesson those prompt and tool experiments pointed to: choosing the right context.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

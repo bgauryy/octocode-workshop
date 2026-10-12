@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>An ambiguous question produced four answers</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .q { text-align: left; background: var(--code-bg); border: 1px solid var(--border-strong); border-left: 4px solid var(--warm); border-radius: var(--radius-sm); padding: 12px 22px; font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); }
+    .q .hl-warm { font-weight: 600; }
+    .q small { font-size: var(--t-small); color: var(--muted-2); margin-left: 10px; font-weight: 400; }
+    .fa { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px; align-items: center; flex: 1; min-height: 0; }
+    .fa .shot { width: 100%; height: auto; max-height: 100%; }
+    .ans { display: flex; flex-direction: column; gap: 10px; }
+    .ans > div:not(.why) { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 12px; align-items: baseline; padding: 8px 14px; border-radius: var(--radius-sm); background: var(--surface); border-left: 3px solid var(--ac); }
+    .ans b { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+    .ans span { font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); }
+    .ans span em { font-style: normal; color: var(--ac); margin-left: 8px; }
+    .ans small { grid-column: 2; font-size: var(--t-small); color: var(--muted); font-family: var(--font-body); }
+    .pop { --ac: var(--warm); } .hub { --ac: var(--accent); }
+    .why { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px dashed var(--warm); font-size: var(--t-small); color: var(--text); line-height: 1.35; }
+    .why strong { color: var(--warm-soft); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 · How it started</span>
+    <h2 class="title" data-slide-title>An ambiguous question produced four answers</h2>
+    <p class="description" data-slide-subtitle>The models interpreted “oldest NBA playoff coach” differently.</p>
+  </div>
+  <div class="slide-content">
+    <div class="q">"Who is the <span class="hl-warm">oldest</span> coach who managed an NBA playoff game?"<small>one prompt · four models</small></div>
+    <div class="fa">
+      <img class="shot" src="../assets/nba.png" alt="Four model answers to the oldest-NBA-playoff-coach question: ChatGPT, Grok, Gemini 2.5 Pro and Perplexity" data-step="1">
+      <div class="ans" data-step="2" data-anim="rise" data-stagger style="--stagger: 140ms">
+        <div class="pop"><b>ChatGPT</b><span>Popovich<em>71</em></span></div>
+        <div class="pop"><b>Grok</b><span>Popovich<em>70</em></span></div>
+        <div class="hub"><b>Gemini</b><span>Hubie Brown<em>70</em></span></div>
+        <div class="hub"><b>Perplexity</b><span>Hubie Brown<em>71</em></span><small>…then lists Popovich at 73 as #2</small></div>
+        <div class="why"><strong>"Oldest" hides several records</strong>; each model picked one, confidently. Training "rewards guessing over acknowledging uncertainty."</div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The question first: it sounds like trivia with one answer. Click 1: four real screenshots, four models (the speaker's own screenshots, 2025; ledger H2). Click 2: the top answer from each, readable from the back. ChatGPT and Grok say Gregg Popovich (at 71 and 70), Gemini 2.5 Pro and Perplexity say Hubie Brown (at 70 and 71); Perplexity even ranks Hubie Brown at 71 first and then lists Popovich at 73 second, contradicting its own ranking. The reveal: "oldest" hides several records (oldest to coach a playoff game, oldest in the Finals, oldest to win a title), so each model confidently picked a different lane (sources: HoopsHype; Wikipedia, Gregg Popovich and Hubie Brown). Why confidently instead of asking? OpenAI and Georgia Tech: "language models hallucinate because the training and evaluation procedures reward guessing over acknowledging uncertainty" (arXiv:2509.04664, 4 Sep 2025). Ambiguous context in, confident garbage out. This is the whole workshop in one slide: define the question, and the disagreement disappears. Next: what I did about both failures.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

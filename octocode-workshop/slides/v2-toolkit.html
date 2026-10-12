@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V2 covers local code, GitHub, npm and skills</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .kit { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr) minmax(0, 1fr); gap: 22px; align-items: stretch; }
+    .grp { --pc: var(--accent); display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 14px 18px 16px; border: 1px solid var(--border-strong); border-top: 3px solid var(--pc); border-radius: var(--radius-sm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .grp.local { --pc: var(--violet); }
+    .grp.skills { --pc: var(--positive); }
+    .grp > .kicker { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; color: var(--pc); }
+    .grp > .kicker b { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); font-weight: 400; letter-spacing: 0; text-transform: none; }
+    .rows { display: flex; flex-direction: column; gap: 6px; }
+    .row { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .row code { font-family: var(--font-mono); font-size: var(--t-small); color: var(--pc); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row span { font-size: var(--t-small); color: var(--muted); line-height: 1.25; }
+    .ext .rows { gap: 5px; }
+    .ext .row { flex-direction: row; align-items: baseline; gap: 10px; }
+    .ext .row code { flex: 0 0 auto; }
+    .ext .row code.npm { color: var(--positive); }
+    .ext .row span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .optin { display: flex; flex-wrap: wrap; gap: 2px 10px; margin-top: auto; padding-top: 8px; border-top: 1px dashed var(--border-strong); font-size: var(--t-small); color: var(--muted-2); line-height: 1.35; }
+    .optin code { font-family: var(--font-mono); color: var(--text-strong); }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px 8px; align-content: flex-start; }
+    .chip { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); padding: 3px 11px; border: 1px solid color-mix(in srgb, var(--positive) 55%, var(--border)); border-radius: 999px; background: var(--surface); }
+    .chip.hub { color: var(--text-strong); border-color: var(--positive); background: color-mix(in srgb, var(--positive) 14%, var(--surface)); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · where we are now</span>
+    <h2 class="title" data-slide-title>V2 covers local code, GitHub, npm and skills</h2>
+    <p class="description" data-slide-subtitle>The same research contract runs on your workspace and on external sources; skills package the workflows on top.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="kit">
+      <div class="grp local" data-anim="rise">
+        <span class="kicker">Local tools <b>workspace</b></span>
+        <div class="rows">
+          <div class="row"><code>structureSearch</code><span>map the tree, find files</span></div>
+          <div class="row"><code>localSearch</code><span>text and regex</span></div>
+          <div class="row"><code>astSearch</code><span>code by syntax shape</span></div>
+          <div class="row"><code>localFetch</code><span>exact lines, matchString, ranges</span></div>
+          <div class="row"><code>lspSearch</code><span>definitions, references, callers</span></div>
+        </div>
+      </div>
+      <div class="grp ext" data-step="1" data-anim="rise">
+        <span class="kicker">External tools <b>GitHub · npm</b></span>
+        <div class="rows">
+          <div class="row"><code>ghSearchRepos</code><span>find repos</span></div>
+          <div class="row"><code class="npm">npmSearch</code><span>package → repo</span></div>
+          <div class="row"><code>ghSearchCode</code><span>code and paths</span></div>
+          <div class="row"><code>ghViewRepoStructure</code><span>tree</span></div>
+          <div class="row"><code>ghGetFileContent</code><span>read, minify</span></div>
+          <div class="row"><code>ghSearchPullRequests</code><span>PRs</span></div>
+          <div class="row"><code>ghSearchIssues</code><span>issues</span></div>
+          <div class="row"><code>ghSearchCommits</code><span>history</span></div>
+        </div>
+        <div class="optin"><span>opt-in:</span><code>ghCloneRepo</code><code>ghListReleases</code><code>ghSearchDiscussions</code></div>
+      </div>
+      <div class="grp skills" data-step="2" data-anim="rise">
+        <span class="kicker">Skills <b>workflows</b></span>
+        <div class="chips">
+          <span class="chip hub">research</span><span class="chip">architect</span><span class="chip">brainstorming</span><span class="chip">rfc-generator</span><span class="chip">documentation</span><span class="chip">roast</span><span class="chip">eval-benchmark</span><span class="chip">clean-agentic-code</span><span class="chip">agentic-prompts</span><span class="chip">chrome-devtools</span><span class="chip">skills</span>
+        </div>
+        <div class="optin"><span>also ships:</span><code>scraping</code><code>agents-communication</code></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Status check before the hands-on: this is everything Octocode gives you at the end of V2, so you know what you can call in the practice. Left, the local tools from earlier in this section: structureSearch maps the tree or finds files, localSearch finds text and regex, astSearch finds code by syntax shape, localFetch reads exact lines with matchString or ranges, and lspSearch follows definitions, references and callers (local-tools and research-dimensions slides; docs/OCTOCODE_CLI.md:114; ledger L1, L2). Turn them on with local.enabled in .octocoderc. Press →: the external tools are the same eight from the V1 toolset: seven for GitHub and npmSearch (README.md:186-223). The three opt-ins stay off until you enable them: ghCloneRepo (CLI-only by default), ghListReleases and ghSearchDiscussions (README.md:191-205). Press → again: the skills we walked through, one slide each, with research as the hub the others route code facts through (skills-intro; ledger S4, K4–K14). scraping and agents-communication also ship but are out of scope today. Install with npx octocode skill install --all --platform all. Tool names follow the dev build used throughout the deck (20.2.0); the public main README uses older names (localSearchCode, localGetFileContent, lspGetSemantics…), so check the names against your running server before the practice. Next: Hands on, Octocode V2.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

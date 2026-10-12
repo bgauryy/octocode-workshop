@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Move from the map to exact evidence</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rl { display: grid; grid-template-columns: 92px minmax(0, 1fr); column-gap: 16px; row-gap: 8px; align-items: center; }
+    .rl .pipe { --gap: 46px; }
+    .rl .pipe > li { padding: 12px 16px; gap: 2px; }
+    .rl .pipe .k { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--positive); }
+    .rl .pipe h3 { font-size: var(--t-mid); }
+    .lane { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 46px; }
+    .lane span { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); padding: 5px 12px; border-radius: 8px; background: color-mix(in srgb, var(--surface-2) 60%, transparent); border: 1px solid var(--border); line-height: 1.3; }
+    .lane span i { font-style: normal; color: var(--muted); font-family: var(--font-body); }
+    .src-l { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: right; }
+    .rl .loopback { margin-top: 0; }
+    .rl .rule { grid-column: 1 / -1; justify-self: center; margin-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Best practices · how to research</span>
+    <h2 class="title" data-slide-title>Move from the map to exact evidence</h2>
+    <p class="description" data-slide-subtitle>Search narrowly, read the relevant lines and follow the relationships they reveal.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="rl">
+      <span></span>
+      <ol class="pipe pipe--positive" data-anim="draw" data-stagger style="--stagger: 200ms">
+        <li><span class="k">1 · map</span><h3>cheaply</h3></li>
+        <li><span class="k">2 · search</span><h3>narrowly</h3></li>
+        <li><span class="k">3 · read</span><h3>exact evidence</h3></li>
+        <li class="is-key"><span class="k">4 · follow</span><h3>the thread</h3></li>
+      </ol>
+      <span class="src-l" data-step="1">local</span>
+      <div class="lane" data-step="1" data-anim="draw" data-stagger style="--stagger: 90ms"><span>structureSearch</span><span>localSearch <i>or</i> astSearch</span><span>localFetch <i>matchString</i></span><span>lspSearch <i>callers</i></span></div>
+      <span class="src-l" data-step="2">GitHub</span>
+      <div class="lane" data-step="2" data-anim="draw" data-stagger style="--stagger: 90ms"><span>ghSearchRepo <i>then</i> ghStructure</span><span>ghSearchCode</span><span>ghGetFileContent <i>ranges</i></span><span>ghSearchHistory <i>PRs</i></span></div>
+      <span class="src-l" data-step="3">npm</span>
+      <div class="lane" data-step="3" data-anim="draw" data-stagger style="--stagger: 90ms"><span>artifactSearch</span><span>its source repo</span><span>release source <i>at its ref</i></span><span>versions · deps</span></div>
+      <span></span>
+      <div class="loopback" data-step="4" data-anim="draw" style="--pc: var(--positive)"><span>not answered? run next.* or a hints.* lead, narrower</span></div>
+      <div class="rule" data-step="5" style="--rule-color: var(--positive)"><span class="k">// stop rule:</span> stop when the evidence answers · cite <strong>file:line, version or PR</strong></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The research loop from the CLI guide — "map cheaply → search narrowly → read exact evidence → follow symbols or history" (packages/octocode/docs/OCTOCODE_CLI.md:114) — laid out per source. Press → for each lane. Local: structureSearch maps the tree; localSearch finds text, astSearch finds code shape; localFetch reads by matchString or ranges; lspSearch follows callers and references. GitHub: ghSearchRepo when you don't know the repo, then ghStructure; ghSearchCode on the default branch; ghGetFileContent by ranges ("Lean order: a ghSearchCode hit line that answers ends it; else matchString, then ranges of ≤40 lines around its hits; fullContent only for small files", ledger V11); ghSearchHistory for the PR. npm: artifactSearch gives versions, dependencies and the release source; "Registry rows are leads; read release source at its ref" — a repo link is not proof of the published version. Press → for the loop back: when a row comes back partial, next.* is "the unread rest: before claiming completeness, run it as given or narrowed, or name what stays unread"; hints.* are opt-in leads (server instructions, &lt;pages&gt;). Press → for the stop rule, from the server instructions' &lt;evidence&gt; block (ledger V10): "Cite source or diff lines by number … Stop when evidence answers; empty ≠ absent until scope, spelling, ref, index are checked." Extra: batch independent rows — up to 5 queries per call — and keep dependent probes sequential (&lt;pages&gt;). Keep this slide in mind when you try it on your own code. Next: skills — a skill is only as good as its trigger.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

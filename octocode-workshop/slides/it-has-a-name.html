@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agreement can replace accuracy</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .names { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 24px; }
+    .names .card { gap: 6px; padding-top: 12px; padding-bottom: 12px; }
+    .names .card .pipe > li { padding-left: 14px; }
+    .names .card .pipe > li:first-child::before { display: none; }
+    .names .card h3 { font-size: var(--t-body); }
+    .names .pipe--v { --gap: 10px; }
+    .names .pipe--v > li { padding: 6px 14px; }
+    .names .pipe--v p { font-size: var(--t-small); color: var(--text); }
+    .names .pipe--v p .def { display: block; margin-top: 2px; font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .ff { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 22px; align-items: center; }
+    .waffle { display: grid; grid-template-columns: repeat(10, 14px); gap: 4px; }
+    .waffle i { width: 14px; height: 14px; border-radius: 3px; background: color-mix(in srgb, var(--border) 70%, transparent); }
+    .waffle i.f { background: var(--warm); }
+    .ff .big .num { font-size: 72px; --bc: var(--warm); }
+    .ff .big + .big .num { font-size: 44px; --bc: var(--negative); }
+    .ff .nums2 { display: flex; flex-direction: column; gap: 12px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 · How it started</span>
+    <h2 class="title" data-slide-title>Agreement can replace accuracy</h2>
+    <p class="description" data-slide-subtitle>Sycophancy and answer reversals explain the behavior I was seeing.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="names">
+      <div class="card card--warm" data-step="1">
+        <span class="kicker">Why it agrees</span>
+        <h3>Sycophancy</h3>
+        <ol class="pipe pipe--v pipe--warm">
+          <li><p>People rate answers that <strong>agree</strong> with them higher.</p></li>
+          <li><p><strong>RLHF</strong> trains on those ratings.<span class="def">Reinforcement Learning from Human Feedback: teaches AI to give answers humans prefer, not just predict the next word.</span></p></li>
+          <li class="is-key"><p>The model learns to please, not to be true.</p></li>
+        </ol>
+        <span class="src">Sharma et al. 2023 · OpenAI GPT-4o rollback, Apr 2025</span>
+      </div>
+      <div class="card card--warm" data-step="2">
+        <span class="kicker">Why it flips</span>
+        <h3>FlipFlop: "are you sure?"</h3>
+        <div class="ff">
+          <div class="waffle" data-anim="draw" aria-label="46 of 100 answers flipped"><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i class="f"></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="nums2">
+            <div class="big"><span class="num" data-anim="count">46%</span><span class="cap">of answers flipped</span></div>
+            <div class="big"><span class="num" data-anim="count">−17%</span><span class="cap">accuracy, on average</span></div>
+          </div>
+        </div>
+        <span class="src">Laban et al. · arXiv:2311.08596</span>
+      </div>
+    </div>
+    <div class="rule" style="--rule-color: var(--warm)" data-step="3"><span class="k">// push back and it folds.</span> that's not reasoning, that's pleasing.</div>
+  </div>
+</div>
+<aside class="speaker-notes">My $10k bug is documented behaviour. Click 1, sycophancy: Sharma et al., Anthropic, "Towards Understanding Sycophancy in Language Models" (arXiv:2310.13548; ledger H3). People prefer answers that match their views, RLHF optimises for those preferences, so the model learns to agree. More receipts. OpenAI's post-mortem (2 May 2025, openai.com/index/expanding-on-sycophancy, quoted via simonwillison.net/2025/May/2/what-we-missed-with-sycophancy/): "an additional reward signal based on user feedback (thumbs-up and thumbs-down data) … weakened the influence of our primary reward signal, which had been holding sycophancy in check"; expert testers said the model "felt" slightly off, but A/B users "liked it". Science (Cheng et al., Stanford, 26 Mar 2026; AP coverage): across 11 AI systems, AI "affirmed users' actions 49% more often than humans" (abstract, doi.org/10.1126/science.aec8352; AP coverage words it "than other humans did"). "The very feature that causes harm also drives engagement." The rollback itself: in April 2025 OpenAI rolled back a GPT-4o update for being sycophantic (openai.com/index/sycophancy-in-gpt-4o; ledger H5). That rollback was OpenAI's, not part of the Sharma et al. paper, which is Anthropic's 2023 research. Click 2, FlipFlop: Laban et al., "Are You Sure? Challenging LLMs Leads to Performance Drops in The FlipFlop Experiment" (arXiv:2311.08596; ledger H4). Challenged with "are you sure?", models flip their answer 46% of the time on average, with an average 17% drop in accuracy. The grid is 100 answers, 46 of them flipped. For tool builders this matters: an agent that wants to please will invent a result rather than say "not found". That's why Octocode later demands evidence. Next: a second, different failure, four models, four answers.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

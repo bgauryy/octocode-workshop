@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octocode in numbers</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .who { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+    .role { display: flex; flex-direction: column; gap: 10px; padding: 20px 26px; border: 1px solid var(--border-strong); border-top: 3px solid var(--bc); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .role .kicker { color: var(--bc); }
+    .role .big .num { font-size: 84px; line-height: 1.1; }
+    .role .big .cap { color: var(--muted); }
+    .role p { font-size: var(--t-body); color: var(--text); line-height: 1.35; margin-top: auto; }
+    .r1 { --bc: var(--accent); } .r2 { --bc: var(--positive); } .r3 { --bc: var(--warm); }
+    .facts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--code-bg); }
+    .facts .f { display: flex; align-items: baseline; gap: 12px; padding: 16px 22px; border-left: 1px solid var(--border-strong); }
+    .facts .f:first-child { border-left: 0; }
+    .facts b { font-family: var(--font-head); font-size: var(--t-sub); color: var(--text-strong); font-weight: 700; font-variant-numeric: tabular-nums; }
+    .facts span { font-size: var(--t-small); color: var(--muted); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Intro · who am I</span>
+    <h2 class="title" data-slide-title>Octocode in numbers</h2>
+    
+  </div>
+  <div class="slide-content slide-content--middle" style="gap: 24px">
+    <div class="who">
+      <div class="role r1" data-step="1">
+        <span class="kicker">Stars</span>
+        <div class="big"><span class="num" data-anim="count">950</span><span class="cap">GitHub stars · bgauryy/octocode</span></div>
+        <p>78 forks</p>
+      </div>
+      <div class="role r2" data-step="2">
+        <span class="kicker">Downloads</span>
+        <div class="big"><span class="num"><span data-anim="count">169</span>k</span><span class="cap">Total downloads</span></div>
+        <p>158k octocode-mcp · 11k octocode CLI</p>
+      </div>
+      <div class="role r3" data-step="3">
+        <span class="kicker">First release</span>
+        <div class="big"><span class="num">2025</span><span class="cap">first released · 6 Jun</span></div>
+        <p>octocode-mcp 1.0.0 on npm.</p>
+      </div>
+    </div>
+    <div class="facts" data-step="4">
+      <div class="f"><b>16</b><span>tools in all · 12 MCP, 13 CLI</span></div>
+      <div class="f"><b>13</b><span>skills</span></div>
+      <div class="f"><b>10,033</b><span>npm downloads last month</span></div>
+      <div class="f"><b>204</b><span>npm releases</span></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Short intro, one click per number. Stars: 950 on github.com/bgauryy/octocode (the repo was renamed from octocode-mcp) and 78 forks (gh api repos/bgauryy/octocode, as of 11 Oct 2026; ledger S1). Downloads: 169,093 npm downloads in the registry's 18-month window: octocode-mcp 157,706 plus the octocode CLI 11,387 (api.npmjs.org/downloads/point/2024-01-01:2026-10-11/octocode-mcp and …/octocode, as of 11 Oct 2026; the API reports from 11 Apr 2025; ledger S9). First release: octocode-mcp 1.0.0 was published to npm on 6 Jun 2025 (registry.npmjs.org/octocode-mcp time.created; ledger S10), so 16 months from first publish to today. Last click, where it is today: 16 tools in the catalog (README.md:124, "16 tools. Your agent gets 12 tools over MCP and 13 in the CLI; clasify joins both when you add its key": 13 CLI tools + clasify + the 2 beta CLI-only ast tools = 16; dev build 20.2.0; ledger S3); 13 skills in skills/ (ledger S4); 10,033 npm downloads last month, 11 Sep to 10 Oct: octocode-mcp 9,129 plus octocode 904 (api.npmjs.org/downloads/point/last-month/<package>, as of 11 Oct 2026; ledger S2); 204 published versions of octocode-mcp since 6 Jun 2025 (`npm view octocode-mcp time --json`; repo at v20.2.0; ledger S5). Recheck stars and downloads the day before presenting. Next: what you'll walk out with.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

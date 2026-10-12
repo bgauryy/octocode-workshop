@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three versions expand the agent's reach</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .evo { flex: 1; min-height: 0; align-items: stretch; gap: 26px; }
+    .evo .era { gap: 14px; padding: 20px 22px 18px; border-top: 1px solid var(--border-strong); }
+    .evo .era-v { align-items: baseline; gap: 14px; }
+    .evo .era-v b { font-size: 52px; line-height: 1; }
+    .evo .era-v span { font-family: var(--font-mono); color: var(--muted); }
+    .evo .era ul { gap: 10px; }
+    .evo .era li { font-size: var(--t-body); line-height: 1.3; padding-left: 22px; }
+    .evo .era li b { color: var(--text-strong); font-weight: 600; }
+    .evo .win { display: flex; flex-direction: column; gap: 2px; padding: 12px 16px; }
+    .evo .win b { font-size: 38px; line-height: 1.1; }
+    .evo .win span { font-size: var(--t-mid); color: var(--text); }
+    .span { display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); flex-shrink: 0; }
+    .span b { color: var(--text-strong); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Part 2 · Octocode in three versions</span>
+    <h2 class="title" data-slide-title>Three versions expand the agent's reach</h2>
+    <p class="description" data-slide-subtitle>Each version gives the agent more capability while reducing what it needs to read.</p>
+  </div>
+  <div class="slide-content">
+    <div class="eras evo">
+      <div class="era era--v1" data-step="1" data-anim="draw">
+        <div class="era-v"><b>V1</b><span>Jun – Dec 2025</span></div>
+        <ul>
+          <li><b>GitHub research</b> via MCP</li>
+          <li><b>hints</b> in results</li>
+          <li><b>secret masking</b></li>
+        </ul>
+        <div class="win"><b>14 → 5</b><span>tools, 5 queries a call</span></div>
+      </div>
+      <div class="era era--v2" data-step="2" data-anim="draw">
+        <div class="era-v"><b>V2</b><span>Dec 2025 – Jul 2026</span></div>
+        <ul>
+          <li><b>local tools</b> inside the MCP</li>
+          <li><b>LSP</b> code navigation</li>
+          <li><b>Agent Skills</b>, <b>Rust</b> crates</li>
+        </ul>
+        <div class="win"><b>20–27×</b><span>faster secret scan</span></div>
+      </div>
+      <div class="era era--v3" data-step="3" data-anim="draw">
+        <div class="era-v"><b>V3</b><span>Jul – Oct 2026</span></div>
+        <ul>
+          <li><b>octocode</b> research CLI</li>
+          <li><b>clasify</b> ranks unread code</li>
+          <li><b>minimal</b> results by default</li>
+        </ul>
+        <div class="win"><b>2.0–3.2×</b><span>fewer chars than gh setups</span></div>
+      </div>
+    </div>
+    <div class="span"><span>first release <b>6 Jun 2025</b></span><span><b>204</b> npm versions</span></div>
+  </div>
+</div>
+<aside class="speaker-notes">The map for Part 2 before we dive in: three eras, and each one solved what the last one exposed. Press → three times; each era draws onto the rail. V1 (v1→v10, June–December 2025): GitHub research over MCP. Hints appear in 2.3.5 (24 Jun 2025), the security layer — content sanitizer plus secret masking with 164 patterns — in 2.3.22 (14 Jul), bulk queries capped at 5 in 2.3.27 (21 Jul), YAML responses in 6.0.0 (24 Sep), per-tool cache TTLs in 4.0.0 (6 Aug). Tools went 14 (1.0.0) → 26 → 10 → 9 → 7 → 5 (6.0.0): fewer, sharper tools. By v10 (24 Dec 2025) the secret patterns were 259. V2 (v11→v16, Dec 2025–Jul 2026): local tools moved inside octocode-mcp (0bef8ac76, 27 Dec 2025), LSP tools (11.1.0, 10 Jan 2026), ~/.octocode/.octocoderc (11.2.2, 19 Jan), the first SKILL.md, and the first Rust crates (16.x, 18 Jun 2026). Measured: the Rust secret scan vs the JS one, same 309 patterns, 200 runs, is 20–27× faster on clean content (1 MB: 50 ms → 2.1 ms) — e1ad2d510:packages/octocode-security/README.md:14-40. V3 (v17→v20, Jul–Oct 2026): the octocode research CLI (17.0, 14 Jul 2026), astSearch (9 Sep), the octocode-native Rust engine (15 Sep), clasify (21 Sep), minimal-by-default results in v20. Measured: August campaign, 30 GitHub questions × 3 passes, blind judge — Octocode v18 CLI used 1.99× fewer characters than plain gh, 2.62× fewer than gh+Headroom, 3.21× fewer than gh+RTK, correctness 9.19–9.30 vs 8.62–9.42 (packages/octocode-benchmark/results/SUMMARY.md:28-30). Footer: first npm release 1.0.0 on 2025-06-06; 204 versions of octocode-mcp on npm across 20 majors — today v20, Oct 2026 (npm view, 2026-10-09). Cut from the slide, say it aloud: V1 also added batching (5 queries a call), YAML output and per-tool cache — fewer calls, sharper choices; V2 added ~/.octocode/.octocoderc config; V3 added astSearch and the native Rust engine plus the benchmark loop. The V2 gain is Rust vs JS on the same 309 patterns; the V3 gain is 30 questions × 3 passes at similar correctness. Sources: scratchpad/history-timeline.md §1 and research-cli-config-mcp.md §1. Caution: the old 1.0–6.3 changelog is LLM-written and wrong on dates and counts — none of its numbers are on this slide. Next: V1, where it started.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Return a useful next move</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rh { display: grid; grid-template-columns: 430px 56px minmax(0, 1fr); align-items: stretch; flex: 1; min-height: 0; }
+    .rh .code { font-size: var(--t-code); align-self: center; }
+    .bus { width: 100%; height: 100%; display: block; overflow: visible; }
+    .bus path { fill: none; stroke-width: 2; vector-effect: non-scaling-stroke; }
+    .outs { display: grid; grid-template-rows: repeat(4, 1fr); gap: 12px; min-height: 0; }
+    .out { position: relative; display: grid; grid-template-columns: 170px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 10px 16px; border: 1px solid var(--border-strong); border-left: 3px solid var(--oc); border-radius: var(--radius-sm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .out::before { content: ''; position: absolute; left: -11px; top: calc(50% - 6px); border: 6px solid transparent; border-left: 8px solid var(--oc); border-right: 0; }
+    .out code { font-size: var(--t-body); color: var(--oc); font-weight: 600; }
+    .out p { font-size: var(--t-mid); color: var(--text); line-height: 1.3; }
+    .out p .ld { font-family: var(--font-mono); color: var(--text-strong); }
+    .out p q { color: var(--muted); font-family: var(--font-mono); quotes: '"' '"'; }
+    .out .cnt { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); text-align: right; white-space: nowrap; }
+    .out .cnt b { display: block; font-family: var(--font-head); font-size: var(--t-sub); color: var(--text-strong); }
+    .o1 { --oc: var(--violet); } .o2 { --oc: var(--positive); } .o3 { --oc: var(--positive); } .o4 { --oc: var(--warm); }
+    .b1 { stroke: var(--violet); } .b2 { stroke: var(--positive); } .b3 { stroke: var(--positive); } .b4 { stroke: var(--warm); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · tool results</span>
+    <h2 class="title" data-slide-title>Return a useful next move</h2>
+    <p class="description" data-slide-subtitle>Hints guide the agent after successful, empty and failed searches.</p>
+  </div>
+  <div class="slide-content">
+    <div class="rh">
+      <div class="code" data-label="localSearch · empty row · YAML"><span class="tk-key">hints</span>:
+  <span class="tk-key">text</span>:
+  - <span class="tk-str">"Nothing searched:</span>
+    <span class="tk-str">include/exclude</span>
+    <span class="tk-str">matched no</span>
+    <span class="tk-str">file."</span>
+  <span class="tk-key">viewTree</span>:   <span class="tk-cmt"># a lead call</span>
+    <span class="tk-key">tool</span>: structureSearch
+    <span class="tk-key">query</span>: {…}</div>
+      <svg class="bus" viewBox="0 0 56 400" preserveAspectRatio="none" aria-hidden="true">
+        <g data-step="1" data-anim="draw"><path class="b1" d="M0 200 C 30 200, 26 50, 52 50"/></g>
+        <g data-step="2" data-anim="draw"><path class="b2" d="M0 200 C 30 200, 26 150, 52 150"/></g>
+        <g data-step="3" data-anim="draw"><path class="b3" d="M0 200 C 30 200, 26 250, 52 250"/></g>
+        <g data-step="4" data-anim="draw"><path class="b4" d="M0 200 C 30 200, 26 350, 52 350"/></g>
+      </svg>
+      <div class="outs">
+        <div class="out o1" data-step="1" data-anim="draw"><code>next.*</code><p>the unread rest</p><span class="cnt"><b>31</b>page kinds</span></div>
+        <div class="out o2" data-step="2" data-anim="draw"><code>hints.*</code><p>leads: <span class="ld">{tool, query}</span></p><span class="cnt"><b>48</b>lead kinds</span></div>
+        <div class="out o3" data-step="3" data-anim="draw"><code>hints.text</code><p>a short fact, only on empty or failed rows</p><span class="cnt"><b>≤120</b>chars</span></div>
+        <div class="out o4" data-step="4" data-anim="draw"><code>errorCode</code><p>the fix, not a stack trace</p><span class="cnt"><b>120</b>typed codes</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Left: a real empty row from localSearch, as YAML (the hint string is from the Rust runtime, local_search/leads.rs:41; query abbreviated). The point: on an empty or failed result the agent does not have to work out what to do next; the result tells it. A compiler doesn't just say "error"; it says "did you mean…?". Octocode results do the same, through four channels; press → for each branch as it draws. (1) next.*: the unread rest (next page, continue, expand); the response is incomplete without them; 31 page kinds such as nextPage, nextMatchPage, continueWindow, expandDates (counted from packages/octocode-config/contract/tool-contract.json continuationChannels on the dev build, 2026-10-12; docs/OCTOCODE_PROTOCOL.md:88-93; ledger V7). (2) hints.*: optional leads, each a ready-to-run {tool, query}: read, findCallers, findReferences, findText, viewTree… 48 lead kinds; on a successful row they appear only with extras:["hints"] (docs/OCTOCODE_PROTOCOL.md:91). (3) hints.text: a short sentence, only on empty or failed rows and only for a per-call fact (a count, a name, a ref) that no lead or error text states (docs/TOOL_DATA_CONTRACT.md:32), e.g. "No matches in 11 files searched." Every hint is written within a 120-character budget (MAX_GUIDANCE_CHARS in crates/runtime/src/response/rows.rs:44, enforced by a test; the runtime never clips). The slide shows a real one: "Nothing searched: include/exclude matched no file." (leads.rs:41, ledger V8, re-wrapped on the slide). (4) errors: the fix, not a stack trace. 120 typed errorCodes, each with the fix in words, e.g. "Run octocode auth login or set GH_TOKEN/GITHUB_TOKEN…" (gh_shared/mod.rs, ledger V8). History: v2.3.5 (24 Jun 2025, 0b2819511) added smart suggestions on empty code searches (github_search_code.ts) and a hints array in api_status_check.ts; a consolidated hints engine came in 4.0.0 (6 Aug 2025). Outside endorsement: Anthropic's "Writing effective tools for agents" (11 Sep 2025) says to "prompt-engineer your error responses"; and Claude Code warns when MCP output exceeds 10,000 tokens and caps it at 25,000 by default (code.claude.com/docs/en/mcp). Hosts cap you, so return less yourself. Remember "empty ≠ absent"; the instructions say so explicitly. Next: your turn. What does your tool return when it finds nothing? Then what this looks like over MCP, end to end.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

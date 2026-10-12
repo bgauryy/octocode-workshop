@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three rules before we build</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
+    .rl { display: flex; flex-direction: column; gap: 14px; padding: 22px 24px; border-radius: var(--radius); border: 1px solid var(--border-strong); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .rl .kicker { color: var(--warm); }
+    .rl svg { width: 150px; height: 70px; overflow: visible; }
+    .rl svg .s { fill: none; stroke: var(--warm); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .rl svg .m { fill: none; stroke: var(--muted-2); stroke-width: 2; }
+    .rl svg .hit { fill: color-mix(in srgb, var(--positive) 22%, transparent); stroke: var(--positive); stroke-width: 1.5; }
+    .rl svg .new { fill: color-mix(in srgb, var(--warm) 22%, transparent); stroke: var(--warm); stroke-width: 1.5; }
+    .rl h3 { font-family: var(--font-head); font-size: var(--t-body); color: var(--text-strong); line-height: 1.25; }
+    .rl p { font-size: var(--t-mid); color: var(--text); line-height: 1.4; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>Part 1 recap · Q&amp;A</span>
+    <h2 class="title" data-slide-title>Three rules before we build</h2>
+    <p class="description" data-slide-subtitle>Recap the LLM mechanics and failure modes, then bring your questions.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="rules">
+      <div class="rl" data-step="1" data-anim="draw">
+        <span class="kicker">01 · the loop</span>
+        <svg viewBox="0 0 150 70" aria-hidden="true"><path class="m" d="M15 18 H 135" pathLength="1"/><circle class="s" cx="15" cy="18" r="7" pathLength="1"/><circle class="s" cx="75" cy="18" r="7" pathLength="1"/><circle class="s" cx="135" cy="18" r="7" pathLength="1"/><path class="s" d="M135 27 V 50 Q 135 60 125 60 H 25 Q 15 60 15 50 V 30" pathLength="1"/><path class="s" d="M9 36 L 15 28 L 21 36" pathLength="1"/></svg>
+        <h3>Your output is the next prompt.</h3>
+        <p>The model re-reads everything, every turn — and believes it.</p>
+      </div>
+      <div class="rl" data-step="2" data-anim="draw">
+        <span class="kicker">02 · tokens + attention</span>
+        <svg viewBox="0 0 150 70" aria-hidden="true"><path class="m" d="M6 64 H 146" pathLength="1"/><path class="s" d="M10 10 C 40 50, 55 58, 75 58 S 115 40, 140 14" pathLength="1"/></svg>
+        <h3>Small and sharp beats big.</h3>
+        <p>Tokens cost money and attention; the middle gets lost.</p>
+      </div>
+      <div class="rl" data-step="3" data-anim="draw">
+        <span class="kicker">03 · caching</span>
+        <svg viewBox="0 0 150 70" aria-hidden="true"><rect class="hit" x="2" y="22" width="104" height="28" rx="5" pathLength="1"/><rect class="new" x="110" y="22" width="38" height="28" rx="5" pathLength="1"/></svg>
+        <h3>Stable first, volatile last.</h3>
+        <p>Cache reads cost 0.1× — for an identical prefix only. <span class="src">Anthropic prompt caching docs</span></p>
+      </div>
+    </div>
+    <div class="rule" style="--rule-color: var(--warm)" data-step="4"><span class="k">// and from 2023:</span> models please before they prove — so <strong>tools must demand evidence</strong>.</div>
+  </div>
+</div>
+<aside class="speaker-notes">Checkpoint before the Octocode story. Each rule redraws the picture from the slide that taught it. (1) The loop: agents decide from what tools return, and the window is re-sent every turn — your output is the next prompt. (2) The U-curve: tokens cost money and attention, and facts in the middle get lost (Liu et al. 2023; ledger B6) — small and sharp beats big. (3) The prefix bar: provider caches bill only an identical prefix at the discount (ledger B7, B8) — stable first, volatile last. Click 4: the 2023 lesson — sycophancy and FlipFlop (ledger H3, H4) mean the model will please before it proves, so tools must demand evidence. Take 3–4 minutes of questions. Next: Part 2 — Octocode V1.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tokens turn text into numbered chunks</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .tk { display: flex; flex-direction: column; gap: 40px; }
+    .tk-row { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 24px; align-items: center; }
+    .tk-row > .kicker { color: var(--muted); }
+    .src { font-family: var(--font-mono); font-size: var(--t-sub); color: var(--text-strong); }
+    .toks { display: flex; flex-wrap: nowrap; gap: 12px; }
+    .tok .t { display: inline-block; font-family: var(--font-mono); font-size: var(--t-body); line-height: 1; white-space: pre; padding: 14px 12px; border-radius: 8px; color: var(--text-strong); background: color-mix(in srgb, var(--accent) 16%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent); }
+    .tok u { text-decoration: none; color: var(--muted-2); }
+    .ids { font-family: var(--font-mono); font-size: var(--t-body); color: var(--warm); }
+    .ids span { color: var(--muted-2); }
+    .tk .legend { padding-left: 214px; }
+    .vec { font-family: var(--font-mono); font-size: var(--t-body); color: var(--accent); }
+    .vec span { color: var(--muted-2); }
+    .vec em { font-style: normal; font-family: var(--font-body, inherit); font-size: var(--t-small); color: var(--muted); margin-left: 18px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
+    <h2 class="title" data-slide-title>Tokens turn text into numbered chunks</h2>
+    <p class="description" data-slide-subtitle>The tokenizer splits text into vocabulary entries and sends their IDs to the model.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="tk">
+      <div class="tk-row">
+        <span class="kicker">you type</span>
+        <div class="src">"Find where Next.js uses useReducer."</div>
+      </div>
+      <div class="tk-row" data-step="1">
+        <span class="kicker">8 tokens</span>
+        <div class="toks" data-anim="draw" data-stagger style="--stagger: 120ms">
+          <div class="tok"><span class="t">Find</span></div>
+          <div class="tok"><span class="t"><u>·</u>where</span></div>
+          <div class="tok"><span class="t"><u>·</u>Next</span></div>
+          <div class="tok"><span class="t">.js</span></div>
+          <div class="tok"><span class="t"><u>·</u>uses</span></div>
+          <div class="tok"><span class="t"><u>·</u>use</span></div>
+          <div class="tok"><span class="t">Reducer</span></div>
+          <div class="tok"><span class="t">.</span></div>
+        </div>
+      </div>
+      <div class="tk-row" data-step="2" data-anim="rise">
+        <span class="kicker">model reads</span>
+        <div class="ids"><span>[</span>11437, 1919, 13886, 5391, 8844, 1199, 26828, 13<span>]</span></div>
+      </div>
+      <div class="tk-row" data-step="3" data-anim="rise">
+        <span class="kicker">each ID becomes</span>
+        <div class="vec">13 <span>→</span> [0.021, −0.334, 0.517, … ] <em>a learned vector (embedding)</em></div>
+      </div>
+      <div class="legend"><span>· = a space</span><span>real o200k_base split and IDs · vector values illustrative</span></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">A tokenizer cuts text into chunks it knows and swaps each chunk for its number in a fixed vocabulary, so the model never sees letters, only that list of IDs. The split is real: o200k_base (GPT-4o family, via js-tiktoken 1.0.21), run on 9 Oct 2026: 35 characters, 8 tokens; note "useReducer" splits into "use" + "Reducer", and the leading space belongs to the token. The IDs on screen are real too (tiktoken, o200k_base: [11437, 1919, 13886, 5391, 8844, 1199, 26828, 13]); reproduce them with enc = tiktoken.get_encoding("o200k_base"); enc.encode("Find where Next.js uses useReducer."). The vector values are illustrative. Click 3: inside the model, each ID picks one row of an embedding table, a long list of learned numbers (here the "." token, ID 13). That vector is what the model actually computes with; the Q, K and V two slides from now are made from it. The numbers on screen are illustrative; real vectors are long: GPT-3 175B uses 12,288 numbers per token (Brown et al. 2020, arXiv:2005.14165, Table 2.1; ledger B33). Each tokenizer has its own vocabulary; Claude's is not public, so use the count_tokens endpoint to measure. Why it matters: cost, limits and attention are all counted in tokens. You pay per token: Claude Sonnet 5.5 input is $2 per million, output $10 (platform.claude.com/docs/en/about-claude/pricing, 6 Oct 2026). JSON is token-hungry: Octocode's documented ghSearchCode call (docs/OCTOCODE_TOOLS.md:112, dev tree) is 66 characters, 21 tokens, 12 of them pure punctuation (o200k_base, tiktoken): 3.1 chars per token vs 4.4 for the English sentence (OpenAI's rule of thumb ~4 chars per token, help.openai.com/en/articles/4936856; ledger B2). Tokenizers change: the Claude 4.7+ tokenizer "produces approximately 30% more tokens for the same text" (same pricing page, 9 Oct 2026). Across languages, lengths differ "up to 15 times in some cases" (Petrov et al., arXiv:2305.15425). That's why Octocode strips noise from results. Next: where tokens live, the context window.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

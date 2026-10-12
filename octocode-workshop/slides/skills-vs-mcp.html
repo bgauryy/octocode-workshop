@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP provides actions; skills guide workflows</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; }
+    .lane { display: flex; flex-direction: column; gap: 12px; min-height: 285px; padding: 20px 24px; border: 1px solid var(--border-strong); border-top: 4px solid var(--lane); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .lane.mcp { --lane: var(--accent); } .lane.skill { --lane: var(--violet); }
+    .lane .kicker { color: var(--lane); }
+    .lane h3 { font-size: var(--t-sub); color: var(--text-strong); }
+    .lane p { font-size: var(--t-mid); line-height: 1.35; color: var(--text); }
+    .lane .path { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 2px; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); }
+    .lane .path b { color: var(--lane); font-weight: 400; }
+    .lane .detail { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border); color: var(--muted); }
+    .lane code { color: var(--text-strong); }
+    .cache-note { margin-top: 16px; padding: 12px 18px; border-left: 3px solid var(--positive); background: var(--code-bg); font-size: var(--t-mid); line-height: 1.3; color: var(--text); }
+    .cache-note strong { color: var(--positive); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <header class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · MCP and skills</span>
+    <h2 class="title" data-slide-title>MCP provides actions; skills guide workflows</h2>
+    <p class="description" data-slide-subtitle>Tools execute; skills decide how to use them.</p>
+  </header>
+  <main class="slide-content">
+    <div class="compare">
+      <section class="lane mcp" aria-label="MCP capability">
+        <span class="kicker">MCP · capability</span>
+        <h3>Call code</h3>
+        <p>Description + schema → typed tool call.</p>
+        <div class="path"><span>discover</span><b>→</b><span>call</span><b>→</b><span>result</span></div>
+        <p class="detail">Search · fetch · LSP</p>
+      </section>
+      <section class="lane skill" aria-label="Skill workflow">
+        <span class="kicker">Skill · workflow</span>
+        <h3>Guide the work</h3>
+        <p>Trigger → <code>SKILL.md</code> → references as needed.</p>
+        <div class="path"><span>decide</span><b>→</b><span>call MCP or CLI</span></div>
+        <p class="detail">Optional <code>scripts/</code> and <code>assets/</code>.</p>
+      </section>
+    </div>
+    <p class="cache-note"><strong>Context cost:</strong> stable schemas may hit a cache; skill instructions load on activation. The host decides.</p>
+  </main>
+</div>
+<aside class="speaker-notes">This is the distinction behind the skill tour. MCP supplies callable capabilities: tools/list advertises a name, description and input schema, and tools/call executes code (MCP specification, modelcontextprotocol.io/specification/2025-06-18/server/tools). A skill supplies a method for deciding what to do: the Agent Skills spec requires only SKILL.md (with name and description frontmatter) and recommends optional scripts/, references/ and assets/ folders. Its name and description (~100 tokens) are loaded at startup, the SKILL.md body when activated, and resources only when required; scripts run and only their output enters context (agentskills.io/specification; platform.claude.com/docs/en/agents-and-tools/agent-skills/overview). A skill may call Octocode through MCP or through npx octocode; when repeatable execution already has a stable CLI, use that instead of making the agent read implementation scripts. The context nuance corrects the speaker's draft: MCP is not automatically cached once for a whole session, and skills are not categorically uncached. Claude's API can cache stable tool definitions in the prompt prefix, but cache hits require an identical prefix and an unexpired cache (5 minutes by default, 1 hour optional); hosts may defer tools: the API has defer_loading, and Claude Code turns tool search on by default for MCP tools (platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool). The SKILL.md body occupies context when read; several activated skills can stack up, and that text may itself be included in a later cacheable prefix. Keep the always-visible descriptions small and put details behind the trigger. Sources: platform.claude.com/docs/en/build-with-claude/prompt-caching; agentskills.io/specification; deck ledger K20–K22. Next: octocode-research, a workflow that uses the research tools.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

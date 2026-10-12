@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One contract spans four research surfaces</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .tm { display: flex; flex-direction: column; gap: 12px; }
+    .fams { display: grid; grid-template-columns: 1.8fr 1.65fr 1.1fr 1.25fr 1.05fr; gap: 14px; align-items: end; }
+    .fam { --fc: var(--accent); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .fam .hd { display: flex; flex-direction: column; gap: 0; padding-bottom: 6px; border-bottom: 3px solid var(--fc); margin-bottom: 2px; }
+    .fam .hd b { font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); }
+    .fam .hd span { font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .fam ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .fam li > span { overflow: hidden; text-overflow: ellipsis; }
+    .fam li { display: flex; flex-direction: column; gap: 2px; font-family: var(--font-mono); font-size: var(--t-code); line-height: 1.3; color: var(--text-strong); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-strong); background: linear-gradient(160deg, var(--surface-2), var(--surface)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .fam li i { font-style: normal; color: var(--muted-2); }
+    .fam li.cli { border-style: dashed; color: var(--muted); }
+    .fam--gh { --fc: var(--accent); } .fam--loc { --fc: var(--violet); } .fam--lsp { --fc: var(--violet); } .fam--pkg { --fc: var(--positive); } .fam--rem { --fc: var(--warm); }
+    .base { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 12px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-top: 3px solid var(--positive); background: var(--code-bg); }
+    .base b { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--positive); }
+    .base span { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); }
+    .base span + span::before { content: '·'; color: var(--muted-2); margin-right: 10px; }
+    .fams > * { grid-row: 1; }
+    .cnt { grid-column: 3 / span 3; align-self: start; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px 14px; padding: 4px 0 0; }
+    .cnt div { display: flex; flex-direction: column; gap: 0; }
+    .cnt b { font-family: var(--font-head); font-size: 56px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--text-strong); }
+    .cnt span { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .cnt p { grid-column: 1 / -1; font-size: var(--t-small); color: var(--muted); margin-top: 6px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Best practices · tool map</span>
+    <h2 class="title" data-slide-title>One contract spans four research surfaces</h2>
+    <p class="description" data-slide-subtitle>GitHub, local code, language servers and packages share a common research flow.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="tm">
+      <div class="fams" data-anim="draw" data-stagger style="--stagger: 150ms">
+        <div class="fam fam--gh" style="grid-column: 1"><div class="hd"><b>GitHub</b></div><ul><li><span>ghSearchRepo</span><span>ghSearchCode</span></li><li><span>ghStructure</span><span>ghGetFileContent</span></li><li><span>ghSearchHistory</span><span>ghGetHistoryItem</span></li><li class="cli"><span>ghCloneRepo <i>CLI</i></span></li></ul></div>
+        <div class="fam fam--loc" style="grid-column: 2"><div class="hd"><b>Local</b></div><ul><li><span>structureSearch</span><span>localSearch</span></li><li><span>astSearch</span><span>localFetch</span></li><li class="cli"><span>astTopology <i>beta</i></span><span>astRewrite <i>beta</i></span></li></ul></div>
+        <div class="cnt"><div><b data-anim="count">16</b><span>in the catalog</span></div><div><b data-anim="count">12</b><span>over MCP</span></div><div><b data-anim="count">13</b><span>in the CLI</span></div><p>dashed = CLI only</p></div>
+        <div class="fam fam--lsp" style="grid-column: 3"><div class="hd"><b>LSP</b><span>symbol identity</span></div><ul><li>lspSearch</li></ul></div>
+        <div class="fam fam--pkg" style="grid-column: 4"><div class="hd"><b>Packages</b><span>8 registries</span></div><ul><li>artifactSearch</li></ul></div>
+        <div class="fam fam--rem" style="grid-column: 5"><div class="hd"><b>Remote</b><span>judge · needs a key</span></div><ul><li>clasify</li></ul></div>
+      </div>
+      <div class="base" data-step="1" data-anim="draw"><b>one contract</b><span>queries[≤5]</span><span>goal + why</span><span>next.* pages</span><span>hints.* leads</span><span>secret redaction</span><span>exit codes</span></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The map to keep in mind for everything that follows (ledger V21, S3; packages/octocode-config/contract/tool-contract.json; docs/OCTOCODE_MCP.md "Tool catalog"). The families draw left to right. GitHub: ghSearchRepo (repositories), ghSearchCode (indexed code, default branch), ghStructure (a tree at any ref; it can materialize files for the local tools), ghGetFileContent, ghSearchHistory (PRs, issues, commits) and ghGetHistoryItem (read one); ghCloneRepo is CLI-only. Local: structureSearch, localSearch, astSearch, localFetch; astTopology and astRewrite are CLI-only betas behind OCTOCODE_BETA. LSP: lspSearch, real language servers. Packages: artifactSearch across 8 registries — npm, PyPI, crates, Maven, NuGet, Go, Packagist, RubyGems (packages/octocode/README.md:53). Remote: clasify, a semantic judge from an external provider (vendor: Jev) that needs a classification key — without one MCP leaves it out (docs/OCTOCODE_TOOLS.md "Internal, external, and hybrid tools"). Counts: "16 tools. Your agent gets 12 tools over MCP and 13 in the CLI; clasify joins both when you add its key" (README.md:124). Press → for the foundation they all stand on: "Every tool takes up to 5 queries per call" (docs/OCTOCODE_MCP.md); mainGoal and reasoning per row; next.* is the unread rest and hints.* are opt-in leads (docs/OCTOCODE_PROTOCOL.md:88-93); the native secret scanner reads every byte bound for the model; and the CLI's exit codes are a typed control channel — 0 ok, 1 empty, 2 invalid input, … 6 partial: run next (packages/octocode/README.md "Output and exit codes"). Names changed over versions — V1 had snake_case names like search_github_code — but the contract stayed. The boxes pair the tools by job: GitHub find (repo, code), read (structure, file), history (search, item); local find (structure, text), syntax + read (AST, fetch), and the CLI-only betas. Cut from the slide: GitHub covers repos, code, tree and PRs; local covers text, tree, syntax and reads; clasify joins both MCP and the CLI once its key is set. Next: how to research with them — the loop.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What happens when a tool finds nothing?</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .pause .display em { font-style: normal; color: var(--accent); }
+    .pause .hintline { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--text); padding: 12px 18px; border-left: 3px solid var(--accent); background: var(--code-bg); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; max-width: 64ch; }
+  </style>
+</head>
+<body>
+<div class="slide slide--section pause">
+  <div class="slide-content">
+    <span class="act-tag">Your turn · 30 seconds</span>
+    <h2 class="display" data-slide-title>What happens when a tool finds nothing?</h2>
+    <p class="sub" data-slide-subtitle>Choose what the agent receives: an empty list, an error or a useful next move.</p>
+    <div class="hintline" data-step="1" data-anim="rise" style="--delay: 200ms">“No matches. Try a shorter term, regex:&quot;rust&quot;.”</div>
+  </div>
+</div>
+<aside class="speaker-notes">A pause, not new content. Ask the room and take two or three answers; most people say "an empty array" or "a 404". That's the moment an agent is most likely to guess — nothing in the window tells it what to do next, so it improvises or concludes the thing doesn't exist. Press →: Octocode's answer is the hint you just saw on the previous slide — on an empty or failed row, one tip of at most 120 characters that names the next move (docs/TOOL_DATA_CONTRACT.md:32,90-91; the hint text is from the tool-results-hints and bp-mcp-tools slides). The research skill turns it into a rule: "Empty is not absent" (skills/octocode-research/SKILL.md:27). If someone has a good answer, write it down — it's the first item for the "audit one of your tools" homework on the closing slide. Next: the route the instructions draw from tool to tool.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

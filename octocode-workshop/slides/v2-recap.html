@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V2 brought the workflow to my code</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rc { display: grid; grid-template-columns: 1.05fr 1fr; gap: 34px; align-items: stretch; }
+    .rail { list-style: none; position: relative; display: flex; flex-direction: column; gap: 22px; padding-left: 30px; }
+    .rail::before { content: ''; position: absolute; left: 8px; top: 10px; bottom: 10px; width: 2px; background: var(--violet); border-radius: 2px; }
+    .rail li { position: relative; display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 2px 14px; align-items: baseline; }
+    .rail li::before { content: ''; position: absolute; left: -29px; top: 6px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 3px solid var(--violet); }
+    .rail time { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); white-space: nowrap; }
+    .rail time b { display: block; color: var(--violet); font-weight: 600; }
+    .rail span { font-size: var(--t-body); color: var(--text-strong); line-height: 1.3; }
+    .rail span small { display: block; font-size: var(--t-mid); color: var(--muted); }
+    .gains { display: flex; flex-direction: column; gap: 14px; }
+    .gains .gain { flex: 1; }
+    .gain { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 16px; align-items: center; padding: 16px 18px; border-radius: var(--radius); border: 1px solid var(--border); border-left: 3px solid var(--positive); background: linear-gradient(160deg, color-mix(in srgb, var(--positive) 7%, var(--surface-2)), var(--surface)); }
+    .gain .num { font-family: var(--font-head); font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; color: var(--positive); white-space: nowrap; }
+    .gain p { font-size: var(--t-mid); color: var(--text); line-height: 1.35; }
+    .gain p b { color: var(--text-strong); font-weight: 600; }
+    .gain p em { font-style: normal; font-family: var(--font-mono); color: var(--muted-2); }
+    .gain.open { border-left-color: var(--muted-2); background: var(--surface); }
+    .gain.open .num { color: var(--muted); font-size: var(--t-sub); }
+    .gain.open p b { display: block; }
+    .gains .kicker, .rcol .kicker { margin-bottom: 2px; }
+    .rcol { display: flex; flex-direction: column; gap: 10px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · recap</span>
+    <h2 class="title" data-slide-title>V2 brought the workflow to my code</h2>
+    <p class="description" data-slide-subtitle>Local tools kept the same contract, and skills made recurring workflows reusable.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="rc">
+      <div class="rcol">
+        <span class="kicker">what was new · v11 → v16</span>
+        <ol class="rail" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><time><b>v11.0</b>27 Dec 2025</time><span>local tools<small>+ first SKILL.md</small></span></li>
+          <li><time><b>v11.1</b>10 Jan 2026</time><span>LSP</span></li>
+          <li><time><b>v11.2</b>19 Jan 2026</time><span>.octocoderc</span></li>
+          <li><time><b>v13</b>15 Mar 2026</time><span>pagination on every tool</span></li>
+          <li><time><b>v16</b>18 Jun 2026</time><span>Rust crates</span></li>
+        </ol>
+      </div>
+      <div class="gains">
+        <span class="kicker">what it bought · measured</span>
+        <div class="gain" data-step="1" data-anim="land"><span class="num" data-anim="count">20–27×</span><p><b>faster secret scan</b> · Rust vs JS</p></div>
+        <div class="gain" data-step="2" data-anim="land"><span class="num">0 of 5</span><p><b>fake secrets leaked</b> · rg: 3 of 3</p></div>
+        <div class="gain" data-step="3" data-anim="land"><span class="num">exact</span><p><b>LSP references</b> · rg -w: 0.26–0.62</p></div>
+        <div class="gain open" data-step="4"><span class="num">not yet</span><p><b>skills' effect on answers</b>unmeasured</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">V2 in one line: the contract I built for GitHub now runs on my own code, and my workflows became skills the agent can load. The rail draws in date order (git first-commit dates and npm, scratchpad history-timeline.md rows 11–16): v11.0, 27 Dec 2025 — local tools inside octocode-mcp and the first SKILL.md (0bef8ac76; npm 11.0.0 on 1 Jan 2026); v11.1.0, 10 Jan 2026 — LSP: lspGotoDefinition, lspFindReferences, lspCallHierarchy (28f1ecb23); v11.2.2, 19 Jan 2026 — ~/.octocode/.octocoderc with priority env &gt; rc &gt; defaults (806510239:packages/octocode-shared/src/config/loader.ts:4-5,26); v13.0.0, 15 Mar 2026 — pagination across all tools (1fd9f3bd9); 16.x, 18 Jun 2026 — the first Rust napi-rs crates: octocode-security (309 patterns), context-utils, lsp (e1ad2d510). Tool count went 10 → 13 → 14 over V2. Press → for each gain. One: the Rust secret scanner versus the JS one, same 309 patterns, M-series, 200 runs: clean content 20–27× faster — 1 MB from 50 ms to 2.1 ms, 5 MB from 248 to 10 ms; with 5 secrets present 16–21× (e1ad2d510:packages/octocode-security/README.md:14-40). Two and three are measured on today's v20 build in Octocode's scripted tool benchmark, no LLM (docs/OCTOCODE_PROTOCOL.md:132-133): with hostile input, 0 of 5 fake secrets leaked versus rg's 3 of 3; LSP references are exact where rg -w scores 0.26–0.62 precision. Four, honestly: I have no measurement yet of how much the skills improve answers — that's what the V3 benchmark work is for. Where this went next: in V3 the responses became minimal by default — the same-day iteration on 9 Oct 2026 cut characters to 0.79× (−21%) at equal correctness (packages/octocode-benchmark/results/lean-vs-mcp-114934-2026-10-09.md:388-395). Next: V3 — the CLI, Rust and the benchmark.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

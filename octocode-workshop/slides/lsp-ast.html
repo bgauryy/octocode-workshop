@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A text search finds the name, not the function</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cmp { flex: 1 1 auto; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+    .pane { display: flex; flex-direction: column; gap: 10px; padding: 16px 24px; border-radius: var(--radius); border: 1px solid var(--border-strong); border-top: 3px solid var(--pc); background: linear-gradient(160deg, var(--surface-2), var(--surface)); min-width: 0; }
+    .pane--text { --pc: var(--muted-2); }
+    .pane--lsp { --pc: var(--violet); }
+    .pane .kicker { color: var(--pc); }
+    .pane--text .kicker { color: var(--muted); }
+    .q { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); }
+    .q b { color: var(--text-strong); font-weight: 500; }
+    .big { display: flex; align-items: baseline; gap: 14px; }
+    .big strong { font-family: var(--font-head); font-size: 64px; line-height: 1; font-weight: 700; color: var(--text-strong); }
+    .pane--lsp .big strong { color: var(--violet); }
+    .big span { font-size: var(--t-mid); color: var(--muted); }
+    .bar { display: flex; flex: none; flex-direction: row; width: 100%; height: 22px; min-height: 0; max-height: 22px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border-strong); }
+    .bar .ok { flex: 4 1 0; height: 100%; background: var(--violet); }
+    .bar .no { flex: 22 1 0; height: 100%; background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--negative) 35%, transparent) 0 8px, transparent 8px 14px); }
+    .split { display: flex; flex-direction: column; align-items: flex-start; text-align: left; gap: 4px; font-size: var(--t-mid); color: var(--text); line-height: 1.3; }
+    .split b { color: var(--violet); }
+    .split .wrong b { color: var(--negative); }
+    .split small { color: var(--muted); font-size: var(--t-small); }
+    .refs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+    .refs li { display: flex; justify-content: space-between; gap: 12px; padding: 4px 14px; border-left: 3px solid var(--violet); background: color-mix(in srgb, var(--violet) 10%, transparent); border-radius: 0 8px 8px 0; font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); }
+    .refs li span { color: var(--muted); }
+    .take { flex: none; margin-top: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+    .take div { display: flex; align-items: baseline; gap: 12px; padding: 10px 18px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--border); font-size: var(--t-mid); color: var(--text-strong); }
+    .take .kicker { color: var(--muted); }
+    .take .lsp { border-color: var(--violet); } .take .lsp .kicker { color: var(--violet); }
+    .take .ast .kicker { color: var(--accent-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · AST + LSP</span>
+    <h2 class="title" data-slide-title>A text search finds the name, not the function</h2>
+    <p class="description" data-slide-subtitle>Same repo, same name: 26 text hits, but only 4 are the function I meant.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="cmp">
+      <div class="pane pane--text">
+        <span class="kicker">Text search</span>
+        <span class="q">search <b>"exit_code"</b></span>
+        <div class="big"><strong>26</strong><span>hits in 4 files</span></div>
+        <div class="bar" role="img" aria-label="4 of 26 hits are the right function"><div class="ok"></div><div class="no"></div></div>
+        <div class="split">
+          <span><b>4</b> the function I mean</span>
+          <span class="wrong"><b>22</b> something else <small>· test helper, method, substring</small></span>
+        </div>
+      </div>
+      <div class="pane pane--lsp" data-step="1" data-anim="draw">
+        <span class="kicker">LSP references</span>
+        <span class="q">references of <b>exit_code</b> · mod.rs:722</span>
+        <div class="big"><strong>4</strong><span>exact, in 2 files</span></div>
+        <ol class="refs">
+          <li>cli/mod.rs:722<span>definition</span></li>
+          <li>cli/mod.rs:673<span>call</span></li>
+          <li>cli/serve.rs:366<span>call</span></li>
+          <li>cli/serve.rs:371<span>call</span></li>
+        </ol>
+      </div>
+    </div>
+    <div class="take" data-step="2">
+      <div><span class="kicker">Text</span>finds the name</div>
+      <div class="lsp"><span class="kicker">LSP</span>finds the symbol</div>
+      <div class="ast"><span class="kicker">AST</span>finds the code shape</div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">A real run on Octocode's own repo, 9 Oct 2026 (octocode 20.2.0). Left: `octocode localSearch` for the text "exit_code" in packages/octocode-native/crates/cli returns 26 hits in 4 files. Only 4 are the function I mean, fn exit_code(class: ExitClass) at cli/src/cli/mod.rs:722 and its 3 uses. The other 22: a test helper with the same name, fn exit_code(output: &amp;Output) at tests/cli.rs:17, with 19 uses (20 hits); a method call error.exit_code() at mod.rs:146; and the substring in mod cli_exit_codes at tests/main.rs:17. A text-only agent "finds 26 callers" and edits the wrong ones. Press →: `octocode lspSearch` with operation references, symbolName exit_code, line 722 asks rust-analyzer, and returns 4 locations in 2 files: the definition plus mod.rs:673 and serve.rs:366 and :371. (Honest detail: about 13 s on the first, cold call. Even the tool tells you what it couldn't see: when feature-gated Rust code could hide references, it flags isPartial with partialReasons cfgGatedFiles (docs/OCTOCODE_TOOLS.md:657); this run came back complete.) This is the server instruction (ledger L2): "Identity (callers, references): lspSearch with a hit's symbolName+line." Press → for the takeaway: text finds the name, LSP finds the symbol, AST finds the code shape. AST: tree-sitter grammars + ast-grep (+ Oxc), 11 language families (ledger L3); structural patterns like $X.unwrap() "match code shape, never comments or strings" (docs/OCTOCODE_PROTOCOL.md:97-99), and the same parse feeds `octocode graph` for callers, impact and cycles. Measured in the scripted benchmark: "LSP references are exact (rg -w: 0.26–0.62)"; symbols exact on 6 of 6 files vs 0.81–0.98 for regexes and ctags (docs/OCTOCODE_PROTOCOL.md:132). lspSearch operations (ledger L1): definition, references, callers, callees, hover, typeDefinition, implementation, workspaceSymbol, supertypes, subtypes, diagnostic, documentSymbols; servers for TypeScript, Python, Rust, Go, Java, C/C++, C#, Scala. Outside evidence that structure beats flat text: LocAgent's graph-guided localization reaches "up to 92.7% accuracy on file-level localization" (arXiv:2503.09089, 12 Mar 2025). History: LSP arrived 10 Jan 2026 in v11.1.0 as lspGotoDefinition / lspFindReferences / lspCallHierarchy (28f1ecb23); the tree-sitter + ast-grep Rust engine on 19 Jun 2026 (4d1067803). Next: why we added LSP, and the new research dimension it gives the agent.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

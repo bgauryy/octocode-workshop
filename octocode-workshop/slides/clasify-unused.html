@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offered 30 times. Called zero times.</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .unused .slide-content { flex-direction: row; align-items: center; gap: 56px; }
+    .unused .zero { font-family: var(--font-head); font-size: 220px; font-weight: 700; line-height: 1; letter-spacing: -0.05em; color: var(--negative); white-space: nowrap; }
+    .unused .zero small { font-size: 0.4em; color: var(--muted-2); letter-spacing: 0; }
+    .unused .txt { display: flex; flex-direction: column; gap: var(--sp-4); }
+    .unused .display { font-size: 50px; max-width: 24ch; }
+  </style>
+</head>
+<body>
+<div class="slide slide--section act--violet unused">
+  <div class="slide-content">
+    <div class="zero" data-anim="land">0<small>/30</small></div>
+    <div class="txt">
+      <span class="act-tag">V3 · The catch</span>
+      <h2 class="display" data-slide-title>Offered 30 times. Called zero times.</h2>
+      <p class="sub" data-slide-subtitle>A tool has no effect if the agent never chooses to use it.</p>
+      <span class="src" data-step="1" data-anim="fade">Oct 2026 A/B · same 30 questions · octocode-benchmark results</span>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The twist after Scout. Everything on the last slide is real: 339× less to read when clasify runs. But in the October A/B, with clasify in the tool list for all 30 sessions, the agent called it zero times; the character ratio with vs without it was 1.04× (CI 0.93–1.16), Sonnet 5.5, single pass (packages/octocode-benchmark/results/mcp-clasify-ab-111154-2026-10-09.md:8-15; ledger X10, results/SUMMARY.md:12-18). Press →: the lesson. A capability the agent doesn't choose is worth nothing. The tool's description is its trigger, the same way a skill's description is. That's why the next fixes are about what sits in the window by default, not about adding tools, and it comes back in the recap: "A skill is only as good as its trigger". Next: everything else that cuts tokens.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

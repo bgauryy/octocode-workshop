@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Goals and hints kept context useful</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .hm { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · what helped most</span>
+    <h2 class="title" data-slide-title>Goals and hints kept context useful</h2>
+    <p class="description" data-slide-subtitle>The biggest gains came from clearer research intent and smaller results.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="hm">
+      <div class="card" data-step="1"><span class="kicker">On every call</span><h3>Reasoning + goals</h3><p>The plan is re-stated in the window each turn, so the model keeps seeing the big picture.</p></div>
+      <div class="card" data-step="2"><span class="kicker">On every result</span><h3>Hints</h3><p>The next step arrives with the data — no stall on empty, no blind retry.</p></div>
+      <div class="card card--positive" data-step="3"><span class="kicker">Overall</span><h3>Small context</h3><p>Less noise, sharper attention. Windows, not files.</p></div>
+    </div>
+    <div class="rule" style="--rule-color: var(--warm)" data-step="4"><span class="k">// the honest part:</span> most of the time went into <strong>manual prompt engineering</strong> — e.g. <code>&lt;xmlTags&gt;</code> in instructions.</div>
+  </div>
+</div>
+<aside class="speaker-notes">From the brief: what helped the most — reasoning on tools, goals on tools, hints. Showing the context window with messages carrying reason and hints helped agents see the big picture much better — better attention. Keeping context small helped attention be far more effective. And honestly: most of the time was spent on manual prompt engineering — e.g. XML tags. You can see that in today's server instructions: &lt;local&gt;…&lt;/local&gt;, &lt;evidence&gt;…&lt;/evidence&gt; blocks, budgeted to ≤2,000 chars because "MCP hosts truncate server instructions near 2 KB" (octocode-core instructions.ts). Next: what the model actually sees.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

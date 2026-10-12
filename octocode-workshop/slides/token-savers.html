@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cut tokens at every research step</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .tsv { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 4px 20px; align-items: center; }
+    .tsv > .layer { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 14px; margin-top: 6px; padding-left: 12px; border-left: 4px solid var(--lc); font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--lc); }
+    .tsv > .layer:first-child { margin-top: 0; }
+    .tsv > .layer span { font-family: var(--font-body); letter-spacing: 0; text-transform: none; color: var(--muted); }
+    .tsv > .m { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--text-strong); white-space: nowrap; }
+    .tsv > .m code { color: var(--accent-2); }
+    .tsv > .bar { height: 24px; border-radius: 6px; position: relative; overflow: hidden; background: color-mix(in srgb, var(--muted-2) 22%, transparent); border: 1px dashed color-mix(in srgb, var(--muted-2) 55%, transparent); }
+    .tsv > .bar > i { position: absolute; inset: -1px auto -1px -1px; width: var(--v); border-radius: 6px; background: var(--lc); }
+    .tsv > .num { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--muted); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .tsv > .num b { color: var(--text-strong); font-weight: 600; }
+    .tsv > .pct { font-family: var(--font-mono); font-size: var(--t-mid); font-weight: 600; color: var(--text-strong); text-align: right; min-width: 3.4em; }
+    .l1 { --lc: var(--violet); } .l2 { --lc: var(--accent); } .l3 { --lc: var(--positive); }
+    .tsv-foot { display: flex; justify-content: space-between; gap: 20px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · token savers</span>
+    <h2 class="title" data-slide-title>Cut tokens at every research step</h2>
+    <p class="description" data-slide-subtitle>Reduce the request, the returned result and the amount of source the agent reads.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="tsv">
+      <div class="layer l1" data-step="1">every request</div>
+      <span class="m" data-step="1">deferred tools → one <code>run</code> tool</span>
+      <div class="bar l1" data-step="1" data-anim="draw"><i style="--v: 16.6%"></i></div>
+      <span class="num" data-step="1">10,865 → <b data-anim="count" data-from="10865">1,805</b> B</span>
+      <span class="pct l1" data-step="1">−83%</span>
+
+      <span class="m" data-step="1">slim <code>tools/list</code> (12 + clasify)</span>
+      <div class="bar l1" data-step="1" data-anim="draw"><i style="--v: 53%"></i></div>
+      <span class="num" data-step="1">30.1 → <b data-anim="count" data-from="30.1">15.9</b> KB</span>
+      <span class="pct l1" data-step="1">−47%</span>
+
+      <div class="layer l2" data-step="2">every result</div>
+      <span class="m" data-step="2">opt-in <code>extras</code></span>
+      <div class="bar l2" data-step="2" data-anim="draw"><i style="--v: 48.3%"></i></div>
+      <span class="num" data-step="2">4,674 → <b data-anim="count" data-from="4674">2,257</b> B</span>
+      <span class="pct l2" data-step="2">−52%</span>
+
+      <span class="m" data-step="2">hints only on empty/failed rows</span>
+      <div class="bar l2" data-step="2" data-anim="draw"><i style="--v: 61.1%"></i></div>
+      <span class="num" data-step="2">306 → <b data-anim="count" data-from="306">187</b> B</span>
+      <span class="pct l2" data-step="2">−39%</span>
+
+      <span class="m" data-step="2"><code>ghSearchHistory</code> page</span>
+      <div class="bar l2" data-step="2" data-anim="draw"><i style="--v: 33.3%"></i></div>
+      <span class="num" data-step="2">30 → <b data-anim="count" data-from="30">10</b> rows</span>
+      <span class="pct l2" data-step="2">−67%</span>
+
+      <div class="layer l3" data-step="3">every read</div>
+      <span class="m" data-step="3"><code>matchString</code> window vs whole file</span>
+      <div class="bar l3" data-step="3" data-anim="draw"><i style="--v: 19.3%"></i></div>
+      <span class="num" data-step="3">19,438 → <b data-anim="count" data-from="19438">3,749</b> B</span>
+      <span class="pct l3" data-step="3">−81%</span>
+
+      <span class="m" data-step="3"><code>contextLines</code> default 10 → 3</span>
+      <div class="bar l3" data-step="3" data-anim="draw"><i style="--v: 47%"></i></div>
+      <span class="num" data-step="3">7,974 → <b data-anim="count" data-from="7974">3,749</b> B</span>
+      <span class="pct l3" data-step="3">−53%</span>
+
+      <span class="m" data-step="3"><code>minify:"symbols"</code> outline</span>
+      <div class="bar l3" data-step="3" data-anim="draw"><i style="--v: 14%"></i></div>
+      <span class="num" data-step="3">19,729 → <b data-anim="count" data-from="19729">2,767</b> B</span>
+      <span class="pct l3" data-step="3">−86%</span>
+    </div>
+    <div class="tsv-foot">
+      <div class="legend"><span>bar = after ÷ before</span></div>
+      <span class="src">bytes of tool output · 2026-10-09</span>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Why this matters: the agent loop re-sends the whole window on every request (system prompt, every tool definition and every earlier result), so a byte you cut is a byte you stop paying for on every later turn. The repo's own finding: "≈82% of octocode tokens are fixed overhead, not tool output" (.octocode/rfc/tool-improvement-2026-10/RFC.md:23). Each bar is one mechanism, after ÷ before on the same input; the coloured part is what's kept, the dashed part is what got cut. The three layers, said aloud: every request: tool schemas are re-sent on every turn; every result: minimal unless the agent asks for more; every read: windows, not files. Step 1, every request: deferring rarely-used tools (OCTOCODE_DEFER_TOOLS) replaces 9 tool schemas with one run({tool, query}) dispatcher: 10,865 → 1,805 bytes, measured 2026-10-09 on the core dist's published schemas (docs/generated/CONFIG_SETTINGS.md:84; a test asserts the dispatcher is under half: src/__tests__/surfaceArms.test.ts:76-82). Slim published schemas: tools/list was ≈30.1 KB on 2026-10-01 (RFC.md:25) and is 15,939 B for 13 tools now (measured 2026-10-09). Step 2, every result: minimal by default, extras are opt-in. ghSearchCode is 2,257 B by default vs 4,674 B with everything on (.octocode/rfc/tool-quality-efficiency-2026-10/research/meaningful-output.md:33-55); prose hints only on empty or failed rows, one tip ≤120 chars, so a not-found row went 306 → 187 B (docs/TOOL_DATA_CONTRACT.md:32,90-91; TOOLS-END-TO-END.md:72); ghSearchHistory pages went 30 → 10 rows because "a 30-row page cost ~7.8 KB where shell agents read 10–15 rows" (toolContract/limits.ts:42-47). Step 3, every read: a matchString window on an 11-hit, 2,097-line Rust file (crates/runtime/src/tools/clasify/run/hydrate.rs) is 3,749 B vs 19,438 B for just the first page of the whole file, re-measured 2026-10-09 with the local CLI; contextLines default 10 → 3 the same day: 7,974 → 3,749 B on that read (limits.ts:88-94: agents set it themselves 12 of 12 times and answers sat within 1–3 lines); minify:"symbols" on a 471-line TypeScript file (packages/octocode-mcp/src/native/index.ts): 19,729 → 2,767 B, measured 2026-10-09. Honest caveats: the October transcripts say wide windows and whole-file reads, not the default, were the real lever; and a symbols outline can still lose bytes to a plain grep of def/class lines, though it wins on coverage. Why deferral matters outside Octocode too: Anthropic counted 5 MCP servers = "58 tools consuming approximately 55K tokens before the conversation even starts"; their Tool Search cut that by 85% and raised Opus 4 from 49% to 74% (anthropic.com/engineering/advanced-tool-use, 24 Nov 2025). Claude Code now defers MCP tools once their definitions pass 10% of context (code.claude.com/docs/en/mcp). Next: the workbench every change is built in.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

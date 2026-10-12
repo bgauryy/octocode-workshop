@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home configures Octocode; the workspace keeps skill output</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .fold { display: grid; grid-template-columns: 1fr 1.15fr; gap: 24px; align-items: stretch; }
+    .fold .card { display: flex; flex-direction: column; gap: 6px; padding: 14px 24px; }
+    .fold .card h3 { font-family: var(--font-mono); }
+    .fold .who { font-size: var(--t-small); color: var(--muted); }
+    .fold .tree { font-family: var(--font-mono); font-size: var(--t-code); line-height: 1.45; color: var(--code-text); display: grid; grid-template-columns: max-content 1fr; column-gap: 20px; row-gap: 0; margin-top: 0; }
+    .fold .tree .d { color: var(--text-strong); }
+    .fold .tree .c { color: var(--code-comment); }
+    .fold-rule { margin-top: 12px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · where things live</span>
+    <h2 class="title" data-slide-title>Home configures Octocode; the workspace keeps skill output</h2>
+    <p class="description" data-slide-subtitle>Two .octocode folders: one for settings and keys, one for results.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="fold">
+      <div class="card card--violet" data-step="1" data-anim="land">
+        <span class="kicker">once per machine · configuration, among others</span>
+        <h3>~/.octocode/</h3>
+        <span class="who">read by the CLI, the MCP server and the skills</span>
+<div class="tree"><span class="d">.octocoderc</span><span class="c">// features &amp; settings</span>
+<span class="d">.env</span><span class="c">// tokens &amp; API keys</span>
+<span class="d">credentials.json</span><span class="c">// GitHub login</span>
+<span class="d">skills/</span><span class="c">// installed skills</span></div>
+      </div>
+      <div class="card card--positive" data-step="2" data-anim="land">
+        <span class="kicker">once per project · output</span>
+        <h3>&lt;workspace&gt;/.octocode/</h3>
+        <span class="who">what the skills write, next to the code</span>
+<div class="tree"><span class="d">octocode-rfc-generator/</span><span class="c">// RFCs</span>
+<span class="d">octocode-research/</span><span class="c">// reports, PR reviews</span>
+<span class="d">octocode-… /</span><span class="c">// one per skill</span>
+<span class="d">.env</span><span class="c">// project keys, override home</span></div>
+      </div>
+    </div>
+    <p class="rule fold-rule" data-step="3" data-anim="land"><span class="k">//</span>settings live at home; results live with the project, so the <strong>next session reads them</strong> instead of redoing them</p>
+  </div>
+</div>
+<aside class="speaker-notes">Click 1: ~/.octocode is the Octocode home (%USERPROFILE%\.octocode on Windows; move it with OCTOCODE_HOME). .octocoderc = JSONC settings the MCP server and CLI read (features like local tools, tool lists, timeouts). .env = tokens and third-party API keys (GH_TOKEN, TAVILY_API_KEY, SERPER_API_KEY, EXA_API_KEY) that the CLI and MCP server load. credentials.json = encrypted GitHub login (AES-256-GCM, key in .key). skills/ = installed skills. The folder holds more than these (stats, tmp/ caches and so on), so treat the list as examples (docs/CONFIGURATION.md, docs/AUTHENTICATION.md:51, https://github.com/bgauryy/octocode/blob/main/docs/CONFIGURATION.md). Click 2: the workspace .octocode is where skills save output after you approve. The RFC generator saves &lt;workspace&gt;/.octocode/octocode-rfc-generator/&lt;YYYY-MM-DD&gt;-&lt;slug&gt;/RFC.md (skills/octocode-rfc-generator/SKILL.md:24); research reports and PR reviews go to .octocode/octocode-research/&lt;YYYY-MM-DD&gt;-pr-&lt;number&gt;.md (skills/octocode-research/references/workflow-pr-review.md:52); a project .env beats the home .env for the same key, except home-only keys. Click 3: results are files next to the code. Next: when both folders set the same thing, which one wins.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LSP gives the agent a new dimension: connections</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lsp { display: flex; flex-direction: column; gap: 22px; width: 100%; }
+    .why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+    .why > div { display: flex; flex-direction: column; gap: 6px; padding: 16px 22px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 3px solid var(--pc); background: var(--surface); }
+    .why .noisy { --pc: var(--negative); }
+    .why .angle { --pc: var(--violet); }
+    .why .kicker { color: var(--pc); }
+    .why h3 { margin: 0; color: var(--text-strong); font-size: var(--t-body); }
+    .why p { margin: 0; color: var(--muted); font-size: var(--t-mid); line-height: 1.35; }
+    .dims { display: grid; grid-template-columns: 1fr 1fr 1fr 1.6fr; gap: 14px; }
+    .dim { display: flex; flex-direction: column; gap: 6px; padding: 16px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); }
+    .dim .kicker { color: var(--muted); }
+    .dim h3 { margin: 0; color: var(--text-strong); font-size: var(--t-body); }
+    .dim code { font-size: var(--t-small); color: var(--accent); }
+    .dim.is-key { border: 1px solid var(--violet); background: linear-gradient(160deg, color-mix(in srgb, var(--violet) 14%, var(--surface)), var(--surface)); }
+    .dim.is-key .kicker, .dim.is-key code { color: var(--violet); }
+    .ops { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+    .ops span { padding: 2px 10px; border-radius: 999px; border: 1px solid var(--violet); font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); }
+    .lsp .foot { display: flex; justify-content: space-between; gap: 20px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <header class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · LSP</span>
+    <h2 class="title" data-slide-title>LSP gives the agent a new dimension: connections</h2>
+    <p class="description" data-slide-subtitle>Text search got noisy, so the agent needed a way to follow how code connects.</p>
+  </header>
+  <main class="slide-content slide-content--middle">
+    <div class="lsp">
+      <div class="why">
+        <div class="noisy"><span class="kicker">Why · text got noisy</span><h3>A name is not a symbol</h3><p>Tests, helpers and substrings match the same text.</p></div>
+        <div class="angle"><span class="kicker">Why · a new angle</span><h3>Search said what and where</h3><p>Nothing told the agent who calls whom.</p></div>
+      </div>
+      <div class="dims" data-step="1" data-anim="draw" data-stagger style="--stagger: 160ms">
+        <div class="dim"><span class="kicker">Text</span><h3>the name</h3><code>localSearch</code></div>
+        <div class="dim"><span class="kicker">Structure</span><h3>the place</h3><code>structureSearch</code></div>
+        <div class="dim"><span class="kicker">Content</span><h3>the lines</h3><code>localFetch</code></div>
+        <div class="dim is-key"><span class="kicker">New · connections</span><h3>the links</h3><code>lspSearch</code>
+          <div class="ops"><span>definition</span><span>references</span><span>callers</span><span>callees</span></div>
+        </div>
+      </div>
+      <div class="foot"><span class="src">12 operations · 8 language servers</span><span class="src">since v11.1.0 · 10 Jan 2026</span></div>
+    </div>
+  </main>
+</div>
+<aside class="speaker-notes">Why LSP. Two reasons. First, text search got noisy: as repos grew, a name matched tests, helpers, methods and substrings, and the agent read or edited the wrong code (the exit_code run on the previous slide: 26 text hits, only 4 were the function). Second, the agent needed another aspect of research: text, structure and content tell it what a thing is called, where it lives and what its lines say, but not how code connects. Press →: the four dimensions. Text finds the name (localSearch), structure finds the place (structureSearch), content reads the lines (localFetch), and the new one, connections, follows the links between symbols (lspSearch). The server instruction (ledger L2): "Identity (callers, references): lspSearch with a hit's symbolName+line." lspSearch operations (ledger L1): definition, references, callers, callees, hover, typeDefinition, implementation, workspaceSymbol, supertypes, subtypes, diagnostic, documentSymbols; language servers for TypeScript, Python, Rust, Go, Java, C/C++, C#, Scala. Measured in the scripted benchmark: "LSP references are exact (rg -w: 0.26–0.62)" (docs/OCTOCODE_PROTOCOL.md:132). History: LSP arrived 10 Jan 2026 in v11.1.0 as lspGotoDefinition / lspFindReferences / lspCallHierarchy (commit 28f1ecb23). Next: the missing piece, my own skills.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

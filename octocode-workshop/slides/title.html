@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octocode Workshop</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .t-wrap { flex: 1; display: grid; grid-template-rows: auto 1fr auto; }
+    .t-top { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); letter-spacing: 0.18em; text-transform: uppercase; }
+    .t-top .hl { margin: 0 8px; }
+    .t-center { display: grid; grid-template-columns: 1.7fr 1fr; gap: 48px; align-items: center; }
+    .t-text { display: flex; flex-direction: column; gap: 20px; }
+    .t-text .display { max-width: 18ch; font-size: 56px; }
+    .t-logo { width: 100%; max-width: 280px; justify-self: end; filter: drop-shadow(0 6px 24px color-mix(in srgb, var(--accent) 18%, transparent)); }
+    .t-bottom { display: flex; justify-content: space-between; align-items: end; }
+    .t-author strong { display: block; font-family: var(--font-head); color: var(--text-strong); font-size: var(--t-body); }
+    .t-author span { font-family: var(--font-head); font-size: var(--t-small); color: var(--muted-2); letter-spacing: 0.12em; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+<div class="slide slide--title-left">
+  <div class="slide-content t-wrap">
+    <div class="t-top">Workshop <span class="hl">·</span> mechanics, internals, hands-on</div>
+    <div class="t-center">
+      <div class="t-text">
+        <h1 class="display" data-slide-title>Octocode Workshop</h1>
+        <p class="lead" data-slide-subtitle>Build reliable AI tools by connecting LLM mechanics, code research and evidence.</p>
+      </div>
+      <img class="t-logo" src="../assets/logo_white.png" alt="Octocode logo">
+    </div>
+    <div class="t-bottom">
+      <div class="t-author"><strong>Guy Bary</strong><span>Octocode creator · Principal Architect @ Wix</span></div>
+      <span class="src">octocode.ai · github.com/bgauryy/octocode</span>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Welcome. Today runs in eight sections, numbered 00 to 07 as on the agenda slide: 00 Intro; 01 LLM basics, the mechanics every tool decision answers to; 02 My story with AI, the 2023 story of how I stopped trusting models; 03 MCP and the Octocode beginning; 04 Octocode in scale; 05 Octocode V2: local tools, skills and configuration; 06 Octocode V3: the CLI, the Rust engine, clasify and the benchmark; 07 Recap and gotchas. Hands-on pauses follow the sections along the way, with best practices for building MCP tools, skills and agentic flows. The hands-on exercises are being rebuilt. They're coming, and I'll say so when we get there. The promise: by the end you'll know why AI tools fail and how a tool is built to stop that. Speaker: Guy Bary, Octocode creator, Principal Architect @ Wix (ledger S8). Next: who I am.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

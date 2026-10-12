@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The agent must prove every claim from files</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .hz { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 28px; flex: 1; min-height: 0; align-items: stretch; }
+    .pane { display: flex; flex-direction: column; gap: 12px; padding: 16px 24px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); min-width: 0; }
+    .pane > .kicker { display: flex; align-items: center; gap: 10px; }
+    .pane > .kicker::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--pc); }
+    .p1 { --pc: var(--positive); } .p2 { --pc: var(--accent); }
+    .rules { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: space-between; }
+    .rules li { display: flex; flex-direction: column; gap: 2px; padding: 6px 16px; border-left: 3px solid var(--positive); border-radius: var(--radius-sm); background: var(--code-bg); }
+    .rules h3 { margin: 0; font-size: var(--t-mid); color: var(--text-strong); }
+    .rules q { font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.35; color: var(--code-string); quotes: none; }
+    .big { display: flex; flex-direction: column; gap: 6px; }
+    .big .num { font-family: var(--font-mono); font-size: var(--t-title); color: var(--accent); line-height: 1; }
+    .big .cap { font-size: var(--t-small); color: var(--muted); }
+    .row { display: grid; grid-template-columns: 62px minmax(0, 1fr) 80px; align-items: center; gap: 12px; }
+    .row .lab { font-size: var(--t-small); color: var(--muted); }
+    .track { height: 22px; border-radius: 6px; background: var(--surface-3); overflow: hidden; }
+    .fill { display: block; height: 100%; width: var(--w); border-radius: 6px; }
+    .before .fill { background: var(--negative); opacity: 0.75; }
+    .after .fill { background: var(--accent); }
+    .row .v { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); text-align: right; white-space: nowrap; }
+    .after .v { color: var(--accent); }
+    .gap { flex: 1; }
+    .note { margin: 0; font-size: var(--t-small); color: var(--muted); line-height: 1.35; }
+    .note b { color: var(--text-strong); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · hallucinations</span>
+    <h2 class="title" data-slide-title>The agent must prove every claim from files</h2>
+    <p class="description" data-slide-subtitle>Instructions now demand evidence, and the MCP description is half as long.</p>
+  </div>
+  <div class="slide-content">
+    <div class="hz">
+      <div class="pane p1" data-anim="rise">
+        <span class="kicker">Instructions: validate everything</span>
+        <ol class="rules">
+          <li><h3>Cite the lines</h3><q>quote verbatim; never invent values.</q></li>
+          <li data-step="1" data-anim="rise"><h3>Prove, don't assume</h3><q>prove identity and behavior, not names</q></li>
+          <li data-step="2" data-anim="rise"><h3>Understand connections</h3><q>trace definitions, callers and imports with LSP</q></li>
+          <li data-step="3" data-anim="rise"><h3>Empty is not absent</h3><q>check scope, spelling, ref, index first</q></li>
+          <li data-step="4" data-anim="rise"><h3>Check the next step</h3><q>each result names the next tool to verify with</q></li>
+        </ol>
+      </div>
+      <div class="pane p2" data-step="5" data-anim="rise">
+        <span class="kicker">Smaller MCP description</span>
+        <div class="big"><span class="num">−50%</span><span class="cap">server instruction text</span></div>
+        <div class="row before"><span class="lab">before</span><span class="track"><span class="fill" style="--w: 100%"></span></span><span class="v">3,807</span></div>
+        <div class="row after"><span class="lab">now</span><span class="track"><span class="fill" style="--w: 50%"></span></span><span class="v">1,908</span></div>
+        <span class="gap"></span>
+        <p class="note">Sent on <b>every request</b>: less MCP text leaves more room for evidence.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The last row of the problems table: hallucinations, meaning confident claims with no line behind them. Stronger wording alone did not fix it, so we changed what the agent is asked to do with every answer: prove it from files and validate everything. Left side, condensed from the live server instructions (dev build 20.2.0, 2026-10-12; ledger V10, X33). Full wording: "Cite source or diff lines by number; quote verbatim; never invent values." Click 1: "prove identity (lspSearch) and behavior (code, diffs), not names or claims". A matching name is not proof; the definition and the diff are. Click 2: understand connections. Before claiming how code works, the agent follows the real links with LSP: where a symbol is defined, who calls it, what imports it. Click 3: "Empty ≠ absent until scope, spelling, ref, index are checked." An empty search is not evidence that something does not exist. Click 4: check the next step. The tool schemas carry this: descriptions say when to call a tool, an empty block says how to repair a miss, and a workflow block names the next hop, so the agent verifies before it answers (docs/OCTOCODE_PROTOCOL.md:66, ledger M4). Also in the instructions, if asked: "Copy row values (path, commitSha, line, localPath); never guess." Anthropic's hallucination guide gives the same advice: "Verify with citations … If it can't find a quote, it must retract the claim." Click 5, the other half of the fix: shrink the text that describes the MCP, because it is sent on every request and competes with the evidence for attention. Server instructions went from 3,807 chars (29 Sep 2026, git 17375b97a:TODO.md) to 1,908 today, under a 2,000 cap; Claude Code truncates server instructions at 2,048 chars (code.claude.com/docs/en/mcp) (ledger X25, V10). If asked: the tools/list payload for the same 13 tools went from about 30.1 KB (RFC.md:25) to 15,939 bytes (measured 2026-10-09; ledger X16), a 47% cut. These are size numbers; we did not measure a hallucination rate, so do not claim one. Next: all nine problems and how we resolved each, on one slide.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

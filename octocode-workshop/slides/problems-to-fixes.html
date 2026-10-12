@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scale exposed nine problems</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .iss { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 22px; width: 100%; }
+    .iss li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 12px; align-content: start; padding: 14px 18px; border: 1px solid var(--border); border-left: 3px solid var(--negative); border-radius: var(--radius-sm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .iss .n { grid-row: span 2; font-family: var(--font-mono); font-size: var(--t-mid); color: var(--negative); line-height: 1.2; }
+    .iss h3 { margin: 0; font-size: var(--t-mid); color: var(--text-strong); line-height: 1.2; }
+    .iss p { margin: 0; font-size: var(--t-small); color: var(--muted); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · problems</span>
+    <h2 class="title" data-slide-title>Scale exposed nine problems</h2>
+    <p class="description" data-slide-subtitle>Bigger repos, longer sessions and more users broke the first tools in nine places.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <ol class="iss" data-step="1" data-anim="rise" data-stagger style="--stagger: 120ms">
+      <li><span class="n">01</span><h3>Rate limits</h3><p>GitHub allows 10 code searches a minute.</p></li>
+      <li><span class="n">02</span><h3>Leaked secrets</h3><p>Fetched files carry keys and hostile instructions.</p></li>
+      <li><span class="n">03</span><h3>No file context</h3><p>A hit line doesn't say where the file belongs.</p></li>
+      <li><span class="n">04</span><h3>Package names</h3><p>An import names a package, not where its code lives.</p></li>
+      <li><span class="n">05</span><h3>Too many calls</h3><p>One query per call meant one idea per turn.</p></li>
+      <li><span class="n">06</span><h3>Context grew</h3><p>Whole-file reads filled the window.</p></li>
+      <li><span class="n">07</span><h3>Large files</h3><p>Even a needed file costs too many tokens.</p></li>
+      <li><span class="n">08</span><h3>Large results and PRs</h3><p>Long outputs bury the change that matters.</p></li>
+      <li><span class="n">09</span><h3>Hallucinations</h3><p>Confident claims with no line behind them.</p></li>
+    </ol>
+  </div>
+</div>
+<aside class="speaker-notes">Problems only on this slide; the fixes come one per slide next, and all of them together after the hallucinations slide. Press → once and the nine cards appear in the order we'll cover them. (1) Rate limits: GitHub allows 5,000 REST requests an hour authenticated and only 10 code-search requests a minute (docs.github.com; ledger V13). (2) Leaked secrets: fetched files and issues can carry credentials and instructions aimed at the agent; 2025 saw real MCP attacks of exactly this shape (ledger V16, V17). (3) No file context: search returns a path and a line, but not where that file sits in the repo. (4) Package names: an import is a name, not a location, and models hallucinate about 19.7% of package references (USENIX Security 2025, arXiv:2406.10279). (5) Too many calls: one query per tool call meant one idea per turn, and every round trip stays in the context. (6) Context grew: whole-file reads filled the window. (7) Large files: even a file the agent needs costs many tokens to read in full. (8) Large results and PRs: long outputs and big pull requests bury the one change that matters. (9) Hallucinations: confident claims with no line behind them. Next: the first two up close, rate limits and security.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

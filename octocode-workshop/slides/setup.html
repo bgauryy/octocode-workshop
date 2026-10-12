@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get your research tools ready</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .setup .code { font-size: var(--t-small); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Hands-on · setup</span>
+    <h2 class="title" data-slide-title>Get your research tools ready</h2>
+    <p class="description" data-slide-subtitle>Install Node 24, sign in to GitHub and connect Octocode to your agent.</p>
+  </div>
+  <div class="slide-content slide-content--middle setup">
+    <div class="code" data-label="setup"><span class="tk-cmt"># 1 · Node ≥24.15, not 25/26 (or: brew install bgauryy/octocode/octocode)</span>
+node -v
+<span class="tk-cmt"># 2 · GitHub login — Octocode reuses gh</span>
+gh auth login            <span class="tk-cmt"># or: npx octocode auth login</span>
+npx octocode auth status
+<span class="tk-cmt"># 3 · add to your agent</span>
+claude mcp add octocode --scope user -- npx -y octocode-mcp@latest
+npx octocode install     <span class="tk-cmt"># any other host</span>
+<span class="tk-cmt"># 4 · the research skill</span>
+npx octocode skill install octocode-research --platform claude --global</div>
+  </div>
+</div>
+<aside class="speaker-notes">All commands from the Octocode README (README.md:40-80) and packages/octocode/README.md. Node 24.x, ≥24.15: the octocode CLI requires ^24.15.0 (packages/octocode/package.json engines) — Node 25/26 are rejected; octocode-mcp accepts ^22.22.2 || ^24.15.0 || >=26. CHECK BEFORE THE WORKSHOP: on 9 Oct 2026 npm "latest" was octocode-mcp 19.1.0 and octocode 20.1.0 while the repo is at 20.2.0 — publish 20.x or pin the version so everyone gets the tools on these slides. Homebrew installs the native binary with no Node. gh auth login is enough — Octocode reads `gh auth token` last in its token order. For Cursor/Codex/pi etc.: npx octocode install detects hosts; --platform accepts pi, cursor, claude, codex, opencode, copilot, gemini, all. Placed right after V1 so install problems surface early and get fixed over the break. Wi-fi tip: ask people to run these before the session. TBD by the speaker: a starter repo (octocode-workshop) with a small TS app, lab READMEs and pre-recorded outputs for offline fallback. Next: Lab 1 — your first evidence call.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

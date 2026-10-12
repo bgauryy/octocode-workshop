@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>octocode-architect</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* skill series (11 slides, one layout): example + rule | steps */
+    .skx .slide-header { margin-bottom: 22px; }
+    .sk { display: grid; grid-template-columns: 1fr 1.2fr; gap: 44px; width: 100%; align-items: stretch; }
+    .sk .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .sk .col > .kicker { padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .sk .bubble { font-size: var(--t-mid); }
+    .sk .bubble code { color: var(--accent-2); font-size: 0.92em; }
+    .sk .rule { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 4px solid var(--violet); background: color-mix(in srgb, var(--violet) 7%, var(--code-bg)); }
+    .sk .rule .kicker { color: var(--violet); }
+    .sk .rule blockquote { font-size: var(--t-mid); line-height: 1.38; color: var(--text-strong); }
+    .sk .rule cite { font-style: normal; color: var(--muted-2); letter-spacing: 0; text-transform: none; }
+    .sk .pipe--v { --gap: 14px; }
+    .sk .pipe--v > li { padding: 8px 16px; align-items: center; }
+    .sk .pipe--v > li > div { gap: 0; }
+    .sk .pipe h3 { font-size: var(--t-mid); letter-spacing: 0.02em; }
+    .sk .pipe p { line-height: 1.3; }
+    .sk .out { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--code-bg); font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); overflow-wrap: anywhere; }
+    .sk .out span { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content skx">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>V2 · Skills</span>
+    <h2 class="title" data-slide-title>octocode-architect</h2>
+    <p class="description" data-slide-subtitle>Use when deciding or changing architecture: it maps boundaries and data flow, and proves each finding before any edit.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sk">
+      <div class="col">
+        <span class="kicker">Example ask</span>
+        <div class="bubble"><span class="who">You</span>Is the chrome package leaking into core? Should we split it?</div>
+        <p class="out"><span>Saves →</span> .octocode/octocode-architect/&lt;date&gt;-&lt;slug&gt;.md</p>
+        <div class="rule" data-step="1" data-anim="land">
+          <span class="kicker">The rule</span>
+          <blockquote>“Topology edges are syntactic candidates. A type-only cycle is not runtime proof.”</blockquote>
+          <cite>octocode-architect/SKILL.md:39</cite>
+        </div>
+      </div>
+      <div class="col">
+        <span class="kicker">What it does</span>
+        <ol class="pipe pipe--v pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><span class="n">1</span><div><h3>Frame</h3><p>the decision, scope and contract owner</p></div></li>
+          <li><span class="n">2</span><div><h3>Model</h3><p>flows from source to consumers</p></div></li>
+          <li><span class="n">3</span><div><h3>Prove</h3><p>evidence for or against each finding</p></div></li>
+          <li class="is-key"><span class="n">4</span><div><h3>Gate</h3><p>edits authorized and seam proven?</p></div></li>
+          <li><span class="n">5</span><div><h3>Change · Verify</h3><p>smallest change, or findings + plan</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The problem: agents patch locally. They fix the line in front of them and never ask what the change does to the system. This skill makes the agent model the system and prove an architectural claim before touching it. Walk the pipe: FRAME the decision, the intended benefit, the scope and the contract owner; MODEL representative flows from source through validation, transformation and boundaries to consumers; PROVE each finding with code and runtime evidence; then the GATE: "Edits authorized and seam proven?" Yes goes to CHANGE and VERIFY, no stops at "Findings + plan" (skills/octocode-architect/SKILL.md:14-20; phase table :26-32). Press → for the mechanic: "Topology edges are syntactic candidates. A type-only cycle is not runtime proof." (SKILL.md:39). So a graph edge alone is a candidate, not a defect. Extra: "Scale rigor to consequence. Do not invent layers, abstractions, findings, or operational work to satisfy a checklist." (SKILL.md:22). Topology comes from the beta npx octocode astTopology (OCTOCODE_BETA=true) or npx octocode graph (SKILL.md:8-10); the saved note has a Location / Finding / Boundary / Consequence / Confidence / Change table (output.md:32). Invoke: npx octocode skill install octocode-architect, then, for example (illustrative prompt): "Is the chrome package leaking into core? Should we split it?" Hand-off: code facts go to octocode-research; a consequential choice goes to octocode-rfc-generator for a reviewed decision record (Related skills). Next: octocode-brainstorming, when the decision is still open.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

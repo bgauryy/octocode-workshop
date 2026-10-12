@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>One install connects twelve MCP tools</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .mp { display: grid; grid-template-columns: 470px minmax(0, 1fr); gap: 28px; flex: 1; min-height: 0; align-items: stretch; }
+    .mp .left { display: flex; flex-direction: column; gap: 16px; min-width: 0; justify-content: space-between; }
+    .mp .term { font-size: var(--t-code); padding: 16px 20px; }
+    .sees { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px; }
+    .sees .big { padding: 18px 18px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--code-bg); }
+    .sees .big .num { font-size: 62px; --bc: var(--accent); }
+    .sees .big .num small { color: var(--muted-2); }
+    .mp .code { font-size: var(--t-small); line-height: 1.5; padding: 40px 20px 14px; min-width: 0; }
+    .mp .code[data-label]::before { left: 20px; }
+    .tag { display: inline-block; font-family: var(--font-head); font-size: var(--t-small); padding: 0 10px; border-radius: 999px; border: 1px solid var(--tc); color: var(--tc); background: color-mix(in srgb, var(--tc) 12%, var(--code-bg)); font-style: normal; line-height: 1.45; }
+    .tag.opt { --tc: var(--muted); } .tag.req { --tc: var(--positive); }
+    .dir { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · MCP in practice</span>
+    <h2 class="title" data-slide-title>One install connects twelve MCP tools</h2>
+    <p class="description" data-slide-subtitle>The server returns research results that an agent can act on.</p>
+  </div>
+  <div class="slide-content">
+    <div class="mp">
+      <div class="left">
+        <div class="term" data-label="install">
+          <span class="cmd">claude mcp add octocode \</span>
+          <span class="out">    --scope user \</span>
+          <span class="out">    -- npx -y octocode-mcp@latest</span>
+          <span class="cmd">npx octocode install --ide cursor</span>
+          <span class="c"># 15 clients supported</span>
+        </div>
+        <div>
+          <span class="kicker">before any call</span>
+          <div class="sees" style="margin-top: 8px">
+            <div class="big"><span class="num" data-anim="rise count">12</span><span class="cap">tools</span></div>
+            <div class="big"><span class="num" data-anim="rise count" style="--delay: 200ms">1,669<small>/2,000</small></span><span class="cap">instruction chars</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="code" data-label="a real call · trimmed"><span class="dir">→ tools/call</span> <span class="tk-key">localSearch</span>
+  {<span class="tk-key">queries</span>: [{<span class="tk-key">mainGoal</span>: <span class="tk-str">"How does the CLI map…"</span>,
+    <span class="tk-key">matchString</span>: <span class="tk-str">"ExitClass"</span>, <span class="tk-key">extras</span>: [<span class="tk-str">"hints"</span>]}]}
+<span class="dir">← result</span> <span class="tk-cmt">(YAML)</span>
+  <span class="tk-key">isPartial</span>: <span class="tk-num">true</span>
+  <span class="tk-key">files</span>: <span class="tk-str">…/cli/mod.rs</span>
+    <span class="tk-key">matches</span>: lines <span class="tk-num">15</span>, <span class="tk-num">882</span>
+  <span class="tk-key">hints</span>:  <em class="tag opt" data-step="1" data-anim="land">optional lead</em>
+    <span class="tk-key">read</span>: {<span class="tk-key">tool</span>: localFetch,
+      <span class="tk-key">ranges</span>: [<span class="tk-str">9-21</span>, <span class="tk-str">876-888</span>]}
+  <span class="tk-key">next</span>:   <em class="tag req" data-step="2" data-anim="land">required page</em>
+    <span class="tk-key">nextMatchPage</span>: {<span class="tk-key">tool</span>: localSearch,
+      <span class="tk-key">matchPage</span>: <span class="tk-num">2</span>, <span class="tk-key">snapshot</span>: …}</div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Everything on this slide is real. Install (README.md:62-63): in Claude Code, `claude mcp add octocode --scope user -- npx -y octocode-mcp@latest`; for any other client, `npx octocode install --ide &lt;id&gt;` writes the server entry into that client's config — `octocode install --list` shows 15 client ids: cursor, claude-desktop, claude-code, windsurf, trae, antigravity, vscode-cline, vscode-roo, vscode-continue, zed, opencode, gemini-cli, kiro, codex, goose (live run, 2026-10-09); `--dry-run` shows what it would write first. Auth: GH_TOKEN/GITHUB_TOKEN, `octocode auth login` once, or the `gh auth token` fallback (docs/OCTOCODE_MCP.md:26). What the agent sees before any call: 12 tools by default — 13 when a clasify key is set (README.md:124) — and server instructions of 1,669 characters, under the 2,000-character cap because hosts truncate near 2 KB (documented for Claude Code: 2,048 chars for server instructions and for each tool description, code.claude.com/docs/en/mcp) (live initialize, 2026-10-09; docs/OCTOCODE_MCP.md:57). In September 2026 the instructions were 3,807 chars and tools/list plus instructions ~81k chars; today tools/list is ~16.5k chars for 13 tools (planning notes at commit 17375b97a, lines 5-12; live run) — different measurement methods, so read it as a trend. Right: a real tools/call over stdio on 2026-10-09, trimmed to fit (the hit file is crates/cli/src/cli/mod.rs; full: mainGoal "How does the CLI map error classes to exit codes?", plus reasoning, path, pageSize, matchPageSize). Click 1 — hints.read is an optional lead: the cheapest next read, already written as a localFetch call with ranges around both hits. Click 2 — next.nextMatchPage is required: the response is incomplete without it, and the query is pinned to a snapshot so page 2 matches page 1. The agent doesn't have to invent its next call — it copies one. Next: then the issues came.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

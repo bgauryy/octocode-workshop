@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I learned AI tools by reading their code</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .re { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: center; flex: 1; min-height: 0; }
+    .re .kicker { display: block; margin-bottom: 12px; color: var(--warm); }
+    .src-list { display: flex; flex-direction: column; gap: 10px; }
+    .src-list .s { display: grid; grid-template-columns: 2.2em 1fr; gap: 14px; align-items: center; padding: 12px 18px; border: 1px solid var(--border-strong); border-left: 3px solid var(--warm); border-radius: var(--radius-sm); background: var(--surface); }
+    .src-list .s .n { font-family: var(--font-mono); font-size: var(--t-small); color: var(--warm); }
+    .src-list .s h3 { font-size: var(--t-mid); color: var(--text-strong); margin: 0; }
+    .src-list .s p { font-size: 20px; color: var(--muted); margin: 4px 0 0; }
+    .src-list .s.not { border-left-color: var(--border-strong); background: transparent; }
+    .src-list .s.not h3 { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; }
+    .src-list .s.not .n { color: var(--muted-2); }
+    .od { display: flex; flex-direction: column; gap: 14px; padding: 26px 28px; border-radius: var(--radius); border: 1px solid var(--border-strong); border-top: 3px solid var(--warm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .od .big .num { --bc: var(--warm); font-size: 108px; }
+    .od a.src { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    .od p { font-size: var(--t-body); color: var(--text); line-height: 1.4; text-wrap: balance; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>How I learned the tools</span>
+    <h2 class="title" data-slide-title>I learned AI tools by reading their code</h2>
+    <p class="description" data-slide-subtitle>Reverse engineering showed me how their prompts and agent flows actually worked.</p>
+  </div>
+  <div class="slide-content">
+    <div class="re">
+      <div>
+        <span class="kicker">Where I learned from</span>
+        <div class="src-list">
+          <div class="s" data-step="1"><span class="n">01</span><div><h3>Reverse-engineered the code</h3><p>prompts, tool descriptions, calls, results</p></div></div>
+          <div class="s" data-step="2"><span class="n">02</span><div><h3>Best practices</h3><p>the labs' own docs and guides</p></div></div>
+          <div class="s" data-step="3"><span class="n">03</span><div><h3>Real examples</h3><p>what working tools actually ship</p></div></div>
+          <div class="s not" data-step="4"><span class="n">✕</span><div><h3>Hype and social posts</h3><p>opinions, not evidence</p></div></div>
+        </div>
+      </div>
+      <div class="od" data-step="5">
+        <div class="big"><span class="num" data-anim="count">514</span><span class="cap">GitHub stars · open-docs</span></div>
+        <p>How AI programs work under the hood.</p>
+        <a class="src" href="https://github.com/bgauryy/open-docs" target="_blank" rel="noopener">github.com/bgauryy/open-docs</a>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">This is how I learned the tools, and how I still do. Click 1: I reverse-engineered the code: the system prompt a tool ships, every tool description (when to use it, when not), how it fills arguments, how results and errors are phrased back, what it caches, truncates or summarizes. You're reading the decisions of teams who measure everything. Click 2: best practices, meaning the labs' own docs. Example: Claude Code's MCP docs publish its hidden limits: server instructions and each tool description truncated at 2,048 characters, and a 25,000-token cap on tool output (code.claude.com/docs/en/mcp, 9 Oct 2026). Click 3: real examples, so what working tools actually do, not what someone says they do. Click 4: what I didn't learn from: hype and social posts. Click 5: I publish what I find at github.com/bgauryy/open-docs (how AI programs work under the hood, open source), now at 514 stars (GitHub API, 9 Oct 2026; ledger S7). Next: the prompt structure I borrowed from those systems.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>clasify scouts files so the agent doesn't read them all</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cj { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+    .lane { display: grid; grid-template-columns: 150px 1fr; gap: 18px; align-items: stretch; padding: 10px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--surface); }
+    .lane--without { border-color: var(--border-strong); }
+    .lane--with { border-color: var(--violet); }
+    .lane-tag { display: flex; flex-direction: column; justify-content: center; gap: 6px; font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.2; }
+    .lane--without .lane-tag { color: var(--negative); }
+    .lane--with .lane-tag { color: var(--violet); }
+    .lane-tag b { color: var(--text-strong); font-family: var(--font-head); font-weight: 600; font-size: var(--t-mid); }
+    .flow { display: flex; align-items: center; gap: 12px; }
+    .arrow { color: var(--muted-2); font-size: var(--t-sub); flex: none; }
+    .node { flex: none; padding: 10px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface-2); font-size: var(--t-small); color: var(--text); line-height: 1.25; }
+    .node strong { display: block; color: var(--text-strong); font-size: var(--t-mid); font-weight: 600; margin-bottom: 2px; }
+    .node--grow { flex: 1; min-width: 0; }
+    .tiles { display: grid; grid-template-columns: repeat(18, 1fr); gap: 4px; margin-top: 6px; }
+    .tiles i { display: block; height: 12px; border-radius: 2px; background: var(--muted-2); opacity: .55; }
+    .node--bad { border-color: var(--negative); }
+    .node--bad strong { color: var(--negative); font-family: var(--font-mono); font-size: var(--t-sub); }
+    .node--violet { border-color: var(--violet); }
+    .node--violet strong { color: var(--violet); }
+    .node--good { border-color: var(--positive); }
+    .node--good strong { color: var(--positive); font-family: var(--font-mono); font-size: var(--t-sub); }
+    .node code { font-family: var(--font-mono); color: var(--violet); font-size: var(--t-small); }
+    .qs { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 12px 20px; border-radius: var(--radius-sm); background: var(--code-bg); border: 1px solid var(--border); font-size: var(--t-small); color: var(--text); }
+    .qs .lbl { color: var(--muted); font-family: var(--font-mono); }
+    .chip { display: inline-flex; align-items: baseline; gap: 10px; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--violet); }
+    .chip code { color: var(--violet); font-family: var(--font-mono); }
+    .chip span { color: var(--text-strong); }
+    .caveat { color: var(--muted); font-size: var(--t-small); margin: 0; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · clasify + Jev</span>
+    <h2 class="title" data-slide-title>clasify scouts files so the agent doesn't read them all</h2>
+    <p class="description" data-slide-subtitle>The agent describes what it needs; a judge model, Jev, reads the candidates and hands back a ranking.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="cj">
+      <div class="lane lane--without" data-step="1">
+        <div class="lane-tag">WITHOUT<b>Agent reads all</b></div>
+        <div class="flow">
+          <div class="node"><strong>Agent</strong>ast-grep: "fix"</div>
+          <span class="arrow">→</span>
+          <div class="node node--grow">reads 54 candidate files, one by one
+            <div class="tiles" aria-hidden="true">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+          </div>
+          <span class="arrow">→</span>
+          <div class="node node--bad"><strong>644 KB</strong>in its context</div>
+        </div>
+      </div>
+      <div class="lane lane--with" data-step="2">
+        <div class="lane-tag">WITH<b>clasify + Jev</b></div>
+        <div class="flow">
+          <div class="node node--violet"><strong>Agent</strong>goal + 2 questions</div>
+          <span class="arrow">→</span>
+          <div class="node node--violet node--grow"><strong>Jev judges each file</strong>clasify runs the search, no bodies</div>
+          <span class="arrow">→</span>
+          <div class="node node--violet"><strong>Ranked list</strong>+ <code>hints.read</code></div>
+          <span class="arrow">→</span>
+          <div class="node node--good"><strong>1 file</strong>1.9 KB returned</div>
+        </div>
+      </div>
+      <div class="qs" data-step="3">
+        <span class="lbl">Jev asks</span>
+        <span class="chip"><code>relevant</code><span>is this file in the right area?</span></span>
+        <span class="chip"><code>sufficient</code><span>does this page alone answer?</span></span>
+      </div>
+      <p class="caveat" data-step="3">A score ranks attention. The agent still reads the source before citing it.</p>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Purpose: the agent can describe the code it needs, but it cannot name the file. Without clasify it reads candidates one by one: in the ast-grep example, 54 files contain "fix", and reading them all returned 644 KB into context. With clasify, the agent sends a goal and two questions. clasify runs the search and reads for the agent, asks Jev, TypeSafe's model for typed probabilistic decisions, to judge each file, and returns scores plus the exact lines to read next (hints.read), never the bodies. fileHas plus Scout (beta) over 9 files returned 1.9 KB in 1 call. The two questions: relevant, is this file in the right area; sufficient, does this page alone answer. A score is not proof: it ranks attention, clasify never proves absence, and the agent still reads the source before citing it. Sources: ledger X5, X12, X38, X6; docs/OCTOCODE_CLASIFY.md:7,23,59,90-95,428-432; https://typesafe.ai/blog/introducing-system-one-models-and-jev. Next: how Jev scores each file against those two questions.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

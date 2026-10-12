@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developers use Octocode in real workflows</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .use { display: grid; grid-template-columns: 400px minmax(0, 1fr); gap: 48px; align-items: center; flex: 1; min-height: 0; }
+    .rings { width: 400px; height: 400px; }
+    .rings circle { fill: none; stroke-width: 2; }
+    .rings .r1 { stroke: var(--accent); fill: color-mix(in srgb, var(--accent) 16%, transparent); }
+    .rings .r2 { stroke: var(--violet); fill: color-mix(in srgb, var(--violet) 7%, transparent); }
+    .rings .r3 { stroke: var(--positive); fill: color-mix(in srgb, var(--positive) 4%, transparent); }
+    .rings .core { fill: var(--surface-2); stroke: var(--border-strong); }
+    .rings .t1 { fill: var(--accent); } .rings .t2 { fill: var(--violet); } .rings .t3 { fill: var(--positive); }
+    .rings text { font-size: 18px; letter-spacing: 0.1em; }
+    .rows { display: flex; flex-direction: column; gap: 18px; }
+    .row { display: grid; grid-template-columns: 14px minmax(0, 1fr); gap: 18px; align-items: start; }
+    .row > i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--rc); margin-top: 8px; background: color-mix(in srgb, var(--rc) 25%, transparent); }
+    .row h3 { font-family: var(--font-head); font-size: var(--t-body); color: var(--text-strong); line-height: 1.25; }
+    .row h3 span { color: var(--rc); font-weight: 500; font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; margin-right: 10px; }
+    .row p { font-size: var(--t-mid); color: var(--text); line-height: 1.4; margin-top: 4px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Intro · who uses it</span>
+    <h2 class="title" data-slide-title>Developers use Octocode in real workflows</h2>
+    <p class="description" data-slide-subtitle>Usage spans individual work, organizations and agentic products.</p>
+  </div>
+  <div class="slide-content">
+    <div class="use">
+      <svg class="dg rings" viewBox="0 0 400 400" role="img" aria-label="Three rings around Octocode: individuals, organizations, agentic products">
+        <g data-anim="draw" style="--delay: 500ms"><circle class="r3" cx="200" cy="200" r="190" pathLength="1"/><text class="t3" x="200" y="38" text-anchor="middle">AGENTIC PRODUCTS</text></g>
+        <g data-anim="draw" style="--delay: 250ms"><circle class="r2" cx="200" cy="200" r="132" pathLength="1"/><text class="t2" x="200" y="96" text-anchor="middle">ORGANIZATIONS</text></g>
+        <g data-anim="draw"><circle class="r1" cx="200" cy="200" r="74" pathLength="1"/><text class="t1" x="200" y="155" text-anchor="middle">INDIVIDUALS</text></g>
+        <defs><clipPath id="logo-clip"><circle cx="200" cy="214" r="36"/></clipPath></defs>
+        <circle class="core" cx="200" cy="214" r="37"/>
+        <image href="../assets/logo_white.png" x="142" y="166" width="116" height="116" clip-path="url(#logo-clip)"/>
+      </svg>
+      <div class="rows">
+        <div class="row" style="--rc: var(--accent)" data-step="1"><i></i><div><h3><span>Individuals</span>Developers</h3><p>Research unfamiliar repos and packages before changing code — with citations, not folklore.</p></div></div>
+        <div class="row" style="--rc: var(--violet)" data-step="2"><i></i><div><h3><span>Organizations</span>e.g. Wix — Bilbo</h3><p>Implemented inside the organization, so teams find and reuse each other's code.</p></div></div>
+        <div class="row" style="--rc: var(--positive)" data-step="3"><i></i><div><h3><span>Agentic products</span>Organization research</h3><p>Other agents call Octocode as their research layer across many repositories.</p></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The rings draw from the inside out: the same engine, used at three scales. Click through the three rows (source: the speaker's brief — ledger S6). Individuals: developers who research an unfamiliar repo or package before changing code, with citations instead of folklore. Organizations: implemented inside companies — e.g. Bilbo at Wix — where the value is knowledge-sharing across many repositories. Agentic products: other agents call Octocode as their research layer, for example organization-wide research. The point for the rest of the day: when your user is an agent, your tool's output is its next prompt. That's the end of the intro. Next: Part 1 — the mechanics.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

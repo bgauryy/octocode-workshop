@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>I learned prompting by testing its limits</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .pe { display: flex; flex-direction: column; gap: 20px; }
+    .pe .pipe > li { padding: 16px 22px; gap: 8px; }
+    .pe .pipe .kicker { color: var(--warm); }
+    .pe .pipe h3 { font-size: var(--t-body); }
+    .pe .pipe p { font-size: var(--t-mid); color: var(--text); }
+    .pe .pipe a { color: var(--accent); font-family: var(--font-mono); font-size: var(--t-small); text-decoration: underline; text-underline-offset: 3px; }
+    .areas-label { font-family: var(--font-mono); font-size: var(--t-small); color: var(--warm); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
+    .areas { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; list-style: none; margin: 0; padding: 0; }
+    .areas li { display: flex; flex-direction: column; gap: 6px; padding: 12px 18px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--text) 18%, transparent); background: color-mix(in srgb, var(--text) 4%, transparent); }
+    .areas b { font-size: var(--t-mid); color: var(--text); }
+    .areas span { font-size: var(--t-small); color: color-mix(in srgb, var(--text) 75%, transparent); line-height: 1.35; }
+    .areas li.is-hack { border-color: var(--warm); }
+    .areas li.is-hack b { color: var(--warm); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 to today · prompt engineering</span>
+    <h2 class="title" data-slide-title>I learned prompting by testing its limits</h2>
+    <p class="description" data-slide-subtitle>Structured output, reasoning techniques and adversarial prompts showed me where instructions broke.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="pe">
+      <ol class="pipe pipe--warm">
+        <li data-step="1" data-anim="draw"><span class="kicker">Step 1 · best practices</span><h3>Learn the basics</h3><p>role · task · examples · format</p><a href="https://www.promptingguide.ai/" target="_blank" rel="noopener">promptingguide.ai</a></li>
+        <li data-step="2" data-anim="draw"><span class="kicker">Step 2 · reverse it</span><h3>Read top models, tools</h3><p>their real system prompts</p><a href="https://github.com/asgeirtj/system_prompts_leaks/pull/44/changes" target="_blank" rel="noopener">my PR #44 · system_prompts_leaks</a></li>
+        <li data-step="3" data-anim="draw" class="is-key"><span class="kicker">Step 3 · the pattern</span><h3>What the labs repeat</h3><p>Markdown + XML </p></li>
+      </ol>
+      <div data-step="4">
+        <div class="areas-label">The main areas I practiced</div>
+        <ul class="areas">
+          <li><b>Step-by-step</b><span>split the task into ordered steps</span></li>
+          <li><b>Chain-of-Thought</b><span>reason first, then answer</span></li>
+          <li><b>Tree-of-Thoughts</b><span>branch, evaluate, pick the best path</span></li>
+          <li><b>Structured output</b><span>ask for an exact shape: JSON, XML, a table</span></li>
+          <li class="is-hack" data-step="5"><b>Jailbreaks &amp; injection</b><span>hacking prompts to find where they break</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">First thing I tested after I stopped trusting: prompting, and how I learned it. The three steps draw left to right. Step 1, best practices: the dair-ai Prompt Engineering Guide (https://www.promptingguide.ai/). It teaches structure, not magic words: role, task, constraints, examples, output format. Step 2, reverse-engineering the top models and tools: read the system prompts they actually ship. The github.com/asgeirtj/system_prompts_leaks archive collects them; I contributed PR #44 (https://github.com/asgeirtj/system_prompts_leaks/pull/44/changes, merged 18 Oct 2025; ledger H7), publishing Claude Code's internal tool descriptions, so the learning didn't stop in 2023. Anthropic also publishes the system prompts of claude.ai and its mobile apps, not the API, and says "This prompt is periodically updated to improve Claude's responses" (platform.claude.com/docs/en/release-notes/system-prompts; the page started on 26 Aug 2024, per simonwillison.net/2024/Aug/26/anthropic-system-prompts). That is a legal way to study how the labs prompt. Step 3: the patterns that repeat across labs: Markdown rules inside XML-tagged sections, explicit "when to use this tool", explicit prohibitions. OpenAI's GPT-4.1 guide backs the tags: "XML performed well in our long context testing" while "JSON performed particularly poorly" (developers.openai.com/cookbook/examples/gpt4-1_prompting_guide, Apr 2025). Click 4: the main areas I practiced along the way. Step-by-step: break the task into ordered steps. Chain-of-Thought: let the model reason before it answers (Wei et al., 2022). Tree-of-Thoughts: explore several reasoning branches, evaluate them, keep the best (Yao et al., 2023). Structured output: I learned to ask the agent for an exact output shape (JSON, XML, a table) so I could check and reuse it. Click 5: and I played a lot with breaking prompts, using jailbreaks and prompt-injection techniques, to see where instructions stop holding. Breaking them taught me as much as writing them. All of these are covered in promptingguide.ai. Next: that structure up close, Markdown versus XML and how they combine.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

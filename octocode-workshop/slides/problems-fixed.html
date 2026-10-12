@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Each problem got an engineering fix</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .px { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 7px; width: 100%; }
+    .px > li { display: grid; grid-template-columns: 270px 56px minmax(0, 1fr) 230px; align-items: center; }
+    .px .p, .px .f { padding: 6px 16px; border-radius: var(--radius-sm); line-height: 1.25; border: 1px solid var(--border); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .px .p { border-left: 3px solid var(--negative); color: var(--text); font-family: var(--font-head); font-size: var(--t-mid); }
+    .px .f { border-left: 3px solid var(--positive); color: var(--text-strong); font-size: var(--t-mid); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .px .f code { color: var(--positive); font-size: 0.95em; }
+    .px .to { height: 2px; margin: 0 12px 0 8px; background: var(--positive); position: relative; }
+    .px .to::after { content: ''; position: absolute; right: -2px; top: -6px; border: 7px solid transparent; border-left: 9px solid var(--positive); border-right: 0; }
+    .px .n { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); text-align: right; padding-left: 12px; white-space: nowrap; }
+    .px .n b { color: var(--text-strong); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · problems → fixes</span>
+    <h2 class="title" data-slide-title>Each problem got an engineering fix</h2>
+    <p class="description" data-slide-subtitle>The fixes changed tool behavior instead of relying on stronger wording alone.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <ol class="px" data-step="1" data-anim="draw" data-stagger style="--stagger: 110ms">
+      <li><span class="p">Rate limits</span><span class="to"></span><span class="f">cache · budget · backoff</span><span class="n"><b>10</b> searches/min</span></li>
+      <li><span class="p">Leaked secrets</span><span class="to"></span><span class="f">redact secrets · block credential paths</span><span class="n"><b>308</b> patterns</span></li>
+      <li><span class="p">No file context</span><span class="to"></span><span class="f"><code>ghStructure</code>: the tree around a file</span><span class="n"></span></li>
+      <li><span class="p">Package names</span><span class="to"></span><span class="f">package search → the repo</span><span class="n"><b>8</b> registries</span></li>
+      <li><span class="p">Too many calls</span><span class="to"></span><span class="f">batch: up to 5 queries per call</span><span class="n"><b>80</b> vs 142 calls</span></li>
+      <li><span class="p">Context grew</span><span class="to"></span><span class="f"><code>matchString</code>: fetch a window</span><span class="n"><b>19 → 3.5</b> KB</span></li>
+      <li><span class="p">Large files</span><span class="to"></span><span class="f"><code>minify</code>: standard · symbols</span><span class="n"><b>19 → 7.4</b> KB</span></li>
+      <li><span class="p">Large results, PRs</span><span class="to"></span><span class="f">paginate · open only chosen PR files</span><span class="n"><b>50,000</b>-char pages</span></li>
+      <li><span class="p">Hallucinations</span><span class="to"></span><span class="f">prove from files · cite lines</span><span class="n">instructions <b>−50%</b></span></li>
+    </ol>
+  </div>
+</div>
+<aside class="speaker-notes">The same nine problems, now with how we resolved each one. Press → once and the rows draw in. (1) Rate limits → cache first (SHA-keyed results never refetch; others revalidate by ETag), a code-search budget of 10/min, full-jitter backoff and a circuit breaker (ledger V12–V14). (2) Leaked secrets → block credential paths and redact secrets in and out; 308 patterns in today's dev build (ledger V15; the JS layer started with 164 in v2.3.22, Jul 2025). (3) No file context → ghStructure shows the repository tree around a file at any ref (ledger V21). (4) Package names → package search resolves the name to its repository; npm_search from 1.0.0, today artifactSearch over 8 registries (packages/octocode/README.md:53). (5) Too many calls → batching, up to 5 queries per call since v2.3.27 (21 Jul 2025); measured later: 80 tool calls vs 142 for an expert gh agent on 30 GitHub questions (lean-vs-mcp-114934-2026-10-09.md:14,56). (6) Context grew → matchString fetches a window around the hit: on one 2,075-line file a full read's first page is ~19 KB, the window at 3 context lines ~3.5 KB (dev build, 2026-10-12; ledger V19). (7) Large files → minify: standard strips comments and blank lines, symbols returns an outline; the whole symbols outline of the same file is ~7.4 KB (ledger V18). (8) Large results and PRs → pagination with a next page, never a silent cut-off; the whole-response window pages at 50,000 chars (docs/OCTOCODE_TOOLS.md:16); the PR tool lists changed files first and opens only chosen patches. (9) Hallucinations → the instructions demand proof from files: "Cite source or diff lines by number; quote verbatim; never invent values." (ledger V10), and the server instruction text went from 3,807 to 1,908 chars (ledger X25). That is a size cut, not a measured hallucination rate. Next: the full GitHub and npm toolset these fixes live in.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

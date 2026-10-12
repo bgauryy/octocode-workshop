@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 5: write a research skill</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+    .lab .code { font-size: var(--t-small); }
+    .lab .card p { font-size: var(--t-mid); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content slide--lab" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Lab 5 · 16 min · teaches: skills · triggers</span>
+    <h2 class="title" data-slide-title>Lab 5: write a research skill</h2>
+    <p class="description" data-slide-subtitle>Create a repeatable workflow that checks whether an idea already exists.</p>
+  </div>
+  <div class="slide-content">
+    <div class="lab">
+      <div class="code" data-label="run">skills/idea-scout/SKILL.md
+  description: "Use when …"
+  steps:
+   1 ghSearchRepo + artifactSearch
+   2 read the top 2 implementations
+   3 verdict: exists · partial · gap
+
+node ~/.octocode/skills/octocode-skills/\
+  scripts/skill-review.mjs skills/idea-scout</div>
+      <div class="stack">
+        <div class="prompt" data-step="1"><span class="kicker">prompt your agent</span>"Use the octocode-skills skill to finish idea-scout: a trigger-tuned description, steps, and an output format with citations."<br><br>Then, without naming it: "Is there already an MCP server that diffs two OpenAPI specs?"</div>
+        <div class="card card--positive" data-step="2"><span class="kicker">done when</span><p>The review passes, the skill fires without being named, and the verdict cites repos and packages.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Lesson: a skill encodes your research algorithm, and the description is the trigger (progressive disclosure). idea-scout is the "skill that helps search for an idea" from the brief. The review script ships with the octocode-skills skill: install it first (npx octocode skill install octocode-skills --platform claude --global); the installer copies skills to $OCTOCODE_HOME/skills/&lt;name&gt; (default ~/.octocode) and links them into each host, e.g. ~/.claude/skills. The real test is the second prompt: it must trigger without the name. Next: Lab 6.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

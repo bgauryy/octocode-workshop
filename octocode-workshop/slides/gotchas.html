@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three shortcuts break the evidence chain</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* gotchas — content: claim title + up to three supporting points */
+    .tpl-gotchas .slide-content { justify-content: safe center; }
+    .tpl-gotchas .tpl-points { list-style: none; display: flex; flex-direction: column; gap: var(--sp-4); max-width: 34em; }
+    .tpl-gotchas .tpl-points li { display: grid; grid-template-columns: 3.5rem 1fr; align-items: baseline; column-gap: var(--sp-2); }
+    .tpl-gotchas .tpl-n { font-family: var(--font-mono); font-size: var(--t-small); font-weight: 700; color: var(--accent); letter-spacing: 0.08em; }
+    .tpl-gotchas .tpl-lead { display: block; font-family: var(--font-head); font-size: var(--t-sub); font-weight: 700; color: var(--text); line-height: 1.25; }
+    .tpl-gotchas .tpl-proof { display: block; margin-top: 0.3em; font-size: var(--t-body); color: var(--muted); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content tpl-gotchas" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Recap · gotchas</span>
+    <h2 class="title" data-slide-title>Three shortcuts break the evidence chain</h2>
+    <p class="description" data-slide-subtitle>An empty result, a text match, and a ranking each need source verification.</p>
+  </div>
+  <main class="slide-content">
+    <ol class="tpl-points">
+      <li class="tpl-point" data-step="1"><span class="tpl-n">01</span><p><strong class="tpl-lead">Empty search is not absence.</strong><span class="tpl-proof">Check scope, spelling, ref and index before ruling code out.</span></p></li>
+      <li class="tpl-point" data-step="2"><span class="tpl-n">02</span><p><strong class="tpl-lead">A text hit is not a symbol.</strong><span class="tpl-proof">Use LSP to distinguish the intended function from same-name code.</span></p></li>
+      <li class="tpl-point" data-step="3"><span class="tpl-n">03</span><p><strong class="tpl-lead">A Scout score is not a citation.</strong><span class="tpl-proof">Read the ranked source lines before making the claim.</span></p></li>
+    </ol>
+  </main>
+</div>
+<aside class="speaker-notes">The practice exercise gave us three easy failure points. First, an empty search row does not prove absence: repair the scope, filters, ref, index and synonyms, as the octocode-research skill says (skills/octocode-research/SKILL.md:27; ledger V8). Second, a text hit does not prove symbol identity: the exit_code example had 26 text hits for four distinct meanings, while lspSearch resolved four locations for the intended function (ledger L2; docs/OCTOCODE_PROTOCOL.md:132). Third, Scout ranks pages, but its relevance and sufficiency scores are not evidence: read the top file and cite the deciding lines (docs/OCTOCODE_CLASIFY.md:59,72-95; ledger X5,X6). Next: translate those checks into rules for tools and skills.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

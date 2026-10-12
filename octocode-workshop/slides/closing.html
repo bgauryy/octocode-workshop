@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Put evidence in front of the model</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cl-wrap { display: grid; grid-template-columns: 1.65fr 1fr; gap: 44px; align-items: center; text-align: left; }
+    .cl-text { display: flex; flex-direction: column; gap: 20px; align-items: flex-start; }
+    .cl-text .term { font-size: var(--t-small); align-self: stretch; padding: 12px 18px; }
+    .todo { list-style: none; display: flex; flex-direction: column; gap: 12px; align-self: stretch; counter-reset: td; }
+    .todo li { counter-increment: td; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 4px 12px; align-items: baseline; }
+    .todo li::before { content: counter(td); display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--positive); color: var(--positive); font-family: var(--font-mono); font-size: var(--t-small); background: color-mix(in srgb, var(--positive) 14%, transparent); }
+    .todo b { font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); font-weight: 600; line-height: 1.3; }
+    .todo p { grid-column: 2; font-size: var(--t-small); color: var(--muted); line-height: 1.35; }
+    .rules6 { grid-column: 2; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    .rules6 span { font-family: var(--font-mono); font-size: var(--t-small); padding: 2px 10px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--text); background: var(--surface); }
+    .qrbox { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+    .qr { width: 230px; height: 230px; border-radius: var(--radius-sm); }
+  </style>
+</head>
+<body>
+<div class="slide slide--closing">
+  <div class="slide-content">
+    <div class="cl-wrap">
+      <div class="cl-text">
+        <span class="eyebrow eyebrow--positive"><span class="pip"></span>Take it home</span>
+        <h2 class="display" style="font-size: var(--t-title)" data-slide-title>Put evidence in front of the model</h2>
+    <p class="description" data-slide-subtitle>Its answer depends on the information you choose to give it.</p>
+        <div class="term"><span class="cmd">npx octocode skill install octocode-research --platform claude --global</span></div>
+        <ol class="todo">
+          <li><b>Install the research skill today.</b><p>Ask it one question about your own code; accept only file:line answers.</p></li>
+          <li><b>Audit one of your own tools against the MCP rules.</b><span class="rules6"><span>when + why</span><span>minimal schema</span><span>batch</span><span>windows</span><span>hints on empty</span><span>small instructions</span></span></li>
+        </ol>
+      </div>
+      <div class="qrbox">
+        <img class="qr" src="../assets/qr-octocode.png" alt="QR code to github.com/bgauryy/octocode">
+        <span class="src">github.com/bgauryy/octocode</span><span class="src" style="margin-top: -8px">octocode.ai</span>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Close on the spine: the model only knows what you put in front of it — so make what you put there evidence. Two things to do. One: install the research skill before you leave — the command on screen installs it for Claude Code globally (`npx octocode skill install`, ledger K3; --platform also takes pi, cursor, codex, opencode, copilot, gemini or all). Then ask it one real question about your own code and accept only answers that cite file:line — "Empty is not absent" (octocode-research SKILL.md:27). Two: audit one of your own tools against the six MCP rules from the end of Part 2 — describe when and why and name the tools before and after it; a minimal schema with an optional goal and reasoning; batch several queries per call; return windows, not files, and say what was left out; hints on empty and errors, not stack traces; small, stable instructions — Claude Code truncates server instructions and each tool description at 2,048 characters (code.claude.com/docs/en/mcp, fetched 9 Oct 2026; ledger V10). Then measure it: a fresh agent, a blind judge, characters at equal correctness. The QR goes to the repo. Then questions.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

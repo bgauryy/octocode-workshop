@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The KV cache memoizes earlier keys and values</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .kv { display: flex; flex-direction: column; gap: 12px; }
+    .sent { display: flex; align-items: center; gap: 14px; padding-top: 12px; }
+    .sent .lbl { font-family: var(--font-head); font-size: var(--t-small); color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .words { display: flex; gap: 8px; }
+    .w { position: relative; display: inline-flex; align-items: center; padding: 4px 12px; border-radius: 8px; border: 1px dashed var(--border-strong); font-family: var(--font-head); font-size: var(--t-body); color: var(--muted-2); line-height: 1.25; }
+    .w.prompt { border: 1px solid var(--border-strong); color: var(--text-strong); background: var(--surface-2); }
+    .w .on { position: absolute; inset: -1px; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 28%, var(--bg)); color: var(--text-strong); }
+    .w .on sup { position: absolute; top: -12px; right: -8px; padding: 0 6px; border-radius: 999px; background: var(--accent); color: var(--bg); font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.3; }
+    .legend { margin-left: auto; display: flex; gap: 18px; align-items: center; font-size: var(--t-small); color: var(--text); }
+    .legend span { display: flex; align-items: center; gap: 8px; }
+    .legend i { display: inline-block; width: 22px; height: 16px; border-radius: 4px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 24%, transparent); }
+    .legend i.mem { border: 1px dashed var(--border-strong); background: repeating-linear-gradient(135deg, var(--surface-2) 0 4px, transparent 4px 8px); }
+    .panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .pn { display: flex; flex-direction: column; gap: 7px; padding: 10px 16px; border-radius: 12px; border: 1px solid var(--pc); background: color-mix(in srgb, var(--pc) 10%, transparent); }
+    .pn h3 { margin: 0; display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-head); font-size: var(--t-body); font-weight: 700; color: var(--pc); line-height: 1.2; }
+    .pn h3 span { font-size: var(--t-small); font-weight: 600; color: var(--muted); }
+    .row { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+    .n { font-family: var(--font-head); font-size: var(--t-small); font-weight: 700; color: var(--muted); text-align: center; }
+    .toks { display: flex; gap: 6px; }
+    .tk { display: flex; align-items: baseline; gap: 6px; padding: 3px 9px; border-radius: 8px; border: 1px solid var(--accent); background: color-mix(in srgb, var(--accent) 24%, transparent); font-family: var(--font-head); font-size: var(--t-small); color: var(--text-strong); white-space: nowrap; line-height: 1.25; }
+    .tk em { font-style: normal; font-family: var(--font-mono); font-size: var(--t-small); font-weight: 700; color: var(--accent-strong); }
+    .tk.mem { border: 1px dashed var(--border-strong); color: var(--muted); background: repeating-linear-gradient(135deg, var(--surface-2) 0 5px, transparent 5px 10px); }
+    .tk.mem em { color: var(--muted-2); }
+    .out { font-size: var(--t-small); color: var(--muted); white-space: nowrap; }
+    .out b { color: var(--text-strong); font-weight: 600; }
+    .tot { margin-top: 2px; padding-top: 6px; border-top: 1px solid color-mix(in srgb, var(--pc) 40%, transparent); font-size: var(--t-small); color: var(--text); }
+    .tot b { font-family: var(--font-mono); font-weight: 700; color: var(--pc); }
+    .cost { display: grid; grid-template-columns: 180px auto auto minmax(0, 1fr); gap: 24px; align-items: center; padding: 10px 20px; border-radius: 12px; border-left: 4px solid var(--warm); background: color-mix(in srgb, var(--warm) 10%, transparent); }
+    .kick { font-family: var(--font-head); font-size: var(--t-small); font-weight: 700; color: var(--warm); text-transform: uppercase; letter-spacing: 0.05em; line-height: 1.3; }
+    .pg { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .pairs { display: grid; grid-template-columns: repeat(var(--n), 9px); gap: 2px; }
+    .pairs i { display: block; width: 9px; height: 9px; border-radius: 2px; background: var(--warm); }
+    .pairs i.o { background: transparent; border: 1px dashed var(--border); }
+    .pg .cap { font-size: var(--t-small); color: var(--muted); white-space: nowrap; line-height: 1.2; }
+    .cost .say p { margin: 0; font-size: var(--t-small); color: var(--text); line-height: 1.35; }
+    .cost .say p strong { color: var(--text-strong); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
+    <h2 class="title" data-slide-title>The KV cache memoizes earlier keys and values</h2>
+    <p class="description" data-slide-subtitle>Each new token computes only its own Q, K and V; earlier K and V are read from memory.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="kv">
+      <div class="sent" aria-label="Full sentence generated one word per step: The cat drank milk.">
+        <span class="lbl">Sentence</span>
+        <div class="words">
+          <span class="w prompt">The</span>
+          <span class="w">cat<span class="on" data-step="1" data-anim="land">cat<sup>1</sup></span></span>
+          <span class="w">drank<span class="on" data-step="2" data-anim="land">drank<sup>2</sup></span></span>
+          <span class="w">milk<span class="on" data-step="3" data-anim="land">milk<sup>3</sup></span></span>
+          <span class="w">.<span class="on" data-step="4" data-anim="land">.<sup>4</sup></span></span>
+        </div>
+        <div class="legend"><span><i></i>computed</span><span><i class="mem"></i>read from cache</span></div>
+      </div>
+      <div class="panels">
+        <div class="pn" style="--pc: var(--negative)" aria-label="Without a cache: every step recomputes K and V for all tokens so far">
+          <h3>Without cache <span>recompute earlier K/V</span></h3>
+          <div class="row" data-step="1"><span class="n">1</span><div class="toks"><span class="tk">The <em>QKV</em></span></div><span class="out">→ <b>cat</b></span></div>
+          <div class="row" data-step="2"><span class="n">2</span><div class="toks"><span class="tk">The <em>KV</em></span><span class="tk">cat <em>QKV</em></span></div><span class="out">→ <b>drank</b></span></div>
+          <div class="row" data-step="3"><span class="n">3</span><div class="toks"><span class="tk">The <em>KV</em></span><span class="tk">cat <em>KV</em></span><span class="tk">drank <em>QKV</em></span></div><span class="out">→ <b>milk</b></span></div>
+          <div class="row" data-step="4"><span class="n">4</span><div class="toks"><span class="tk">The <em>KV</em></span><span class="tk">cat <em>KV</em></span><span class="tk">drank <em>KV</em></span><span class="tk">milk <em>QKV</em></span></div><span class="out">→ <b>.</b></span></div>
+          <div class="tot" data-step="4">K/V computed: 1 + 2 + 3 + 4 = <b>10</b></div>
+        </div>
+        <div class="pn" style="--pc: var(--positive)" aria-label="With a KV cache: earlier K and V are read from memory, only the newest token is computed">
+          <h3>With cache <span>reuse earlier K/V</span></h3>
+          <div class="row" data-step="1"><span class="n">1</span><div class="toks"><span class="tk">The <em>QKV</em></span></div><span class="out">→ <b>cat</b></span></div>
+          <div class="row" data-step="2"><span class="n">2</span><div class="toks"><span class="tk mem">The <em>KV</em></span><span class="tk">cat <em>QKV</em></span></div><span class="out">→ <b>drank</b></span></div>
+          <div class="row" data-step="3"><span class="n">3</span><div class="toks"><span class="tk mem">The <em>KV</em></span><span class="tk mem">cat <em>KV</em></span><span class="tk">drank <em>QKV</em></span></div><span class="out">→ <b>milk</b></span></div>
+          <div class="row" data-step="4"><span class="n">4</span><div class="toks"><span class="tk mem">The <em>KV</em></span><span class="tk mem">cat <em>KV</em></span><span class="tk mem">drank <em>KV</em></span><span class="tk">milk <em>QKV</em></span></div><span class="out">→ <b>.</b></span></div>
+          <div class="tot" data-step="4">K/V computed: 1 + 1 + 1 + 1 = <b>4</b></div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The model writes one token at a time. The full sentence is on top: "The cat drank milk." We give it "The", and it generates the rest one word per step. Each click is one step, and both panels move together so you can compare. Click 1: it reads "The" and predicts "cat". Both sides compute Q, K and V for "The"; nothing is different yet. Click 2: it reads "The cat" and predicts "drank". Without a cache (left), it redoes the K and V of "The" even though they never changed. With the cache (right), "The" is read from memory, hatched, and only "cat" is computed. Click 3: "drank" arrives. Left recomputes three tokens, right computes one. Click 4: "milk" arrives and the model predicts the period. Left has computed K and V 1+2+3+4 = 10 times; right only 4, one per token. For engineers, this is memoization: a pure function of an input that doesn't change, computed once and cached. The price is memory, which grows with every token in the context. Hugging Face, "KV Caching Explained" (huggingface.co/blog/not-lain/kv-caching, 30 Jan 2025): "For each new word, the model retrieves the stored keys and values and adds the new ones." Click 5, what stays expensive: each new token's Q still compares with every earlier K, so across the whole text attention covers every pair. The grids are triangles because of the causal mask from the last slide: each token pairs with itself and the tokens before it, n(n+1)/2 pairs. 4 tokens is 10 pairs, 8 tokens is 36: double the tokens, close to four times the work, and exactly 4× as texts get long. Vaswani et al. 2017, "Attention Is All You Need", arXiv:1706.03762, Table 1: self-attention is O(n²·d) per layer. Anthropic: "n² pairwise relationships for n tokens" (anthropic.com/engineering/effective-context-engineering-for-ai-agents, 29 Sep 2025). Hand-off: providers take the same trick one step further and keep your K and V between messages. That's prompt caching.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

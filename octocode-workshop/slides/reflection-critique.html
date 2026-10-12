@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reflect on real tool usage with a fresh critic</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rf { display: flex; flex-direction: column; gap: 16px; }
+    .rf .pat { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 28px; padding: 10px 24px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+    .rf .pat .lbl { font-family: var(--font-mono); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+    .rf .flow { display: flex; align-items: center; gap: 14px; font-family: var(--font-mono); font-size: var(--t-body); color: var(--text-strong); }
+    .rf .flow .st { padding: 6px 16px; border-radius: var(--radius-sm); background: var(--surface-2); border: 1px solid var(--border-strong); }
+    .rf .flow .st.is-crit { border-color: var(--violet); color: var(--violet); }
+    .rf .flow .ar { color: var(--muted-2); }
+    .rf .pat .why { font-size: var(--t-small); color: var(--text); line-height: 1.35; max-width: 440px; }
+    .rf .pat .why b { color: var(--warm-soft); }
+    .rf .pat .why .src { display: block; color: var(--muted-2); }
+    .rf .uses { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .rf .card { display: flex; flex-direction: column; gap: 8px; padding: 14px 20px; }
+    .rf .card h3 { font-size: var(--t-mid); line-height: 1.25; margin: 0; }
+    .rf .card .q { font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.45; color: var(--code-text); background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; white-space: pre; }
+    .rf .card .q .c { color: var(--code-comment); }
+    .rf .card p { font-size: var(--t-small); color: var(--muted); margin: auto 0 0; line-height: 1.4; }
+    .rf .card p b { color: var(--text-strong); }
+    .rf .roles { display: flex; flex-direction: column; gap: 10px; }
+    .rf .role { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: var(--radius-sm); background: var(--code-bg); border: 1px solid var(--border); }
+    .rf .role .r { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); }
+    .rf .role .m { font-family: var(--font-mono); font-size: var(--t-small); color: var(--violet); }
+    .rf .role.is-small .m { color: var(--positive); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · reflection &amp; critique</span>
+    <h2 class="title" data-slide-title>Reflect on real tool usage with a fresh critic</h2>
+    <p class="description" data-slide-subtitle>Draft, critique, revise, with each critique grounded in what the agent actually did.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="rf">
+      <div class="pat" data-step="1" data-anim="rise">
+        <span class="lbl">The pattern</span>
+        <div class="flow">
+          <span class="st">draft</span><span class="ar">→</span>
+          <span class="st is-crit">critique</span><span class="ar">→</span>
+          <span class="st">revise</span><span class="ar">↻</span>
+        </div>
+        <div class="why"><b>Self-critique can fail.</b> Check against outside evidence.<span class="src">Reflexion · Self-Refine · Huang 2024</span></div>
+      </div>
+      <div class="uses">
+        <div class="card card--warm" data-step="2" data-anim="land">
+          <span class="kicker">1 · tool usage</span>
+          <h3>Inspect tool use</h3>
+          <div class="q"><span class="c"># after the task</span>
+Which call was wasted?
+Which hint did you skip?
+What did you expect back?</div>
+          <p>Fix the <b>description or hint</b> that misled it.</p>
+        </div>
+        <div class="card card--violet" data-step="3" data-anim="land">
+          <span class="kicker">2 · fresh agents</span>
+          <h3>Interview a fresh agent</h3>
+          <div class="q"><span class="c"># no history, no build context</span>
+1. run a task with the CLI
+2. ask: why that tool?
+3. compare the answer
+   with its tool calls</div>
+          <p>Compare its story with <b>the tool log</b>.</p>
+        </div>
+        <div class="card" data-step="4" data-anim="land">
+          <span class="kicker">3 · model split</span>
+          <h3>Test with a smaller model</h3>
+          <div class="roles">
+            <div class="role"><span class="r">plan · build</span><span class="m">Opus, Sonnet</span></div>
+            <div class="role is-small"><span class="r">test · reflect</span><span class="m">Haiku, small models</span></div>
+          </div>
+          <p>It <b>meets your tool cold</b>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The pattern first. Reflection is one of the four agentic design patterns Andrew Ng lists (with tool use, planning and multi-agent): the model drafts, a critic reviews, the model revises, and the loop repeats. Reflexion (Shinn et al., 2023) stores the agent's own notes on feedback and uses them on the next try: 91% pass@1 on HumanEval vs GPT-4's 80%. Self-Refine (Madaan et al., 2023) has one model draft, critique and revise: about 20% better on average across 7 tasks. Anthropic calls it the evaluator-optimizer workflow and says it works best when the grading criteria are clear. The catch: Huang et al. (ICLR 2024) found models struggle to fix their own reasoning without outside feedback, and sometimes get worse. So the critique needs something real to look at: tool calls, logs, a fresh reader. That is how I use it in Octocode.
+Click 2, reflect on tool usage: at the end of a task, ask the agent how the tools went: which call was wasted, which hint it skipped, what it expected a tool to return. The answers point at the description, schema or hint to change.
+Click 3, interview fresh agents: start a new agent with no history and no context from the build session, give it a real task with the Octocode CLI, then interview it: why did you pick that tool, what did it return? Then compare its answers with its actual tool calls. Where its story doesn't match the log, the tool text is unclear.
+Click 4, strong builds, small tests: I plan and build with strong models (Opus, Sonnet) and test and reflect with small ones (Haiku and other small models). A small model with no context is the closest stand-in for the agent that meets your tool description cold. Anthropic's research system uses the same split: an Opus lead with Sonnet helpers beat Opus alone by 90.2% on their internal eval.
+This is my own practice, not a measured result; the measurement is the benchmark on the next slide. Sources: arxiv.org/abs/2303.11366 (Reflexion); arxiv.org/abs/2303.17651 (Self-Refine); deeplearning.ai/the-batch/agentic-design-patterns-part-2-reflection (Ng, 27 Mar 2024); anthropic.com/engineering/building-effective-agents (evaluator-optimizer); arxiv.org/abs/2310.01798 (Huang et al.); anthropic.com/engineering/multi-agent-research-system. Ledger X37, X45. Next: how I know any of this helped: the benchmark loop.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

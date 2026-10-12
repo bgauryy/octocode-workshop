@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Each tool is a bridge between code and the agent</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .part { display: flex; flex-direction: column; gap: 8px; padding: 16px 18px; border: 1px solid var(--border-strong); border-top: 3px solid var(--bc); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .part.i { --bc: var(--violet); } .part.t { --bc: var(--accent); } .part.a { --bc: var(--warm); }
+    .part .kicker { color: var(--bc); }
+    .part h3 { font-size: var(--t-mid); color: var(--text-strong); margin: 0; }
+    .part p { font-size: 20px; color: var(--muted); margin: 0; line-height: 1.35; }
+    .part ul { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-direction: column; gap: 5px; }
+    .part li { display: flex; justify-content: space-between; gap: 10px; font-size: 19px; color: var(--muted); }
+    .part li code { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); }
+    .bridge { flex: 1; min-height: 0; margin-top: 18px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); align-items: center; gap: 0; }
+    .end { padding: 14px 18px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); }
+    .end .kicker { display: block; margin-bottom: 4px; }
+    .end p { margin: 0; font-family: var(--font-body); white-space: normal; font-size: 20px; color: var(--text); line-height: 1.35; }
+    .end.agent .kicker { color: var(--accent); } .end.fn .kicker { color: var(--warm); }
+    .span { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 14px; }
+    .span .deck { width: 100%; height: 2px; background: var(--accent); position: relative; }
+    .span .deck::before, .span .deck::after { content: ""; position: absolute; top: -5px; border: 6px solid transparent; }
+    .span .deck::before { left: -2px; border-right: 9px solid var(--accent); border-left: 0; }
+    .span .deck::after { right: -2px; border-left: 9px solid var(--accent); border-right: 0; }
+    .span .tool { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text-strong); padding: 6px 14px; border: 1px solid var(--accent); border-radius: var(--radius-sm); background: color-mix(in srgb, var(--accent) 18%, var(--surface-2)); }
+    .span small { font-size: 18px; color: var(--muted); text-align: center; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · what MCP tells the LLM</span>
+    <h2 class="title" data-slide-title>Each tool is a bridge between code and the agent</h2>
+    <p class="description" data-slide-subtitle>A server describes itself in three layers of text the model reads before it calls anything.</p>
+  </div>
+  <div class="slide-content">
+    <div class="parts">
+      <div class="part i" data-step="1">
+        <span class="kicker">01 · server</span>
+        <h3>Instructions</h3>
+        <p>How to use this server: when, in what order, what to avoid. Sent once at <code>initialize</code>.</p>
+      </div>
+      <div class="part t" data-step="2">
+        <span class="kicker">02 · per tool</span>
+        <h3>Tool definition</h3>
+        <ul>
+          <li><code>description</code><span>what &amp; when</span></li>
+          <li><code>inputSchema</code><span>args in</span></li>
+          <li><code>outputSchema</code><span>result out</span></li>
+        </ul>
+      </div>
+      <div class="part a" data-step="3">
+        <span class="kicker">03 · per tool</span>
+        <h3>Annotations</h3>
+        <ul>
+          <li><code>readOnlyHint</code><span>only reads?</span></li>
+          <li><code>destructiveHint</code><span>can delete?</span></li>
+          <li><code>idempotentHint</code><span>safe to retry?</span></li>
+          <li><code>openWorldHint</code><span>outside world?</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bridge" data-step="4">
+      <div class="end agent"><span class="kicker">Agent</span><p>reads the text, picks a tool, fills the args</p></div>
+      <div class="span"><span class="tool">tool = description + schema</span><span class="deck"></span><small>JSON args in · result out</small></div>
+      <div class="end fn"><span class="kicker">Code</span><p>a real function runs: query, API, file, shell</p></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The previous slide showed the conversation; this one shows what the server actually says about itself. Every piece is text the model reads, so every piece is a prompt. Click 1, instructions: one text for the whole server, returned in the initialize result. It tells the agent how to use the server: when to reach for it, in which order to call tools, what to avoid (MCP spec, lifecycle: InitializeResult.instructions, modelcontextprotocol.io/specification). Click 2, the tool definition, returned by tools/list: a name, a description that says what the tool does and when to use it, an inputSchema (JSON Schema for the arguments) and, optionally, an outputSchema for structured results (added in spec version 2025-06-18). Click 3, annotations: hints about behavior, so the host and the model know what a call will do. readOnlyHint: it only reads. destructiveHint: it may delete or overwrite. idempotentHint: calling it twice is safe. openWorldHint: it touches the outside world, like the web. They are hints, not guarantees, and clients should not trust them from untrusted servers (spec, tools: ToolAnnotations, added 2025-03-26). Click 4, the point: each tool is a bridge. On one side the agent, which only understands text; on the other side real code, a query, an API call, a file read. The description and schema are the bridge: the model fills JSON arguments, the code runs, the result comes back as text. Design the bridge well and the agent uses your code well. Next: the first MCP server I built, with just two tools.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

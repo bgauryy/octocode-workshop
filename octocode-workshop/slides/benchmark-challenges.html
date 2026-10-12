@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A benchmark can fool its author</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .traps { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+    .traps .row { display: grid; grid-template-columns: minmax(0, 1.05fr) 20px minmax(0, 1.25fr) minmax(0, 1.15fr); gap: 0 14px; align-items: center; }
+    .traps .hd { padding: 0 18px; line-height: 1; }
+    .traps .hd span { font-family: var(--font-mono); font-size: var(--t-small); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .traps .hd .h-trap { color: var(--negative); }
+    .traps .hd .h-guard { color: var(--positive); }
+    .traps .item { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 12px 18px; }
+    .traps .trap { color: var(--text-strong); font-size: var(--t-body); font-weight: 600; line-height: 1.25; display: flex; align-items: baseline; gap: 12px; }
+    .traps .trap .n { font-family: var(--font-mono); font-size: var(--t-small); color: var(--negative); font-weight: 500; }
+    .traps .trap { border-left: 3px solid var(--negative); padding-left: 14px; }
+    .traps .to { color: var(--muted-2); font-size: var(--t-mid); text-align: center; }
+    .traps .guard { color: var(--text); font-size: var(--t-small); line-height: 1.3; border-left: 3px solid var(--positive); padding-left: 14px; }
+    .traps .eg { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .traps .row.data { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 6px 18px; }
+    .slide-footer .src { font-family: var(--font-body); font-size: var(--t-small); color: var(--muted-2); white-space: nowrap; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · challenges</span>
+    <h2 class="title" data-slide-title>A benchmark can fool its author</h2>
+    <p class="description" data-slide-subtitle>Every shortcut makes the numbers look better than the tool. Here are the traps, and how I guard against each one.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="traps" role="table" aria-label="Benchmark traps, guards and Octocode examples">
+      <div class="row hd" role="row">
+        <span class="h-trap" role="columnheader">trap</span><span></span>
+        <span class="h-guard" role="columnheader">guard</span>
+        <span role="columnheader">in Octocode</span>
+      </div>
+      <div class="row data" role="row" data-step="1">
+        <span class="trap" role="cell"><span class="n">01</span>Weak baseline</span><span class="to" aria-hidden="true">→</span>
+        <span class="guard" role="cell">Benchmark against the strongest opponent you can build</span>
+        <span class="eg" role="cell">gh-lean beat Octocode in October</span>
+      </div>
+      <div class="row data" role="row" data-step="2">
+        <span class="trap" role="cell"><span class="n">02</span>Tuning on the test set</span><span class="to" aria-hidden="true">→</span>
+        <span class="guard" role="cell">Keep held-out questions for shipping decisions (Goodhart's law)</span>
+        <span class="eg" role="cell">Q21, Q25 tuned on; private set not built yet</span>
+      </div>
+      <div class="row data" role="row" data-step="3">
+        <span class="trap" role="cell"><span class="n">03</span>Leaks into the prompt</span><span class="to" aria-hidden="true">→</span>
+        <span class="guard" role="cell">Fail the run on any leak</span>
+        <span class="eg" role="cell">leak_check.py scans briefs, instructions, tools/list</span>
+      </div>
+      <div class="row data" role="row" data-step="4">
+        <span class="trap" role="cell"><span class="n">04</span>One run, one number</span><span class="to" aria-hidden="true">→</span>
+        <span class="guard" role="cell">Repeat runs; report 95% CIs and every metric: cost, time, correctness</span>
+        <span class="eg" role="cell">3 runs, bootstrap CI; Oct: lost chars, won time 16.5 vs 19.4 s</span>
+      </div>
+      <div class="row data" role="row" data-step="5">
+        <span class="trap" role="cell"><span class="n">05</span>Trusting the judge</span><span class="to" aria-hidden="true">→</span>
+        <span class="guard" role="cell">Blind, shuffled judge; spot-check it against humans</span>
+        <span class="eg" role="cell">gpt-5.5 judge, tool names redacted</span>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer">
+    <span class="src">Kapoor et al. 2024, AI Agents That Matter · Anthropic 2024, A statistical approach to model evals · Zheng et al. 2023, LLM-as-a-judge</span>
+  </div>
+</div>
+<aside class="speaker-notes">Open: benchmarking is tricky, and the easiest person to fool is the author. Every shortcut makes the numbers flatter the tool. Five traps, and the guard I use against each.
+Press 1 (weak baseline): Kapoor et al. 2024, "AI Agents That Matter" (arXiv:2407.01502), found agent benchmarks undermined by weak baselines, accuracy-only reporting and missing holdouts. So I benchmark against the strongest opponent I can build, and it hurts: in October gh-lean beat Octocode on characters (0.71×).
+Press 2 (tuning on the test set): Goodhart's law, paraphrased: when a measure becomes a target, it stops being a good measure. In August I added generic rules after Q21 and Q25 failed, so "those two questions are no longer clean tests" (method.md:42-54). The method says: "The set is public and may be memorized… use private held-out questions for shipping decisions" (method.md:91-92). Honest gap: the private set isn't built yet.
+Press 3 (leaks): Zhou et al. (arXiv:2311.01964) show contamination inflates scores. compare/bin/leak_check.py takes each question's distinctive terms and fails the run if any appear in the arm briefs or in the live MCP initialize instructions and tools/list.
+Press 4 (one run, one number): Anthropic, "A statistical approach to model evals" (anthropic.com/research/statistical-approach-to-model-evals): report standard error and 95% confidence intervals, and use paired questions. August used 3 runs and 10k bootstrap resamples. October shows why every metric matters: Octocode lost on characters (0.71×) but won on time, median 16.5 s vs 19.4 s, made 80 vs 142 calls, at about the same cost, $2.61 vs $2.49 (results/lean-vs-mcp-114934-2026-10-09.md:48-57). Reproducibility: refs frozen to SHAs, empty working dir.
+Press 5 (trusting the judge): Zheng et al. 2023 (arXiv:2306.05685) document position, verbosity and self-preference bias in LLM judges. The guard: a blind, shuffled judge, spot-checked against humans. Ours today: gpt-5.5 as judge, with tool names redacted.
+Close: the public set is for iterating, the private set is for shipping.
+Next: V3 in one slide.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

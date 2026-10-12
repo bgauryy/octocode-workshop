@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dev environment</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .tree { display: flex; flex-direction: column; gap: 10px; max-width: 1080px; margin: 0 auto; width: 100%; }
+    .tree .root { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--text-strong); margin-bottom: 2px; }
+    .tree .row { display: grid; grid-template-columns: 250px 120px minmax(0, 1fr); gap: 20px; align-items: center; padding: 14px 20px; border: 1px solid var(--border-strong); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .tree .row.sub { margin-left: 48px; position: relative; }
+    .tree .row.sub::before { content: ""; position: absolute; left: -30px; top: 50%; width: 22px; border-top: 2px solid var(--border-strong); }
+    .tree .row code { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--violet); }
+    .tree .tag { justify-self: start; font-size: var(--t-small); color: var(--text-strong); padding: 3px 12px; border: 1px solid var(--border-strong); border-radius: 999px; }
+    .tree .row.key { border-color: var(--violet); }
+    .tree .row p { font-size: var(--t-small); line-height: 1.35; color: var(--muted); }
+    .tree .row p b { color: var(--text-strong); font-weight: 600; }
+    .tree .links { font-size: var(--t-small); color: var(--muted); margin: 2px 0 -2px 48px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · how I build</span>
+    <h2 class="title" data-slide-title>Dev environment</h2>
+    <p class="description" data-slide-subtitle>This is how to set up the local environment: short entry files that point the agent to docs, skills and memory.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="tree" data-anim="rise" data-stagger style="--stagger: 140ms">
+      <div class="root">repo/</div>
+      <div class="row"><code>CLAUDE.md</code><span class="tag">entry</span><p><b>Tiny</b>: just points the agent to AGENTS.md</p></div>
+      <div class="row key"><code>AGENTS.md</code><span class="tag">map</span><p><b>Short</b>: says where things are and links to them, without repeating them</p></div>
+      <div class="links">↳ linked from AGENTS.md</div>
+      <div class="row sub"><code>docs/</code><span class="tag">docs</span><p><b>All documentation in one folder</b>: architecture, packages, guides</p></div>
+      <div class="row sub"><code>.agents/skills/</code><span class="tag">skills</span><p><b>Repo skills</b>: shared skills + project-specific workflows</p></div>
+      <div class="row sub"><code>.octocode/</code><span class="tag">memory</span><p><b>Agent memory</b>: reports, plans and gotchas the agent writes back</p></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">This is a general way to set up a local dev environment so an agent can work in any repo. The problem: AI tends to generate a lot, and it quickly becomes hard to follow, so the repo has to tell the agent where everything is. Read it top to bottom, the way the agent does. CLAUDE.md is the entry: tiny, it just says "Read AGENTS.md". AGENTS.md is the map: short, it says where things are and links to them instead of repeating them. Everything it links lives in a folder: docs/ holds all the documentation (architecture, packages, guides), so AGENTS.md just points there; .agents/skills/ holds the repo's skills, shared ones plus project-specific workflows, so they load the same way; .octocode/ (git-ignored) keeps the reports, plans and gotchas the agent writes back. Short entry files, detail in folders. In the Octocode repo this is exactly the layout (repo read 2026-10-10; ledger X35, X36). Next: with the environment in place, the hands-on.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

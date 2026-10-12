@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The protocol has four prompting layers</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .proto { --gap: 12px; }
+    .proto > li { display: grid; grid-template-columns: auto 300px minmax(0, 1fr); align-items: center !important; gap: 18px; padding: 8px 18px; }
+    .proto h3 { font-size: var(--t-body); line-height: 1.15; }
+    .proto .role { font-size: var(--t-mid); color: var(--muted); }
+    .proto .n { border-color: var(--border-strong); background: var(--surface-2); color: var(--muted); }
+    .proto > li > .ex { display: block; }
+    .proto .ex { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px; line-height: 1.4; overflow: hidden; }
+    .proto .ex .k { color: var(--code-key); } .proto .ex .s { color: var(--code-string); } .proto .ex .c { color: var(--code-comment); }
+    .proto > li:nth-child(1) { --pc: var(--violet); }
+    .proto > li:nth-child(2) { --pc: var(--violet); }
+    .proto > li.is-key { --pc: var(--accent); }
+    .proto-foot { display: flex; align-items: center; justify-content: center; gap: 28px; }
+    .proto-foot .rule { margin: 0; --rule-color: var(--positive); }
+    .proto-fyi { margin: 0; max-width: 420px; font-size: var(--t-small); color: var(--muted); line-height: 1.35; }
+    .proto-fyi strong { color: var(--text); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · the protocol</span>
+    <h2 class="title" data-slide-title>The protocol has four prompting layers</h2>
+    <p class="description" data-slide-subtitle>Instructions, tool descriptions, input schemas and results each guide the agent.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <ol class="pipe pipe--v proto">
+      <li data-step="1" data-anim="draw"><span class="n">1</span><div><h3>MCP instructions</h3><span class="role">frames the session</span></div><div class="ex"><span class="k">&lt;local&gt;</span>…<span class="k">&lt;github&gt;</span>…<span class="k">&lt;evidence&gt;</span>… <span class="c">1,908 / 2,000 chars</span></div></li>
+      <li data-step="2" data-anim="draw"><span class="n">2</span><div><h3>Tool description</h3><span class="role">picks the tool</span></div><div class="ex"><span class="s">"Find literal or regex text in local files; hits are anchors…"</span></div></li>
+      <li data-step="3" data-anim="draw"><span class="n">3</span><div><h3>Input schema</h3><span class="role">shapes the call</span></div><div class="ex">{<span class="k">queries</span>: [{<span class="k">mainGoal</span>, <span class="k">reasoning</span>, …}] } <span class="c">1–5 rows</span></div></li>
+      <li class="is-key" data-step="4" data-anim="draw"><span class="n">4</span><div><h3>Tool results</h3><span class="role">steers the next step</span></div><div class="ex"><span class="k">next</span>.nextPage · <span class="k">hints</span>.read · <span class="s">"No matches in 11 files searched."</span></div></li>
+    </ol>
+    <div class="proto-foot" data-step="5">
+      <div class="rule"><span class="k">//</span> give the agent <strong>the method and the capability</strong>.</div>
+      <p class="proto-fyi"><strong>FYI:</strong> no tool annotations, no output schemas. Left out to keep the context small.</p>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The core of the whole workshop. The brief's Octocode protocol, layer by layer as it draws top-down, and every layer is text the model reads. (1) MCP instructions frame the session (workflows and tool order): the general idea and the workflows, in XML-tagged sections (&lt;local&gt;, &lt;github&gt;, &lt;packages&gt;, &lt;pages&gt;, &lt;evidence&gt;…), capped at 2,000 chars because hosts truncate longer ones (docs/OCTOCODE_PROTOCOL.md:65; a code comment in packages/octocode-mcp/src/native/index.ts:289 says "near 2 KB"; ledger V10); today 1,908 chars (measured initialize.result.instructions.length on the dev build 20.2.0, 2026-10-12; the CLI prints the same text plus a &lt;cli&gt; line). (2) Tool description picks the tool (use when, not when): every description follows one grammar: prose (what the tool does, when it is right), an optional &lt;empty&gt; repair, then one &lt;workflow&gt; (where its output goes next) (docs/OCTOCODE_PROTOCOL.md:66). The example is the real start of localSearch's description. In full: "Find literal or regex text in local files; hits are anchors, not identity. resultView picks paths, counts, spans. &lt;empty&gt;Lowercase/shorter term, regex:"rust", includeIgnored.&lt;/empty&gt;&lt;workflow&gt;hit → localFetch; name+line → lspSearch&lt;/workflow&gt;" (242 chars, from a live tools/list on the dev build, 2026-10-12). (3) Input schema shapes the call (goal + reason); the full row is {mainGoal, reasoning, path, matchString}: minimal fields plus optional mainGoal and reasoning for multi-call research, 1–5 queries per call (maxItems: 5 in the live tools/list; docs/OCTOCODE_PROTOCOL.md §3.4; ledger V5, V6). (4) Results steer the next step (data, pages, leads): data plus two continuation channels. next = the unread pages, hints = leads {tool, query} plus a hints.text sentence only for a per-call fact on empty rows (packages/octocode-config/contract/tool-contract.json continuationChannels; docs/OCTOCODE_PROTOCOL.md §3.8; ledger V7); the sentence shown is a real one from a live localSearch on the dev build (ledger V8). FYI, what's thin: tools/list carries only a readOnlyHint annotation per tool and no output schemas. I left the rest out on purpose to keep the context small. Main idea: give the agent the instructions and the capabilities to search smart, so it understands code from several dimensions, evidence-based. Next three slides zoom into layers 3 and 4 with the real code.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

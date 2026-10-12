@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Research before you write the code</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .rdd { display: grid; grid-template-columns: minmax(0, 1fr) 104px minmax(0, 1fr) 104px minmax(0, 1fr); align-items: stretch; }
+    .rdd > .hand { align-self: center; }
+    .sess { border: 1.5px dashed var(--border-strong); border-radius: var(--radius); padding: 12px 14px 8px; display: flex; flex-direction: column; gap: 4px; background: color-mix(in srgb, var(--surface) 55%, transparent); }
+    .sess .kicker { text-align: center; }
+    .sess .kicker b { color: var(--text-strong); font-weight: 600; }
+    .sess svg { width: 100%; height: auto; }
+    .dg .gen { fill: color-mix(in srgb, var(--accent) 10%, var(--surface-2)); stroke: var(--accent); stroke-width: 1.5; }
+    .dg .ver { fill: color-mix(in srgb, var(--negative) 8%, var(--surface-2)); stroke: var(--negative); stroke-width: 1.5; }
+    .dg .dn { fill: none; stroke: var(--accent); stroke-width: 2; } .dg .hd-dn { fill: var(--accent); stroke: var(--accent); }
+    .dg .up { fill: none; stroke: var(--negative); stroke-width: 2; } .dg .hd-up { fill: var(--negative); stroke: var(--negative); }
+    .dg .t-dn { font-size: 20px; fill: var(--accent); } .dg .t-up { font-size: 20px; fill: var(--negative); }
+    .hand { position: relative; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .hand .ln { width: 100%; height: 2px; background: var(--positive); position: relative; }
+    .hand .ln::after { content: ''; position: absolute; right: -2px; top: -6px; border: 7px solid transparent; border-left: 9px solid var(--positive); border-right: 0; }
+    .pill { font-family: var(--font-mono); font-size: var(--t-small); color: var(--positive); border: 1px solid var(--positive); background: color-mix(in srgb, var(--positive) 10%, var(--code-bg)); border-radius: 999px; padding: 3px 10px; white-space: nowrap; }
+    .out { display: flex; justify-content: flex-end; margin-top: 6px; }
+    .stack { display: flex; flex-direction: column; gap: 26px; }
+    .ref { align-self: center; font-size: var(--t-small); color: var(--muted); text-decoration: none; margin-top: -10px; }
+    .ref span { font-family: var(--font-mono); color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+    /* nested steps: dim only the outer one when it is past */
+    [data-step-focus] [data-step] [data-step].step-visible.step-past { opacity: 1; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Agentic development · RDD</span>
+    <h2 class="title" data-slide-title>Research before you write the code</h2>
+    <p class="description" data-slide-subtitle>Research Driven Development: gather evidence and validate context before any code. Plan, research, implement, and a verifier attacks each step.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="stack">
+      <div class="rdd">
+        <div class="sess" data-step="1"><span class="kicker">session 1 · <b>plan</b></span>
+          <svg class="dg" viewBox="0 0 300 172" data-step="1" data-anim="draw" role="img" aria-label="Planner generates a draft; a verifier sends flaws back">
+            <rect class="gen" x="10" y="4" width="280" height="48" rx="10"/><rect class="ver" x="10" y="120" width="280" height="48" rx="10"/>
+            <line class="dn" x1="196" y1="52" x2="196" y2="108"/><polygon class="hd-dn" points="196,120 189,107 203,107"/>
+            <line class="up" x1="104" y1="120" x2="104" y2="64"/><polygon class="hd-up" points="104,52 97,65 111,65"/>
+            <text class="lbl-strong" x="150" y="35" text-anchor="middle">Planner</text><text class="lbl-strong" x="150" y="151" text-anchor="middle" style="fill: var(--negative)">Verifier</text>
+            <text class="t-dn" x="206" y="92">draft</text><text class="t-up" x="94" y="92" text-anchor="end">flaws</text>
+          </svg>
+        </div>
+        <div class="hand" data-step="2" data-anim="draw"><span class="pill">plan.md</span><span class="ln"></span></div>
+        <div class="sess" data-step="2"><span class="kicker">session 2 · <b>research</b></span>
+          <svg class="dg" viewBox="0 0 300 172" data-step="2" data-anim="draw" role="img" aria-label="Researcher generates evidence; a verifier sends flaws back">
+            <rect class="gen" x="10" y="4" width="280" height="48" rx="10"/><rect class="ver" x="10" y="120" width="280" height="48" rx="10"/>
+            <line class="dn" x1="196" y1="52" x2="196" y2="108"/><polygon class="hd-dn" points="196,120 189,107 203,107"/>
+            <line class="up" x1="104" y1="120" x2="104" y2="64"/><polygon class="hd-up" points="104,52 97,65 111,65"/>
+            <text class="lbl-strong" x="150" y="35" text-anchor="middle">Researcher</text><text class="lbl-strong" x="150" y="151" text-anchor="middle" style="fill: var(--negative)">Verifier</text>
+            <text class="t-dn" x="206" y="92">claims</text><text class="t-up" x="94" y="92" text-anchor="end">flaws</text>
+          </svg>
+        </div>
+        <div class="hand" data-step="3" data-anim="draw"><span class="pill">research.md</span><span class="ln"></span></div>
+        <div class="sess" data-step="3"><span class="kicker">session 3 · <b>implement</b></span>
+          <svg class="dg" viewBox="0 0 300 172" data-step="3" data-anim="draw" role="img" aria-label="Coder generates code; a verifier sends flaws back">
+            <rect class="gen" x="10" y="4" width="280" height="48" rx="10"/><rect class="ver" x="10" y="120" width="280" height="48" rx="10"/>
+            <line class="dn" x1="196" y1="52" x2="196" y2="108"/><polygon class="hd-dn" points="196,120 189,107 203,107"/>
+            <line class="up" x1="104" y1="120" x2="104" y2="64"/><polygon class="hd-up" points="104,52 97,65 111,65"/>
+            <text class="lbl-strong" x="150" y="35" text-anchor="middle">Coder</text><text class="lbl-strong" x="150" y="151" text-anchor="middle" style="fill: var(--negative)">Verifier</text>
+            <text class="t-dn" x="206" y="92">code</text><text class="t-up" x="94" y="92" text-anchor="end">flaws</text>
+          </svg>
+          <div class="out"><span class="pill">code + tests</span></div>
+        </div>
+      </div>
+      <div class="rule" data-step="4"><span class="k">// only artifacts cross sessions:</span> each step starts with <strong>the minimal context</strong> it needs.</div>
+      <a class="ref" data-step="4" href="https://github.com/bgauryy/octocode/blob/main/MANIFEST.md" target="_blank" rel="noopener">“Code is Truth, but Context is the Map.” · <span>github.com/bgauryy/octocode/blob/main/MANIFEST.md</span> ↗</a>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">MANIFEST.md:17-18: "Research Driven Development (RDD) is the methodology that formalizes 'vibe-research.' It prioritizes evidence gathering and context validation before any code is implemented… Code is Truth, but Context is the Map." (ledger V22; github.com/bgauryy/octocode/blob/main/MANIFEST.md). The picture is the manifest's adversarial flow drawn as a pipeline. Click 1: a fresh session plans. A generator (Planner) drafts, and a verifier (the manifest calls it the Discriminator) attacks it and sends flaws back, GAN-style, until the plan holds. Click 2: only plan.md crosses into a new session; the Researcher gathers evidence with the tools, and the verifier attacks every claim. Click 3: only research.md crosses into the implement session; the Coder writes code, the verifier attacks it; out comes code + tests. Click 4: each flow runs in a separate agent or session (the dashed frames), so each step starts with "the minimal context necessary for the agent to implement the task with maximum quality" (MANIFEST.md:183-190, 251-252, 361-368). Analogy: TDD for knowledge. Write the evidence first, then let a hostile reviewer attack it. The model vendor prescribes the same contract: Anthropic's "Reduce hallucinations" guide says "extract word-for-word quotes first"; "Verify with citations … If it can't find a quote, it must retract the claim" (platform.claude.com docs, fetched 2026-10-09). And what happens without it: Damien Charlotin's AI Hallucination Cases database lists 2,184 court decisions involving AI-hallucinated content, typically fake citations, as of 12 Oct 2026 (damiencharlotin.com/hallucinations). Next: two habits inside validation: reflection and independent critique.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

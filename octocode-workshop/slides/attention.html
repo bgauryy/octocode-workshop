@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The middle of context gets missed</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .att { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 32px; align-items: stretch; height: 250px; flex: none; }
+    .curve-wrap { min-width: 0; min-height: 0; position: relative; }
+    .uc { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .uc .axis { fill: none; stroke: var(--border-strong); stroke-width: 2; }
+    .uc .u { fill: none; stroke: var(--warm); stroke-width: 4; stroke-linecap: round; }
+    .uc .pt { fill: var(--bg); stroke: var(--warm); stroke-width: 3; }
+    .uc .zone { fill: color-mix(in srgb, var(--negative) 12%, transparent); stroke: var(--negative); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; }
+    .uc .lbl { font-size: 22px; fill: var(--muted); }
+    .uc .zt { fill: var(--negative); font-size: 22px; font-weight: 600; }
+    .why { display: flex; flex-direction: column; justify-content: center; gap: 14px; border-left: 3px solid var(--negative); padding-left: 22px; }
+    .why p { font-size: var(--t-mid); color: var(--text); line-height: 1.35; margin: 0; }
+    .why p strong { color: var(--text-strong); font-weight: 600; }
+    .why .src { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); line-height: 1.35; }
+    .keep { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+    .keep .kicker { color: var(--positive); }
+    .tips { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .tip { background: color-mix(in srgb, var(--positive) 8%, var(--surface)); border: 1px solid color-mix(in srgb, var(--positive) 40%, transparent); border-top: 3px solid var(--positive); border-radius: var(--radius-sm); padding: 12px 18px; display: flex; flex-direction: column; gap: 6px; }
+    .tip h3 { font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); font-weight: 600; margin: 0; }
+    .tip p { font-size: var(--t-small); color: var(--text); line-height: 1.35; margin: 0; }
+    .tip p strong { color: var(--positive); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
+    <h2 class="title" data-slide-title>The middle of context gets missed</h2>
+    <p class="description" data-slide-subtitle>Where you place a fact affects whether the model uses it.</p>
+  </div>
+  <div class="slide-content">
+    <div class="att">
+      <div class="curve-wrap">
+        <svg class="dg uc" viewBox="0 0 820 260" role="img" aria-label="Illustrative U-shaped curve: a fact is found best at the start or end of the context, worst in the middle">
+          <path class="axis" d="M60 10 L60 220 L810 220"/>
+          <text class="lbl" x="60" y="252">start</text>
+          <text class="lbl" x="435" y="252" text-anchor="middle">where the fact sits</text>
+          <text class="lbl" x="810" y="252" text-anchor="end">end</text>
+          <text class="lbl" x="44" y="14" text-anchor="end" transform="rotate(-90 44 14)">found it</text>
+          <g data-step="2" data-anim="land"><rect class="zone" x="265" y="14" width="340" height="204" rx="10"/>
+            <text class="zt" x="435" y="44" text-anchor="middle">lost in the middle</text></g>
+          <g data-step="1" data-anim="draw">
+            <path class="u" d="M85 40 C 230 110, 300 172, 435 174 S 650 116, 785 58" pathLength="1"/>
+            <circle class="pt" cx="85" cy="40" r="7" pathLength="1"/><circle class="pt" cx="435" cy="174" r="7" pathLength="1"/><circle class="pt" cx="785" cy="58" r="7" pathLength="1"/>
+          </g>
+        </svg>
+      </div>
+      <div class="why" data-step="2">
+        <p>A measured <strong>position bias</strong>: models favour the start and the end of the window. Long chats push your task into the middle.</p>
+        <span class="src">Liu et al., Lost in the Middle (TACL 2024) · shape illustrative</span>
+      </div>
+    </div>
+    <div class="keep">
+      <span class="kicker" data-step="3">so keep attention on the task → better answers</span>
+      <div class="tips">
+        <div class="tip" data-step="3" data-anim="land"><h3>One session, one subject</h3><p>Every earlier turn is about this task, so the history <strong>helps</strong>.</p></div>
+        <div class="tip" data-step="4" data-anim="land"><h3>New task → new session</h3><p>Old turns become noise in the middle. A fresh window <strong>starts sharp</strong>.</p></div>
+        <div class="tip" data-step="5" data-anim="land"><h3>Bring the right context in</h3><p>Only the files and docs this task needs: <strong>small and on point</strong>.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Open: saving K and V makes a long context cheaper, not sharper. We saw the cost of how many tokens; this slide is about where they sit. Click 1: the curve draws. Liu et al., "Lost in the Middle" (TACL 2024, arXiv:2307.03172; ledger B6): "performance is often highest when relevant information occurs at the beginning or end of the input context", and it drops when the fact is in the middle. The curve is the shape of their finding, drawn for the slide, not their numbers (ledger D1). Click 2: the middle band lands. Be precise here: this is a measured position bias. It is not a direct result of the n² cost from the KV cache slide. What it means in practice: in a long chat, your actual task drifts into the middle of the window. Clicks 3–5: so what do you do? These tips are derived advice that follows from those findings, not a measured result. Click 3: one session, one subject. If every earlier message is about the same task, the history the model re-reads is signal, not distraction. Click 4: new task, new session. The old conversation doesn't vanish. It sits in the middle of the window competing for attention. Chroma, Context Rot (14 Jul 2025): "Even a single distractor reduces performance relative to the baseline." Click 5: bring the right context in. Only the files, docs or tool results this task needs. Same idea as Anthropic's guidance to find the smallest set of high-signal tokens. For tool builders: smaller, sharper results beat bigger windows, which is why Octocode returns match windows, ranges, pagination and minimal results. Next: reasoning, how the model breaks a problem into steps before it answers.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

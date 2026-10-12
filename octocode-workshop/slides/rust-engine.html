@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octocode helped move its engine to Rust</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .ru { display: grid; grid-template-columns: 470px minmax(0, 1fr); gap: 44px; align-items: center; }
+    .ru svg { height: 330px; }
+    .ru .dg .box.key { stroke: var(--violet); fill: color-mix(in srgb, var(--violet) 12%, var(--surface)); }
+    .ru .dg .ln { stroke: var(--violet); }
+    .ru .dg .hd { fill: var(--violet); stroke: none; }
+    .ru .dg .crate { font-size: 20px; fill: var(--text-strong); font-weight: 600; }
+    .rb { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px 16px; align-items: center; }
+    .rb > .grp { grid-column: 1 / -1; font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); margin-top: 12px; }
+    .rb > .grp:first-child { margin-top: 0; }
+    .rb > .lbl { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); white-space: nowrap; }
+    .rb > .lbl.n { color: var(--text-strong); }
+    .rb > .trk { height: 22px; border-radius: 6px; background: color-mix(in srgb, var(--border) 45%, transparent); position: relative; overflow: hidden; }
+    .rb > .trk > i { position: absolute; inset: 0 auto 0 0; width: max(var(--v), 4px); border-radius: 6px; background: color-mix(in srgb, var(--muted-2) 70%, transparent); }
+    .rb > .trk.n > i { background: var(--violet); }
+    .rb > .val { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--muted); text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; min-width: 5.4em; }
+    .rb > .val.n { color: var(--text-strong); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · Rust</span>
+    <h2 class="title" data-slide-title>Octocode migrated itself to Rust</h2>
+    <p class="description" data-slide-subtitle>The migration kept the research capabilities while changing the execution layer.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="ru">
+      <svg class="dg" viewBox="0 0 470 330" role="img" aria-label="Both octocode-mcp and the octocode CLI call one Rust runtime, built on the engine and github crates" data-anim="draw">
+        <rect class="box" x="1" y="1" width="214" height="66" rx="12" pathLength="1"/>
+        <text class="crate" x="18" y="30">octocode-mcp</text><text class="lbl" x="18" y="54">Node · napi-rs</text>
+        <rect class="box" x="255" y="1" width="214" height="66" rx="12" pathLength="1"/>
+        <text class="crate" x="272" y="30">octocode CLI</text><text class="lbl" x="272" y="54">native binary</text>
+        <path class="ln" d="M108 67 V112" pathLength="1"/><polygon class="hd" points="102,108 114,108 108,118"/>
+        <path class="ln" d="M362 67 V112" pathLength="1"/><polygon class="hd" points="356,108 368,108 362,118"/>
+        <rect class="box key" x="1" y="120" width="468" height="78" rx="12" pathLength="1"/>
+        <text class="crate" x="18" y="150">runtime</text><text class="lbl" x="18" y="178">tools · cache · redaction · output</text>
+        <path class="ln" d="M108 198 V243" pathLength="1"/><polygon class="hd" points="102,239 114,239 108,249"/>
+        <path class="ln" d="M362 198 V243" pathLength="1"/><polygon class="hd" points="356,239 368,239 362,249"/>
+        <rect class="box" x="1" y="251" width="214" height="78" rx="12" pathLength="1"/>
+        <text class="crate" x="18" y="280">engine</text><text class="lbl" x="18" y="308">search · AST · LSP</text>
+        <rect class="box" x="255" y="251" width="214" height="78" rx="12" pathLength="1"/>
+        <text class="crate" x="272" y="280">github</text><text class="lbl" x="272" y="308">client · retries</text>
+      </svg>
+      <div class="rb" aria-label="Measured start-up and LSP times">
+        <span class="grp" data-step="1">start · help / auth</span>
+        <span class="lbl" data-step="1">via Node launcher</span><div class="trk" data-step="1" data-anim="draw"><i style="--v: 100%"></i></div><span class="val" data-step="1">~120 ms</span>
+        <span class="lbl n" data-step="1">native binary</span><div class="trk n" data-step="1" data-anim="draw"><i style="--v: 6.7%"></i></div><span class="val n" data-step="1" data-anim="rise count" data-from="120">~8 ms</span>
+
+        <span class="grp" data-step="2">start · one tool call</span>
+        <span class="lbl" data-step="2">via Node launcher</span><div class="trk" data-step="2" data-anim="draw"><i style="--v: 100%"></i></div><span class="val" data-step="2">~330 ms</span>
+        <span class="lbl n" data-step="2">native binary</span><div class="trk n" data-step="2" data-anim="draw"><i style="--v: 48.5%"></i></div><span class="val n" data-step="2" data-anim="rise count" data-from="330">~160 ms</span>
+
+        <span class="grp" data-step="3">lspSearch hover · TypeScript</span>
+        <span class="lbl" data-step="3">cold server</span><div class="trk" data-step="3" data-anim="draw"><i style="--v: 100%"></i></div><span class="val" data-step="3">~3 s</span>
+        <span class="lbl n" data-step="3">kept warm</span><div class="trk n" data-step="3" data-anim="draw"><i style="--v: 3.3%"></i></div><span class="val n" data-step="3" data-anim="rise count" data-from="3">~0.1 s</span>
+      </div>
+    </div>
+    <div class="rule" style="--rule-color: var(--violet)" data-step="4"><span class="k">// meta:</span> researched with Octocode, and now <strong>one engine</strong> serves MCP and the CLI.</div>
+  </div>
+</div>
+<aside class="speaker-notes">What moved: everything that does work (search, AST, the LSP client, the GitHub client, redaction, caching and response rendering) into one Rust workspace, packages/octocode-native, version 20.2.0 (dev build, unreleased; npm latest is 20.1.0): five crates (Cargo.toml:2): engine (search, structural/AST, LSP, minify, graph, security), github (transport, retry, rate budget, search), runtime (tools, config, cache, providers, response), runtime-napi (the Node adapter octocode-mcp loads in-process) and cli (the binary). The diagram draws as I talk: MCP and the CLI are now thin hosts over the same runtime: "MCP and npx octocode &lt;toolName&gt; share the same schemas, runners, validation, response envelope, pagination, and secret redaction" (docs/OCTOCODE_MCP.md:3). Press → for each pair of bars, and be precise about what they measure. Steps 1–2 come from packages/octocode-native/README.md:267-270: running the native binary directly vs going through the `octocode` Node launcher, which runs the same native engine, so it's launcher overhead: help/auth ~8 ms vs ~120 ms, a tool call ~160 ms vs ~330 ms (no sample size given). The native binary ships inside the npm package as per-platform optional dependencies (packages/octocode-native/package.json:45-52); `npx octocode` starts it through a Node launcher that declares Node ^24.15.0 (other versions only print an engine warning). Step 3 is from CHANGELOG.md:215-217: the first lspSearch in a workspace starts a private per-workspace language server that later CLI calls reuse, so a TypeScript hover goes from ~3 s cold to ~0.1 s warm. Extra from the history: the first Rust crate was the secret scanner, with the same 309 patterns, 20–27× faster than the JS version on clean content (1 MB: 50 ms → 2.1 ms) (git e1ad2d510: packages/octocode-security/README.md:14-40). Press → for the rule: I used Octocode to research the old TypeScript code and plan the migration in the RDD flow (speaker's own account, ledger X4). Honest counterpoint: plain rg answers in 3–25 ms vs ~200 ms per CLI call (docs/OCTOCODE_PROTOCOL.md:139). Next: clasify and Jev.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+/* masters.css — this deck's slide masters (deck-owned, like theme.css).
+   Background, decoration and chrome for every slide of a kind, defined once.
+   A slide picks its master with its root class: <div class="slide slide--content">.
+   Tune the --master-* colours below (Design tab) and every slide of that master follows. */
+
+:root {
+  --master-default-1: color-mix(in srgb, var(--accent) 60%, transparent); /* .slide · background · glow */
+  --master-default-2: color-mix(in srgb, var(--violet) 7%, transparent); /* .slide · background · glow */
+  --master-default-3: var(--bg-2); /* .slide · background · gradient */
+  --master-default-4: var(--bg); /* .slide · background · gradient */
+  --master-default-5: rgb(140 180 230 / 0.045); /* .slide::before · background-image · glow */
+  --master-default-6: var(--border-strong); /* .slide::after · background · gradient */
+  --master-section-1: color-mix(in srgb, var(--accent) 18%, transparent); /* .slide--section · background · glow */
+  --master-section-2: color-mix(in srgb, var(--violet) 10%, transparent); /* .slide--section · background · glow */
+  --master-section-3: var(--bg-2); /* .slide--section · background · gradient */
+  --master-section-4: var(--bg); /* .slide--section · background · gradient */
+  --master-closing-1: color-mix(in srgb, var(--accent) 18%, transparent); /* .slide--closing · background · glow */
+  --master-closing-2: color-mix(in srgb, var(--positive) 10%, transparent); /* .slide--closing · background · glow */
+  --master-closing-3: var(--bg-2); /* .slide--closing · background · gradient */
+  --master-closing-4: var(--bg); /* .slide--closing · background · gradient */
+}
+
+.slide {
+  background: radial-gradient(circle at 92% 8%, var(--master-default-1), transparent 32%),
+    radial-gradient(circle at 4% 96%, var(--master-default-2), transparent 38%),
+    linear-gradient(180deg, var(--master-default-3) 0%, var(--master-default-4) 100%);
+}
+
+.slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, var(--master-default-5) 1px, transparent 0);
+  background-size: 28px 28px;
+  pointer-events: none;
+  mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+
+.slide::after {
+  content: '';
+  position: absolute;
+  inset: auto var(--pad) 1.65rem var(--pad);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--master-default-6), transparent);
+}
+
+.slide--section {
+  background: radial-gradient(circle at 80% 20%, color-mix(in srgb, var(--act-color, var(--accent)) 18%, transparent), transparent 40%),
+    radial-gradient(circle at 10% 80%, var(--master-section-2), transparent 40%),
+    linear-gradient(180deg, var(--master-section-3) 0%, var(--master-section-4) 100%);
+}
+
+.slide--section.act--positive .display { line-height: 1.2; padding-bottom: 0.12em; }
+.slide--section .practice-link {
+  align-self: flex-start;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border: 1px solid var(--positive);
+  border-radius: var(--radius-sm);
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-size: var(--t-mid);
+  text-decoration: none;
+}
+.slide--section .practice-link:hover,
+.slide--section .practice-link:focus-visible { background: color-mix(in srgb, var(--positive) 18%, transparent); }
+
+.slide--closing {
+  background: radial-gradient(circle at 80% 20%, var(--master-closing-1), transparent 40%),
+    radial-gradient(circle at 12% 86%, var(--master-closing-2), transparent 40%),
+    linear-gradient(180deg, var(--master-closing-3) 0%, var(--master-closing-4) 100%);
+}
+
+/* ── Typography (deck-wide, 2026-10-11): calmer weights ──
+   Heavy IBM Plex Mono bold everywhere read as shouting. Titles stay mono (brand)
+   at a regular weight; card and step headings switch to Plex Sans semibold;
+   mono labels, pills and inline bold drop to regular/semibold.
+   !important because base.css and per-slide styles set heavier weights. */
+.slide [data-slide-title],
+.slide .slide-header .title {
+  font-weight: 400 !important;
+  letter-spacing: -0.02em;
+}
+.slide .slide-content h3,
+.slide .slide-content h4 {
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0 !important;
+}
+.slide .slide-content b,
+.slide .slide-content strong {
+  font-weight: 600 !important;
+}
+.slide .rule strong,
+.slide .code strong,
+.slide .code b,
+.slide .term strong,
+.slide .term b {
+  color: var(--accent-2);
+  font-weight: 400 !important;
+}
+.slide .pipe .n,
+.slide .nums .n,
+.slide .px .p {
+  font-weight: 400 !important;
+}
+
+/* ── Chrome: logo / footer / section / page number (js/chrome.js, octodeck.json "chrome") ── */
+.slide-chrome { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+.chrome-logo { position: absolute; top: 1rem; right: var(--pad, 3rem); height: 26px; width: auto; max-width: 120px; object-fit: contain; opacity: 0.85; }
+.chrome-band {
+  position: absolute; left: var(--pad, 3rem); right: var(--pad, 3rem); bottom: 0.55rem;
+  display: flex; justify-content: space-between; gap: 1rem; align-items: baseline;
+  font-family: var(--font-head, inherit); font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted-2, var(--muted, #888));
+}
+.chrome-band .chrome-left { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.chrome-page { color: var(--accent, currentColor); font-variant-numeric: tabular-nums; margin-left: auto; }
+/* A slide with its own .slide-footer gets only the page number, placed inside that footer. */
+.slide-footer .chrome-page { margin-left: 1rem; }

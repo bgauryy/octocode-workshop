@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Package search jumps from a name to its code</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .alg { --gap: 48px; margin: 0; }
+    .alg > li { padding: 18px 22px 16px; gap: 12px; min-width: 0; }
+    .alg h3 { font-size: var(--t-mid); }
+    .alg .code { font-family: var(--font-mono); font-size: var(--t-small); line-height: 1.4; color: var(--code-text); background: var(--code-bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; margin: 0; white-space: normal; }
+    .alg .code .k { color: var(--code-key); }
+    .alg .code .s { color: var(--code-string); }
+    .alg .code .c { color: var(--code-comment); }
+    .alg .out { font-size: var(--t-body); color: var(--muted); border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; }
+    .alg .out b { color: var(--muted-2); font-weight: 400; margin-right: 8px; }
+    .alg .out code { font-family: var(--font-mono); font-size: var(--t-small); color: var(--text); }
+    .alg .tool { align-self: flex-start; font-family: var(--font-mono); font-size: var(--t-small); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--pc); color: var(--pc); background: color-mix(in srgb, var(--pc) 10%, transparent); }
+    .alg + .rule { margin-top: 28px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · more context</span>
+    <h2 class="title" data-slide-title>Package search jumps from a name to its code</h2>
+    <p class="description" data-slide-subtitle>The agent checks the registry once, then knows which repository holds the package's code.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <ol class="pipe alg">
+      <li data-step="1" data-anim="draw"><span class="n">1</span><h3>A name in the code</h3>
+        <p class="code"><span class="k">import</span> { McpServer } <span class="k">from</span><br><span class="s">"@modelcontextprotocol/sdk"</span></p>
+        <p class="out"><b>→</b>a name, not a location</p></li>
+      <li data-step="2" data-anim="draw"><span class="n">2</span><h3>One registry lookup</h3><span class="tool">npm search</span>
+        <p class="code"><span class="c">// repository →</span><br>modelcontextprotocol/<br>typescript-sdk</p>
+        <p class="out"><b>→</b>checked, not guessed</p></li>
+      <li data-step="3" data-anim="draw"><span class="n">3</span><h3>Read the real code</h3>
+        <p class="code">modelcontextprotocol/<br>typescript-sdk <span class="c">· src/</span></p>
+        <p class="out"><b>→</b><code>ghSearchCode</code> · <code>ghGetFileContent</code></p></li>
+    </ol>
+    <div class="rule" data-step="4"><span class="k">// one lookup;</span> from then on the agent <strong>knows where the code lives</strong>.</div>
+  </div>
+</div>
+<aside class="speaker-notes">The second tool goes from a package name to its code. Press → for each step. (1) While reading code, the agent sees a package name, for example an import from @modelcontextprotocol/sdk. That's a name, not a location: it doesn't say where the source lives. (2) So it checks once with npm search: the registry's repository field points to github.com/modelcontextprotocol/typescript-sdk (registry.npmjs.org/@modelcontextprotocol/sdk/latest, v1.32.1; checked for this deck). No guessing, and no hallucinated package names. (3) From then on the agent knows the repo, with the code under src/, and reads the real code with ghSearchCode and ghGetFileContent. (4) One lookup, and from then on the agent knows where the code lives. History: npm_search existed from 1.0.0 (6 Jun 2025), PyPI was added in 2.3.21, and today artifactSearch covers 8 registries: npm, PyPI, crates, Maven, NuGet, Go, Packagist, RubyGems (packages/octocode/README.md:53). Next: too many calls, and how one batched call searches from several directions.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

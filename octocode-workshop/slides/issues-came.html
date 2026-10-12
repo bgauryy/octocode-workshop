@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real usage exposed six more problems</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .ic { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 22px; flex: 1; min-height: 0; }
+    .ic .pipe { --gap: 30px; }
+    .ic .pipe > li { padding: 12px 18px; }
+    .ic .pipe h3 { font-size: var(--t-body); }
+    .cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; align-items: start; }
+    .col { display: flex; flex-direction: column; gap: 14px; }
+    .bug { padding: 12px 16px; border-radius: var(--radius-sm); border: 1px solid color-mix(in srgb, var(--negative) 55%, transparent); border-left: 3px solid var(--negative); background: color-mix(in srgb, var(--negative) 7%, var(--surface)); }
+    .bug h3 { font-family: var(--font-head); font-size: 26px; color: var(--text-strong); line-height: 1.2; }
+    .bug p { font-size: 22px; color: var(--muted); line-height: 1.3; margin-top: 3px; }
+    .bug.solved { border-color: color-mix(in srgb, var(--positive) 45%, transparent); border-left-color: var(--positive); background: color-mix(in srgb, var(--positive) 6%, var(--surface)); }
+    .bug.solved h3 { color: var(--muted); }
+    .bug.solved p { font-family: var(--font-mono); font-size: var(--t-small); color: var(--positive); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>Octocode in scale · then issues came</span>
+    <h2 class="title" data-slide-title>Real usage exposed six more problems</h2>
+    <p class="description" data-slide-subtitle>Structure and package search already answered two; bigger repos and longer sessions broke six more places.</p>
+  </div>
+  <div class="slide-content">
+    <div class="ic">
+      <ol class="pipe pipe--warm" data-anim="draw" data-stagger style="--stagger: 200ms">
+        <li><span class="n">1</span><h3>call GitHub</h3></li>
+        <li><span class="n">2</span><h3>find the code</h3></li>
+        <li><span class="n">3</span><h3>read the result</h3></li>
+        <li><span class="n">4</span><h3>answer</h3></li>
+      </ol>
+      <div class="cols">
+        <div class="col" data-step="1" data-anim="land" data-stagger>
+          <div class="bug"><h3>Rate limits</h3><p>10 code searches a minute</p></div>
+          <div class="bug"><h3>Security</h3><p>secrets and hidden instructions</p></div>
+        </div>
+        <div class="col" data-step="2" data-anim="land" data-stagger>
+          <div class="bug solved"><h3>File context</h3><p>✓ solved → ghStructure</p></div>
+          <div class="bug solved"><h3>Packages</h3><p>✓ solved → package search</p></div>
+        </div>
+        <div class="col" data-step="3" data-anim="land" data-stagger>
+          <div class="bug"><h3>Large results</h3><p>one file fills the window</p></div>
+          <div class="bug"><h3>Context grew</h3><p>every read, re-read each turn</p></div>
+          <div class="bug"><h3>Too many calls</h3><p>attention fades</p></div>
+        </div>
+        <div class="col" data-step="4" data-anim="land" data-stagger>
+          <div class="bug"><h3>Hallucinations</h3><p>no line behind the answer</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The issues list from the brief (ledger V23), pinned to where in the loop each one hit. Press → once per stage. (1) Calling GitHub: rate limits. Code search allows 10 requests a minute, REST 5,000 an hour authenticated (docs.github.com, ledger V13). Security: secrets in fetched code, and content that carries instructions. Invariant Labs showed a malicious public issue making a GitHub-MCP agent leak private-repo data on 26 May 2025 (ledger V16). (2) Finding the code: the two we just solved. A file on its own doesn't say where it belongs, which ghStructure answers; and a package name doesn't say where its source lives, which package search answers. Say it plainly: those two came first, and these green cards are what we already fixed. (3) Reading the result: one large file fills the window; context grows because every read stays and is re-read on every later turn; and after several tool calls the model's attention faded. (4) The answer: hallucinations, meaning confident claims with no line behind them. Outside numbers (anthropic.com/engineering/advanced-tool-use, fetched 2026-10-09): Anthropic counted five common MCP servers at "58 tools consuming approximately 55K tokens before the conversation even starts" (advanced tool use, 24 Nov 2025). Tool definitions are context too. Ask the room: which of these have you hit with your own agents? It became too heavy, and every fix that follows was context engineering. Next: the full map, one engineering fix per problem, including the two we already saw.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

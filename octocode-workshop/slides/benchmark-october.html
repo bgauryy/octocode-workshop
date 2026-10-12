@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>October: I made gh as lean as possible, and it won</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .oc { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 44px; align-items: center; }
+    .oc .ladder { display: flex; flex-direction: column; gap: 6px; }
+    .oc .ladder > .hd { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted-2); }
+    .oc .rung { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; align-items: start; padding: 8px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+    .oc .rung .n { font-family: var(--font-head); font-size: var(--t-sub); color: var(--accent); line-height: 1.1; }
+    .oc .rung .k { font-family: var(--font-head); font-size: var(--t-body); color: var(--text-strong); margin: 0 0 2px; }
+    .oc .rung .k small { font-family: var(--font-body); font-size: var(--t-small); color: var(--muted); margin-left: 10px; }
+    .oc .rung p { margin: 0; font-size: var(--t-small); color: var(--text); line-height: 1.4; }
+    .oc .rung p { line-height: 1.35; }
+    .oc .rung .ln { display: grid; grid-template-columns: 215px minmax(0, 1fr); gap: 12px; align-items: baseline; }
+    .oc .rung .ln .k { margin: 0; white-space: nowrap; }
+    .oc .rung code { white-space: nowrap; font-family: var(--font-mono); font-size: var(--t-small); color: var(--code-key); }
+    .oc .rung.res { border-color: var(--border-strong); }
+    .oc .hbars { gap: 6px 16px; margin-top: 4px; }
+    .oc .hbars > .lbl.k { color: var(--text-strong); }
+    .oc .hbars > .trk { height: 22px; }
+    .oc .hbars > .trk.vio > i { --bc: var(--violet); }
+    .oc .hbars > .val { font-size: var(--t-small); }
+    .oc .side { display: flex; flex-direction: column; gap: 16px; padding-left: 30px; border-left: 1px solid var(--border-strong); }
+    .oc .big { overflow: visible; }
+    .oc .big .num { font-size: 72px; line-height: 1.2; overflow: visible; --bc: var(--warm); }
+    .oc .note { padding: 12px 16px; border-left: 3px solid var(--accent); background: var(--surface-2); border-radius: var(--radius-sm); }
+    .oc .note .k { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin: 0 0 6px; }
+    .oc .note p { margin: 0; font-size: var(--t-body); color: var(--text-strong); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V3 · stats · Oct 2026</span>
+    <h2 class="title" data-slide-title>October: I made gh as lean as possible, and it won</h2>
+    <p class="description" data-slide-subtitle>A stronger gh baseline exposed where Octocode v20 still spends context.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="oc">
+      <div class="ladder">
+        <span class="hd">How I pushed the benchmark</span>
+        <div class="rung" data-step="1" data-anim="rise">
+          <span class="n">1</span>
+          <div class="ln"><p class="k">Aug · plain gh</p><p>No guidance. Octocode used 2–3.2× fewer chars.</p></div>
+        </div>
+        <div class="rung" data-step="2" data-anim="rise">
+          <span class="n">2</span>
+          <div class="ln"><p class="k">Oct · gh-lean</p><p>Told to be as efficient as it can: read-only gh, <code>--json</code>/<code>--jq</code> projections, <code>grep</code>&nbsp;/&nbsp;<code>sed&nbsp;-n</code>&nbsp;/&nbsp;<code>head</code> filters.</p></div>
+        </div>
+        <div class="rung res" data-step="3" data-anim="rise">
+          <span class="n">3</span>
+          <div>
+            <p class="k">Result<small>same harness, same day · median chars / question</small></p>
+            <div class="hbars" aria-label="Median characters per question: gh-lean 6,068, Octocode v20 MCP 8,168">
+              <span class="lbl k">gh-lean</span><div class="trk win" data-anim="draw"><i style="--v: 74.3%"></i></div><span class="val win" data-anim="count">6,068</span>
+              <span class="lbl k">Octocode v20 MCP</span><div class="trk vio" data-anim="draw" style="--delay: 150ms"><i style="--v: 100%"></i></div><span class="val" data-anim="count">8,168</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="side">
+        <div class="big" data-step="3" data-anim="rise count" data-from="1"><span class="num">0.71×</span><span class="cap">per-question geometric mean</span><p>CI 0.58–0.85 · median bars imply 0.74× · correctness near parity</p></div>
+        <div class="note" data-step="4" data-anim="land"><p class="k">On purpose</p><p>gh-lean is the next target for v20.</p></div>
+      </div>
+    </div>
+    <span class="src">results/lean-vs-mcp-114934-2026-10-09.md:48-57 · compare/arms/gh-lean.md</span>
+  </div>
+</div>
+<aside class="speaker-notes">Press →: in August, plain gh with no guidance was an easy opponent; Octocode used 2–3.2× fewer characters. Press →: so I pushed the limit on purpose. I told the agent to be as efficient as it can: read-only gh, --json/--jq projections, grep/sed -n/head filters (compare/arms/gh-lean.md). Press →: the October head-to-head, same harness, same day, claude-sonnet-5-5, 30 questions × 1 (results/lean-vs-mcp-114934-2026-10-09.md:48-57; ledger X9). The bars show separate medians: gh-lean 6,068 and Octocode 8,168 characters per question. Their ratio is about 0.74. The large 0.71× is a different calculation, the geometric mean of paired per-question ratios, with CI 0.58–0.85; Octocode was leaner on only 6 of 30. Correctness 9.2 vs 8.8 is near parity within the judge's one-point noise. Press →: the stronger baseline showed what v20 still needs to improve. For balance: Octocode made fewer calls (80 vs 142), answered faster (median 16.5 s vs 19.4 s), and cost about the same ($2.61 vs $2.49). The characters went to whole-file reads and wide windows: Octocode read back 248,148 chars vs 134,090. And v20 is still 4.33× leaner than plain gh (CI 2.62–6.92). Aside: clasify was offered in 30 of 30 sessions and called 0 times (results/mcp-clasify-ab-111154-2026-10-09.md:8-15; X10). Next: why a benchmark can fool its author.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

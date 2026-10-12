@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 2: investigate a GitHub codebase</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+    .lab .code { font-size: var(--t-small); }
+    .lab .card p { font-size: var(--t-mid); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content slide--lab" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Lab 2 · 15 min · teaches: batching · hints · goals</span>
+    <h2 class="title" data-slide-title>Lab 2: investigate a GitHub codebase</h2>
+    <p class="description" data-slide-subtitle>Cite the source behind every claim in your answer.</p>
+  </div>
+  <div class="slide-content">
+    <div class="lab">
+      <div class="code" data-label="run">npx octocode ghSearchRepo '{"queries":[{
+  "keywords": ["code research"],
+  "language": "TypeScript"
+}]}'
+
+<span class="tk-cmt"># again, asking for lead calls</span>
+  … "extras": ["hints"] …</div>
+      <div class="stack">
+        <div class="prompt" data-step="1"><span class="kicker">prompt your agent</span>"Using Octocode, find how Next.js matches middleware paths. Batch your first searches, cite file:line, and find the PR that last changed it."</div>
+        <div class="card card--positive" data-step="2"><span class="kicker">done when</span><p>3+ file:line citations and one PR number. Count the tool calls — and spot one that came from a hint.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Lesson: batching (up to 5 queries), mainGoal/reasoning, and hints. Expected chain: ghSearchCode → ghGetFileContent (matchString) → ghSearchHistory operation pullRequest on vercel/next.js. Ask participants to compare a result with and without extras:["hints"] — lead calls appear on successful rows only when asked (fieldClass.ts). Rate limits: code search is 10/min — pair up. Next: Lab 3.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

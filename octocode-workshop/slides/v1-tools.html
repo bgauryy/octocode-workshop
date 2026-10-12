@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eight tools cover GitHub and npm research</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .tk { display: flex; flex-direction: column; gap: 14px; }
+    .cols { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    .col { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    .col > .kicker { display: flex; align-items: center; gap: 8px; }
+    .col > .kicker::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+    .tool { display: flex; flex-direction: column; gap: 4px; padding: 9px 16px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .tool code { font-family: var(--font-mono); font-size: 20px; color: var(--accent); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .tool span { font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .tool.npm code { color: var(--positive); }
+    .optin { display: grid; grid-template-columns: auto repeat(3, minmax(0, 1fr)); align-items: center; gap: 18px; padding: 10px 18px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
+    .optin b { font-family: var(--font-head); font-size: var(--t-small); color: var(--muted-2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .optin div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .optin code { font-family: var(--font-mono); font-size: 20px; color: var(--text-strong); }
+    .optin span { font-size: var(--t-small); color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · the toolset</span>
+    <h2 class="title" data-slide-title>Eight tools cover GitHub and npm research</h2>
+    <p class="description" data-slide-subtitle>Each tool handles one research step: find the source, locate the code, read it, then check its history.</p>
+  </div>
+  <div class="slide-content">
+    <div class="tk">
+      <div class="cols">
+        <div class="col" data-anim="rise">
+          <span class="kicker">Find the source</span>
+          <div class="tool"><code>ghSearchRepos</code><span>repos by keyword, owner, topic, stars</span></div>
+          <div class="tool npm"><code>npmSearch</code><span>package name → its source repo</span></div>
+        </div>
+        <div class="col" data-step="1" data-anim="rise">
+          <span class="kicker">Locate the code</span>
+          <div class="tool"><code>ghSearchCode</code><span>code and paths, 1–5 queries per call</span></div>
+          <div class="tool"><code>ghViewRepoStructure</code><span>the directory tree around a file</span></div>
+        </div>
+        <div class="col" data-step="2" data-anim="rise">
+          <span class="kicker">Read it</span>
+          <div class="tool"><code>ghGetFileContent</code><span>whole file, line range or match window, minified</span></div>
+        </div>
+        <div class="col" data-step="3" data-anim="rise">
+          <span class="kicker">Check history</span>
+          <div class="tool"><code>ghSearchPullRequests</code><span>PRs, or one PR's files, patches and reviews</span></div>
+          <div class="tool"><code>ghSearchIssues</code><span>issues, or one issue with its comments</span></div>
+          <div class="tool"><code>ghSearchCommits</code><span>commit history, or a diff between two refs</span></div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The full external toolset in one view: eight tools registered by default, seven for GitHub and one for npm, grouped by the research step they serve. Start left: find the source. ghSearchRepos finds repositories by keyword, owner, topic, language or stars; npmSearch resolves a package name to its source repository, which fixed the "hard to find where a package lives" problem. Click 1, locate: ghSearchCode searches code and paths, batching 1 to 5 queries per call; ghViewRepoStructure shows the tree around a file (the structure view from earlier). Click 2, read: ghGetFileContent reads a whole file, a line range, a matchString window or paginated characters, with an optional minifier. That is the zoom in and zoom out. Click 3, history: ghSearchPullRequests searches PRs or opens one in depth (files, patches, reviews, commits); ghSearchIssues does the same for issues and their comments; ghSearchCommits walks history or compares two refs, optionally with the diff. Click 4: three more are off unless you enable them with an environment flag: ghCloneRepo (ENABLE_CLONE, supports a sparse subtree), ghListReleases (ENABLE_RELEASES) and ghSearchDiscussions (ENABLE_DISCUSSIONS); on MCP those last two must also be listed in ENABLE_TOOLS (README.md:191-205). Sources: bgauryy/octocode main, README.md:186-223 and packages/octocode-tools-core/src/tools/toolConfig.ts; packages/octocode-tools-core/src/tools/toolNames.ts. Tool names are taken from the README; the string constants live in @octocodeai/octocode-core, so check the names against the running server before presenting. Next: the V1 hands-on pause, then V2 brings this same flow to local code.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bring the research flow to local code</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .loc { display: flex; flex-direction: column; gap: 16px; }
+    .loc .pipe h3 code { color: var(--text-strong); font-size: 1em; }
+    .loc .pipe .k { font-family: var(--font-head); font-size: var(--t-small); letter-spacing: 0.12em; text-transform: uppercase; color: var(--violet); }
+    .loc .pipe > li { gap: 4px; padding-top: 12px; padding-bottom: 12px; }
+    .loc .pipe p { font-size: var(--t-mid); }
+    .loc .loopback > span { font-size: var(--t-small); }
+    .loc .delta .v { font-size: var(--t-sub); }
+    .loc .delta p { color: var(--text); font-size: var(--t-mid); }
+    .loc .delta .before .v { color: var(--negative); }
+    .loc .delta > .before { justify-content: center; }
+    .wins { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .wins > div { border-left: 3px solid var(--violet); padding: 2px 0 4px 16px; display: flex; flex-direction: column; gap: 2px; }
+    .wins strong { display: block; font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); }
+    .wins span { line-height: 1.35; font-size: var(--t-small); color: var(--text); }
+    .since { display: flex; justify-content: space-between; gap: 20px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · local tools</span>
+    <h2 class="title" data-slide-title>Bring the research flow to local code</h2>
+    <p class="description" data-slide-subtitle>Use the same approach on your workspace that you use on GitHub.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="loc">
+      <div>
+        <ol class="pipe pipe--violet" data-anim="draw" data-stagger style="--stagger: 200ms">
+          <li><span class="k">map</span><h3><code>structureSearch</code></h3><p>tree · find files</p></li>
+          <li><span class="k">search</span><h3><code>localSearch</code></h3><p>text · regex</p></li>
+          <li><span class="k">read</span><h3><code>localFetch</code></h3><p>matchString · ranges</p></li>
+          <li class="is-key"><span class="k">follow</span><h3><code>lspSearch</code></h3><p>callers · references</p></li>
+        </ol>
+        <div class="loopback" style="--pc: var(--violet); --delay: 900ms" data-anim="draw"><span>next.* pages + hints.* leads → the next call</span></div>
+      </div>
+      <div class="delta" data-step="1" data-anim="draw">
+        <div class="before"><span class="k">before · fetch files + rg</span><span class="v">3 of 3 fake secrets leaked</span></div>
+        <span class="to"></span>
+        <div class="after"><span class="k">after · same contract, local</span><span class="v">0 of 5 leaked</span><p>3.2 MB file → 18k-char first page · accuracy 14 of 15, same as rg</p></div>
+      </div>
+      <div class="wins" data-step="2" data-anim="land">
+        <div><strong>Secrets redacted by default</strong><span>every byte bound for the model is scanned, no setup</span></div>
+        <div><strong>One flow for local and external code</strong><span>the agent learns one Octocode contract: workspace, GitHub, npm</span></div>
+      </div>
+      <div class="since"><span class="src">since v11.0 · 27 Dec 2025</span></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">From the brief: I wanted the same mechanism I had for GitHub on my local code, because the Octocode flow felt better than plain fetch-files-and-rg: same batching, core schema, hints, pagination. Walk the pipe as it draws. It is the research loop from the CLI guide, "map cheaply → search narrowly → read exact evidence → follow symbols or history" (packages/octocode/docs/OCTOCODE_CLI.md:114): structureSearch maps the tree or finds files; localSearch finds literal/regex text and astSearch finds code shape; localFetch reads exactly the lines you need with matchString, ranges or a whole declaration; lspSearch follows the symbol. The line underneath: every row carries next.* (the unread rest, snapshot-pinned) and opt-in hints.* leads, so the agent's next call is already written (docs/OCTOCODE_PROTOCOL.md:88-93). Press → for before/after. Before means whole files and rg's raw match dumps, with no next step, measured in Octocode's scripted tool benchmark (docs/OCTOCODE_PROTOCOL.md:133,135): with hostile input, rg leaked 3 of 3 fake secrets, Octocode 0 of 5, because the native scanner reads every byte bound for the model; a 3.2 MB file costs an 18k-character first page and a 2 MB minified line costs 710; and on plain local questions it matches rg's accuracy, 14 of 15, with about 8% more characters for the citable line gutter. Honest negative: rg answers in 3 to 25 ms, the CLI starts in about 200 ms per call (OCTOCODE_PROTOCOL.md:139). Dates: local tools landed inside octocode-mcp in v11.0 on 27 Dec 2025 (commit 0bef8ac76 "Add local tools (#254)") as localSearchCode, localGetFileContent, localFindFiles and localViewStructure; today's names came with v20. OpenAI's Codex system prompt standardises on ripgrep too ("prefer using `rg` … because `rg` is much faster"; github.com/openai/codex codex-rs/core/gpt_5_codex_prompt.md:5). Text search runs in-process on ripgrep's crates: grep-searcher, grep-regex, grep-pcre2, ignore (ledger L3). Press → again for the two wins: secrets are removed by default, not as an opt-in, so local research is safe out of the box; and the agent gets ONE flow, Octocode, for local and external code: same calls, same schema, same next/hints, whether it reads the workspace or GitHub and npm. Extra: walking pages of a big search now reuses a snapshot instead of rescanning: median 6,340 → 1,847 ms, −71%, 7 alternating reps (the local-tools improvement plan at commit b9cfc4c72, lines 152-155). Next: beyond text, AST and LSP.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

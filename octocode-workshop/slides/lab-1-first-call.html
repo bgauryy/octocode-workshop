@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lab 1: make your first evidence call</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .lab { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; align-items: start; }
+    .lab .code { font-size: var(--t-small); }
+    .lab .card p { font-size: var(--t-mid); line-height: 1.35; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content slide--lab" data-step-indicator>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Lab 1 · 10 min · teaches: MCP and CLI are one engine</span>
+    <h2 class="title" data-slide-title>Lab 1: make your first evidence call</h2>
+    <p class="description" data-slide-subtitle>Install Octocode, connect your agent and verify one answer against its source.</p>
+  </div>
+  <div class="slide-content">
+    <div class="lab">
+      <div class="code" data-label="run"><span class="tk-cmt"># the contract, as the agent sees it</span>
+npx octocode schema localSearch --view query
+
+<span class="tk-cmt"># one call, by hand</span>
+npx octocode localSearch '{"queries":[{
+  "path": ".",
+  "matchString": "export function",
+  "resultView": "matchOnly"
+}]}'</div>
+      <div class="stack">
+        <div class="prompt" data-step="1"><span class="kicker">prompt your agent</span>"List your Octocode tools. Which one would you use to read 20 lines of a GitHub file — and with which fields?"</div>
+        <div class="card card--positive" data-step="2"><span class="kicker">done when</span><p>auth status is green, and your agent names <code>ghGetFileContent</code> with <code>ranges</code> or <code>matchString</code>.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Lesson: MCP and the CLI are the same engine and the same contract. schema --view query prints the self-contained query schema (OCTOCODE_CLI.md:88-91); the localSearch call is the documented form (OCTOCODE_CLI.md:75). The prompt checks tool discovery: the right answer is ghGetFileContent with ranges/matchString (descriptions.ts:45-46). Common failure: no GitHub token → the error hint tells you exactly what to run. Next: V2 — configuration, local tools and skills.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

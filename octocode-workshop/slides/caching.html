@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt caching reuses the prefix</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cache { display: flex; flex-direction: column; gap: 26px; }
+    .def { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .def > div { display: flex; align-items: center; gap: 16px; padding: 16px 20px; border-radius: 12px; border: 1px solid var(--dc); background: color-mix(in srgb, var(--dc) 12%, transparent); }
+    .def .sw { flex: none; width: 34px; height: 34px; border-radius: 7px; border: 1px solid var(--dc); background: color-mix(in srgb, var(--dc) 22%, transparent); }
+    .def .hitsw { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--positive) 30%, transparent) 0 6px, color-mix(in srgb, var(--positive) 12%, transparent) 6px 12px); }
+    .def p { font-size: var(--t-body); color: var(--text); line-height: 1.3; }
+    .def strong { color: var(--text-strong); font-weight: 600; }
+    .rows { display: flex; flex-direction: column; gap: 14px; }
+    .row { display: grid; grid-template-columns: 170px minmax(0, 1fr) 150px; gap: 18px; align-items: center; }
+    .row > b { font-family: var(--font-head); font-size: var(--t-small); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-weight: 500; }
+    .pfx { display: flex; gap: 3px; height: 50px; font-family: var(--font-mono); font-size: var(--t-small); }
+    .pfx > span { display: flex; align-items: center; padding: 0 14px; border-radius: 7px; white-space: nowrap; overflow: hidden; min-width: 0; border: 1px solid var(--sc); background: color-mix(in srgb, var(--sc) 18%, transparent); color: var(--text-strong); }
+    .pfx .new { --sc: var(--warm); }
+    .pfx .hit { --sc: var(--positive); background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--positive) 24%, transparent) 0 8px, color-mix(in srgb, var(--positive) 12%, transparent) 8px 16px); }
+    .pfx .miss { --sc: var(--negative); }
+    .cost { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); }
+    .cost strong { font-family: var(--font-head); font-size: var(--t-sub); color: var(--cc, var(--text-strong)); margin-right: 6px; }
+    .ttl { padding: 14px 20px; border-radius: 12px; border-left: 4px solid var(--negative); background: color-mix(in srgb, var(--negative) 10%, transparent); font-size: var(--t-body); color: var(--text); }
+    .ttl strong { color: var(--text-strong); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
+    <h2 class="title" data-slide-title>Prompt caching reuses the prefix</h2>
+    <p class="description" data-slide-subtitle>The provider keeps the prefix's keys and values so later messages can reuse that work.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="cache">
+      <div class="def">
+        <div style="--dc: var(--warm)"><span class="sw"></span><p><strong>New tokens:</strong> read for the first time, full price.</p></div>
+        <div style="--dc: var(--positive)"><span class="sw hitsw"></span><p><strong>Cached tokens:</strong> their K and V are saved, not the text, and reused at <strong>0.1×</strong> or less.</p></div>
+      </div>
+      <div class="rows">
+        <div class="row" data-step="1" data-anim="draw"><b>Message 1</b><div class="pfx" style="width: 42%"><span class="new" style="flex: 1">tools · instructions · msg 1</span></div><span class="cost"><strong>1×</strong>+ saved</span></div>
+        <div class="row" data-step="2" data-anim="draw"><b>Message 2</b><div class="pfx" style="width: 66%"><span class="hit" style="flex: 3">all of message 1 + reply</span><span class="new" style="flex: 1.3">+ msg 2</span></div><span class="cost" style="--cc: var(--positive)"><strong>0.1×</strong>mostly</span></div>
+        <div class="row" data-step="3" data-anim="draw"><b>Message 3</b><div class="pfx" style="width: 90%"><span class="hit" style="flex: 5">everything so far, cached</span><span class="new" style="flex: 1.3">+ msg 3</span></div><span class="cost" style="--cc: var(--positive)"><strong>0.1×</strong>mostly</span></div>
+        <div class="row" data-step="4" data-anim="draw"><b>Idle 5+ min</b><div class="pfx" style="width: 90%"><span class="miss" style="flex: 1">cache expired → re-read all of it</span></div><span class="cost" style="--cc: var(--negative)"><strong>1×</strong>again</span></div>
+      </div>
+      <p class="ttl" data-step="4" data-anim="rise"><strong>Default cache: 5 min idle, then it expires</strong>; each hit resets the clock. Change an early word: miss too.</p>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Link back: on the last slide the model kept K and V while writing one answer. Prompt caching keeps them between your messages. The model keeps no memory between messages: every time you send a message, the app re-sends the whole conversation (tools, instructions, every earlier message and reply) plus the new one. The provider has already computed the K and V for the start of that conversation, so it keeps them. OpenAI: "The prompt cache stores key-value (KV) tensors, not the tokens themselves" (developers.openai.com/api/docs/guides/prompt-caching). Anthropic: "KV cache representations and cryptographic hashes are held in memory for the cache TTL and promptly deleted after expiry" (platform.claude.com/docs/en/manage-claude/api-and-data-retention). That gives two kinds of input tokens. New tokens are read for the first time at full price. Cached tokens are the prefix whose K and V are already saved. Click 1: message 1. Everything is new and full price, and the provider saves it (writing the cache costs a little more: 1.25× for the 5-minute cache, 2× for the 1-hour cache; ledger B7). Click 2: message 2 re-sends all of message 1 and the reply. That part is cached, plus the new message. On Anthropic, cache reads cost 0.1× base input on most models (0.05× on Opus/Sonnet 5.5; ledger B7). Example: Claude Sonnet 5.5 input is $2 per million tokens and cache reads are $0.10, the 0.05× rate; on Sonnet 5 the same $2 input reads at $0.20, the standard 0.1× (platform.claude.com/docs/en/about-claude/pricing and prompt-caching docs, checked Oct 2026). The slide says "0.1× or less" to cover both. Click 3: message 3. The cached part keeps growing and the new part stays small, which is why long agent loops are affordable. Click 4: the cache expires. Anthropic's default cache lives 5 minutes and every hit refreshes it; a 1-hour option has a higher write price (ledger B7). Walk away for coffee and the next message re-reads everything at full price. It also misses if anything near the start changes, because each token's K and V depend on every token before it: "Cache hits require 100% identical prompt segments" (platform.claude.com prompt-caching docs). OpenAI works the same way: caching is on by default from 1,024 tokens, and "the entire rendered prefix" must match (ledger B8). It's faster too: a 100K-token cached prompt went from 11.5 s to 2.4 s to first token (claude.com/resources/articles/prompt-caching, the page Anthropic's 14 Aug 2024 announcement now lives at; the same-day coverage is simonwillison.net/2024/Aug/14/prompt-caching-with-claude; ledger B11). Manus called cache hit rate "the single most important metric for a production-stage AI agent", with cached input at 0.30 vs uncached at 3 USD/MTok (ledger B11). Caching discounts input only; output is billed normally. Rule for tool builders: put stable things first and changing things last, so no dates or random ordering in instructions. Hand-off: cheaper isn't sharper. Next: where a fact sits in the window still matters.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

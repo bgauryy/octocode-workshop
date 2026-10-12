@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ask freely, page every result, then measure</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; width: 100%; align-items: stretch; }
+    .dl .card { display: flex; flex-direction: column; gap: 12px; padding: 20px 22px; min-width: 0; }
+    .dl .card h3 { margin: 0; font-size: var(--t-sub); line-height: 1.2; color: var(--text-strong); }
+    .dl .card > p { margin: 0; font-size: var(--t-small); color: var(--text); line-height: 1.4; }
+    .dl .card > p b { color: var(--text-strong); }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips code { font-family: var(--font-mono); font-size: var(--t-small); padding: 3px 12px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--surface); color: var(--accent); }
+    .pages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .pages span { height: 34px; border-radius: 6px; border: 1px dashed var(--border-strong); display: grid; place-items: center; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted-2); }
+    .pages span.on { border: 2px solid var(--violet); color: var(--text-strong); background: color-mix(in srgb, var(--violet) 18%, transparent); }
+    .stat { display: flex; align-items: baseline; gap: 12px; padding-top: 10px; border-top: 1px solid var(--border); margin-top: auto; }
+    .stat .n { font-family: var(--font-head); font-size: var(--t-sub); color: var(--text-strong); white-space: nowrap; }
+    .stat .t { font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .loop { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+    .loop li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: center; font-size: var(--t-small); color: var(--text); line-height: 1.3; }
+    .dl [data-step] + [data-step] { --delay: 180ms; }
+    .dl .stat[data-step] { --delay: 360ms; }
+    .dl .card .stat { background: none; border: 0; border-top: 1px solid var(--border); border-radius: 0; padding: 10px 0 0; box-shadow: none; }
+    .dl .loop > li { padding-left: 0; }
+    .dl .loop > li::before { content: none; display: none; }
+    .loop li i { font-style: normal; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: var(--t-small); color: var(--bg); background: var(--positive); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Recap · best practices for tool data</span>
+    <h2 class="title" data-slide-title>Ask freely, page every result, then measure</h2>
+    <p class="description" data-slide-subtitle>Let the agent ask precisely, read in pages, and test the outcome.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="dl">
+      <div class="card">
+        <span class="kicker">1 · ask</span>
+        <h3>Any combination of filters</h3>
+        <div class="chips" data-step="1" data-anim="land" data-stagger><code>keyword</code><code>owner</code><code>topic</code><code>language</code><code>stars</code><code>code | path</code></div>
+        <p data-step="1" data-anim="fade">The agent <b>shapes the question</b>.</p>
+        <div class="stat" data-step="1" data-anim="rise count"><span class="n">1–5</span><span class="t">queries per call, each with its own filters</span></div>
+      </div>
+      <div class="card card--violet">
+        <span class="kicker">2 · paginate</span>
+        <h3>Budget the context window</h3>
+        <div class="pages" data-step="2" data-anim="draw" data-stagger><span class="on">p1</span><span>next</span><span>…</span><span>pN</span></div>
+        <p data-step="2" data-anim="fade">Show <b>what is left</b>; read a <b>window</b>, not the file.</p>
+        <div class="stat" data-step="2" data-anim="rise count"><span class="n">19 → 3.5 KB</span><span class="t">full read vs matchString window, one file</span></div>
+      </div>
+      <div class="card card--warm">
+        <span class="kicker">3 · reflect &amp; benchmark</span>
+        <h3>Prove the change helped</h3>
+        <ol class="loop" data-step="3" data-stagger>
+          <li><i>1</i>Find wasted calls</li>
+          <li><i>2</i>Test with a fresh agent</li>
+          <li><i>3</i>Benchmark against a strong baseline</li>
+        </ol>
+        <div class="stat" data-step="3" data-anim="rise count"><span class="n">30 / 0</span><span class="t">clasify offered vs called: only a benchmark showed it</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Three habits for the data side of a tool. Press → (ask): give the agent the ability to ask for data in any permutation. Filters combine freely: ghSearchRepos takes keyword, owner, topic, language and stars; ghSearchCode searches code or paths; and each call batches 1 to 5 queries, each with its own filters (README.md:186-223; v1-tools slide). The agent shapes the question; the tool doesn't force one path. Press → (paginate): always think of the context window. Large results come in pages with a next page, never a silent cut-off; the whole-response window pages at 50,000 characters (docs/OCTOCODE_TOOLS.md:16). The PR tool pages files, comments and commits (filePage, commentPage, commitPage). And zoom in: on one 2,075-line file a full read's first page was ~19 KB, the matchString window ~3.5 KB (dev build, 2026-10-12; ledger V19). Press → (reflect and benchmark): after a task, ask the agent which call was wasted and which hint it skipped; test cold with a fresh, small model; then measure against the strongest baseline you can build, like gh-lean in October. The callback: clasify was offered in 30 of 30 sessions and called 0 times (results/mcp-clasify-ab-111154-2026-10-09.md:8-15; ledger X10). Only the benchmark showed it. Next: thank you, and one step to take home.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

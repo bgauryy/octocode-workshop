@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My research habits became the three main tools</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .alg { --gap: 56px; }
+    .alg > li { padding: 22px 24px 20px; gap: 12px; }
+    .alg h3 { font-size: var(--t-mid); }
+    .alg h3, .alg .q { text-wrap: balance; }
+    .alg + .rule { --rule-color: var(--positive); }
+    .alg .q { font-size: var(--t-body); color: var(--text); line-height: 1.35; }
+    .alg .out { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); border-top: 1px solid var(--border); padding-top: 10px; margin-top: auto; }
+    .alg .out b { color: var(--muted-2); font-weight: 400; margin-right: 8px; }
+    .alg .tool { align-self: flex-start; font-family: var(--font-mono); font-size: var(--t-small); padding: 4px 12px; border-radius: 999px; border: 1px solid var(--pc); color: var(--pc); background: color-mix(in srgb, var(--pc) 10%, transparent); }
+    .main-tag { align-self: flex-start; font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); letter-spacing: 0.04em; margin-bottom: 18px; }
+    .main-tag strong { color: var(--positive); font-weight: 600; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · the algorithm</span>
+    <h2 class="title" data-slide-title>My research habits became the three main tools</h2>
+    <p class="description" data-slide-subtitle>Find the repo, find the place in it, then read the file and what it links to.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <p class="main-tag">// <strong>the main tools</strong> · everything else came later</p>
+    <ol class="pipe alg">
+      <li data-step="1" data-anim="draw"><span class="n">1</span><h3>Find the repo</h3><p class="q">Which repos matter?</p><p class="out"><b>→</b>owner/repo</p><span class="tool">ghSearchRepo</span></li>
+      <li data-step="2" data-anim="draw"><span class="n">2</span><h3>Find the place</h3><p class="q">Which files hold the answer?</p><p class="out"><b>→</b>path + line</p><span class="tool">ghSearchCode</span></li>
+      <li data-step="3" data-anim="draw"><span class="n">3</span><h3>Read the file</h3><p class="q">What does it say, import and call?</p><p class="out"><b>→</b>lines + links</p><span class="tool">ghGetFileContent</span></li>
+    </ol>
+    <div class="rule" data-step="4"><span class="k">// each habit became a tool:</span> the tools encode <strong>how a researcher moves</strong>, not API endpoints.</div>
+  </div>
+</div>
+<aside class="speaker-notes">These three were the main tools, the core of how I researched code by hand: (1) search repositories, which is how I pick the right repo; (2) find the correct places in a repo; (3) read a file by its content and its relations to other files. Press → for each step; each card draws in and says what it hands to the next step. In full: which repositories matter (keywords, owner, stars, activity) → owner/repo; which paths and files inside it hold the answer → path + line; what the file says and what it imports and calls → lines + links. Today they are named ghSearchRepo, ghSearchCode and ghGetFileContent (packages/octocode-config/contract/tool-contract.json; ledger V21); in 1.0.0 (6 Jun 2025) they were search_github_repos, search_github_code and fetch_github_file_content (36f55ae3c:src/tools/contstants.ts:2-15). Other tools came later as usage grew, such as ghStructure for the tree around a file and the npm tool; we'll meet them in the "Octocode in scale" section. Click 4: the tools encode a researcher's habits, not just API endpoints. Next: the protocol that ties them together.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

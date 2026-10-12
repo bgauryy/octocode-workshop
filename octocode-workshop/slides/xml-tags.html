@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown sets the rules; XML fences the sections</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .xt { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; align-items: stretch; }
+    .xt-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .xt-head { font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    .xt-head b { color: var(--text-strong); font-weight: 700; }
+    .xt .code { flex: 1; font-size: var(--t-small); line-height: 1.45; white-space: pre; padding: 34px 20px 12px; margin: 0; }
+    .xt .code .tg { color: var(--warm); }
+    .xt .code .md { color: var(--accent); }
+    .xt .code .dim { color: var(--muted); }
+    .use { font-size: var(--t-body); color: var(--text); line-height: 1.3; }
+    .use strong { color: var(--text-strong); font-weight: 600; }
+    .xt-col.is-key .code { border-color: var(--positive); }
+    .xt-col.is-key .xt-head b { color: var(--positive); }
+    .xt-rule { margin-top: 18px; }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>2023 to today · prompt engineering</span>
+    <h2 class="title" data-slide-title>Markdown sets the rules; XML fences the sections</h2>
+    <p class="description" data-slide-subtitle>The labs' prompts use both: XML marks where each block starts and ends, Markdown structures what is inside.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="xt">
+      <div class="xt-col" data-step="1" data-anim="land">
+        <div class="xt-head"><b>Markdown</b> · hierarchy</div>
+<div class="code" data-label="EXAMPLE · MARKDOWN"><span class="md">## Role</span>
+Code researcher.
+<span class="md">## Rules</span>
+<span class="md">-</span> Cite file:line
+<span class="md">-</span> Never guess</div>
+        <p class="use"><strong>Use for:</strong> rules and priorities</p>
+      </div>
+      <div class="xt-col" data-step="2" data-anim="land">
+        <div class="xt-head"><b>XML</b> · boundaries</div>
+<div class="code" data-label="EXAMPLE · XML"><span class="tg">&lt;task&gt;</span>
+Find the auth flow.
+<span class="tg">&lt;/task&gt;</span>
+<span class="tg">&lt;context&gt;</span>
+<span class="dim">…pasted files…</span>
+<span class="tg">&lt;/context&gt;</span></div>
+        <p class="use"><strong>Use for:</strong> data vs instructions</p>
+      </div>
+      <div class="xt-col is-key" data-step="3" data-anim="land">
+        <div class="xt-head"><b>Both</b> · what ships</div>
+<div class="code" data-label="EXAMPLE · COMBINED"><span class="tg">&lt;rules&gt;</span>
+<span class="md">## Evidence</span>
+<span class="md">-</span> Cite file:line
+<span class="md">-</span> Never guess
+<span class="tg">&lt;/rules&gt;</span>
+<span class="tg">&lt;context&gt;</span>
+<span class="dim">…pasted files…</span>
+<span class="tg">&lt;/context&gt;</span></div>
+        <p class="use"><strong>Use for:</strong> real agent prompts</p>
+      </div>
+    </div>
+    <p class="rule xt-rule" data-step="4" data-anim="land"><span class="k">//</span>XML says <strong>which block</strong>; Markdown says <strong>what matters inside it</strong>. Octocode uses both.</p>
+  </div>
+</div>
+<aside class="speaker-notes">The previous slide ended on the pattern the labs repeat. Here it is: two ways to structure a prompt, and why production prompts combine them. Click 1, Markdown: headings and bullets give hierarchy. Role, then rules, then a list. It's readable for you and for the model, and it's best for rules and priorities. Click 2, XML tags: they give hard boundaries. The task is in one block, the pasted files in another, so the model never mistakes your data for your instructions, and you can point at a block by name: "use only what's in context." Anthropic's prompting docs recommend XML tags for exactly this. OpenAI's GPT-4.1 guide agrees on tags for long context: "XML performed well in our long context testing" while "JSON performed particularly poorly" (developers.openai.com/cookbook/examples/gpt4-1_prompting_guide, Apr 2025). Click 3, both: this is what ships. Cursor's leaked system prompt (asgeirtj/system_prompts_leaks, Cursor/cursor.md) fences whole rule blocks in tags like &lt;system-communication&gt; and tells the agent which other tags carry hidden context. Octocode does the same: its MCP instructions are split into tagged blocks (&lt;flow&gt;, &lt;local&gt;, &lt;github&gt;, &lt;evidence&gt;), and its tool descriptions use Markdown inside (octocode-core src/toolContract/instructions.ts:32, TOOL_RESEARCH_INSTRUCTIONS, the text `octocode | jq .instructions` prints in the dev build; ledger X31, X32). Click 4: XML says which block, Markdown says what matters inside it. Next: what I learned by reverse-engineering the tools the labs shipped.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

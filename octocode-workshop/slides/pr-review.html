@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The PR tool lets the agent choose what to read</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .pr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px; flex: 1; min-height: 0; align-items: stretch; }
+    .flow { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+    .flow li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 14px; align-items: center; padding: 10px 16px; border: 1px solid var(--border-strong); border-left: 4px solid var(--fc); border-radius: var(--radius-sm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .flow .n { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-mono); font-size: var(--t-small); font-weight: 700; color: var(--bg); background: var(--fc); }
+    .flow h3 { margin: 0; font-family: var(--font-head); font-size: var(--t-mid); color: var(--text-strong); }
+    .flow p { margin: 0; font-size: var(--t-small); color: var(--muted); line-height: 1.3; }
+    .flow p code { font-family: var(--font-mono); font-size: 1em; color: var(--fc); }
+    .f1 { --fc: var(--muted-2); } .f2 { --fc: var(--accent); } .f3 { --fc: var(--violet); } .f4 { --fc: var(--positive); }
+    .rt { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .call { margin: 0; padding: 10px 18px; background: var(--code-bg); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 18px; line-height: 1.38; color: var(--text); white-space: pre; overflow: hidden; }
+    .call .k { color: var(--accent); } .call .s { color: var(--positive); } .call .c { color: var(--muted-2); }
+    .grp { display: flex; flex-direction: column; gap: 6px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chips code { font-family: var(--font-mono); font-size: 18px; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--text-strong); background: var(--surface); }
+    .chips.pg code { border-style: dashed; color: var(--violet); }
+    .chips code.off { color: var(--warm-soft); border-color: var(--warm); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode in scale · reviewing large PRs</span>
+    <h2 class="title" data-slide-title>The PR tool lets the agent choose what to read</h2>
+    <p class="description" data-slide-subtitle>It never pulls a whole PR: list the changed files first, then open only the patches, comments and commits that matter.</p>
+  </div>
+  <div class="slide-content">
+    <div class="pr">
+      <ol class="flow">
+        <li class="f1" data-anim="rise"><span class="n">1</span><h3>Overview, not the diff</h3><p>title, body and the changed-file list, page by page (<code>filePage</code>)</p></li>
+        <li class="f2" data-step="1" data-anim="rise"><span class="n">2</span><h3>Pick the files</h3><p>patches for chosen files only: <code>mode: "selected"</code></p></li>
+        <li class="f3" data-step="2" data-anim="rise"><span class="n">3</span><h3>Read the discussion</h3><p>inline review comments on one file, paged (<code>commentPage</code>)</p></li>
+        <li class="f4" data-step="3" data-anim="rise"><span class="n">4</span><h3>Verify in context</h3><p>open the full file with <code>ghGetFileContent</code>; check history with <code>ghSearchCommits</code></p></li>
+      </ol>
+      <div class="rt">
+        <pre class="call" data-step="1" data-anim="land"><span class="k">ghSearchPullRequests</span> {  <span class="c">// schematic</span>
+  prNumber: 4821,
+  content: {
+    patches:  { mode: <span class="s">"selected"</span>,
+                files: [<span class="s">"src/auth/session.ts"</span>] },
+    comments: { reviewInline: true,
+                file: <span class="s">"src/auth/session.ts"</span> }
+  }
+}</pre>
+        <div class="grp" data-step="2" data-anim="rise">
+          <span class="kicker">choose the content</span>
+          <div class="chips"><code>body</code><code>changedFiles</code><code>patches</code><code>reviews</code><code>comments</code><code>commits</code><code class="off">reviewMode: "full"</code></div>
+        </div>
+        <div class="grp" data-step="3" data-anim="rise">
+          <span class="kicker">page through it</span>
+          <div class="chips pg"><code>filePage</code><code>commentPage</code><code>commitPage</code><code>itemsPerPage</code></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">A large PR can have dozens of files and hundreds of comments; dumping all of it into context buries the change that matters (the same lost-in-the-middle problem). So ghSearchPullRequests works like a reviewer, step by step. Step 1: get the overview: metadata, body and the changed-file list, paged with filePage and itemsPerPage. The agent looks at the file names and decides what is worth checking. Click 1: open patches only for the chosen files: content.patches.mode is "none", "selected" or "all", with patches.files naming the files (or patches.ranges for specific lines). The code on the right is a schematic call; the PR number and path are made up. Click 2: read the discussion selectively: content.comments has discussion, reviewInline, includeBots and a per-file filter, paged with commentPage. You also choose body, changedFiles, reviews and commits (list, includeFiles). reviewMode "full" turns everything on: all patches, comments, reviews and the commit list, so use it only on small PRs. Click 3: paginate everything: filePage, commentPage, commitPage, itemsPerPage, and charOffset/charLength for long bodies. Then verify outside the diff: ghGetFileContent for the surrounding code, and ghSearchCommits for history or a diff between two refs. Sources: bgauryy/octocode packages/octocode-tools-core/src/tools/github_search_pull_requests/scheme.ts, splitSchemes.ts and contentRequest.ts (PrContentSelector). Parts of the schema come from @octocodeai/octocode-core/schemas, so check the field names against the running server before presenting. Next: the last problem on the list, hallucinations, and how we made the agent prove every claim.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

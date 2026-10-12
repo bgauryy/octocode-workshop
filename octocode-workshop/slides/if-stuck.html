@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unblock the next research step</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--positive"><span class="pip"></span>Hands-on · if stuck</span>
+    <h2 class="title" data-slide-title>Unblock the next research step</h2>
+    <p class="description" data-slide-subtitle>Five common fixes help recover from workshop lab failures.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="pf">
+      <div class="pf-row"><div class="p">"auth" / 401 errors</div><div class="to">→</div><div class="f"><code>gh auth login</code> or <code>npx octocode auth login</code></div></div>
+      <div class="pf-row"><div class="p">Rate limited (code search 10/min)</div><div class="to">→</div><div class="f">Pair up · batch queries · wait for the reset</div></div>
+      <div class="pf-row"><div class="p">0 hits on GitHub</div><div class="to">→</div><div class="f">Empty ≠ absent: check spelling, scope, ref — or clone</div></div>
+      <div class="pf-row"><div class="p">LSP not answering</div><div class="to">→</div><div class="f"><code>npx octocode lsp-server status &lt;file&gt;</code></div></div>
+      <div class="pf-row"><div class="p">Exit code 6 in the CLI</div><div class="to">→</div><div class="f">Not an error: a page remains — run the <code>next</code> call</div></div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Leave this up between labs. Auth: Octocode reads env, stored credentials, keychain, then `gh auth token` (docs/AUTHENTICATION.md). Rate limits: GitHub code search is 10 requests/minute (docs.github.com); Octocode budgets it and backs off, but a room sharing one IP still hits it — pair up. Zero hits: the instructions say "empty ≠ absent until scope, spelling, ref, index are checked" (octocode-core instructions.ts); code search covers default branches of indexed repos only. LSP: the hidden lsp-server command reports server status. Exit code 6 means a page remains (instructions.ts:29). Next: Lab 2.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

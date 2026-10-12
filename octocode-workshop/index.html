@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<!--
+  OCTOCODE SLIDES — PRESENTATION SHELL (v2)
+  Copied verbatim by `octodeck init|migrate|upgrade`. Do not hand-edit: slide
+  order lives in octodeck.json (the file that makes this folder a deck), theme lives in css/theme.css.
+
+  Keys:  → ↓ Space next · ← ↑ previous · Home/End · G grid · F fullscreen
+         P presenter · B/W black/white screen · E edit mode (octodeck serve)
+  Hash:  index.html#<slide-id> opens that slide.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Octocode Workshop: Build Reliable, Evidence-Based AI Tools</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="css/theme.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      background: #050914;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+    }
+
+    /* ── 1280×720 stage, scaled to the window ───────────── */
+    /* Centred by position, not by the grid: a grid track grows to 1280px in a smaller window and
+       starts at the left edge, so the scale() below would shrink the stage off-centre and clip it. */
+    #stage { width: 1280px; height: 720px; position: absolute; left: 50%; top: 50%; margin: -360px 0 0 -640px; transform-origin: center center; }
+    .slide-cell { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .slide-cell.is-active { pointer-events: auto; }
+    .slide-frame {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      border: none; opacity: 0; pointer-events: none;
+      transition: opacity 150ms ease;
+    }
+    .slide-frame[data-active] { opacity: 1; pointer-events: auto; }
+
+    #progress {
+      position: fixed; bottom: 0; left: 0; height: 3px; z-index: 10;
+      background: var(--progress, var(--accent, #5cd0ec));
+      transition: width 200ms ease; pointer-events: none;
+    }
+    #counter {
+      position: fixed; bottom: 10px; right: 18px; z-index: 10;
+      font: 11px/1 system-ui, sans-serif; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.3); pointer-events: none;
+    }
+
+    /* ── HUD (keyboard hint pill) ───────────────────────── */
+    #hud {
+      position: fixed; right: 18px; top: 18px; z-index: 50;
+      display: flex; align-items: center; gap: 10px;
+      font: 11px/1 system-ui, sans-serif; letter-spacing: 0.06em;
+      color: rgba(255,255,255,0.45);
+      background: rgba(0,0,0,0.55); border: 1px solid rgba(255,255,255,0.1);
+      padding: 6px 12px; border-radius: 999px; backdrop-filter: blur(4px);
+      opacity: 0; transition: opacity 0.25s ease; pointer-events: none;
+    }
+    #hud.show { opacity: 1; }
+    #hud .sep { color: rgba(255,255,255,0.15); }
+    #hud kbd {
+      font: inherit; font-size: 10px; padding: 1px 5px; border-radius: 3px;
+      background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+    }
+    #toast {
+      position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 60;
+      max-width: min(90vw, 640px); padding: 10px 16px; border-radius: 8px;
+      font: 13px/1.4 system-ui, sans-serif; color: #e6edf3;
+      background: rgba(10,14,22,0.92); border: 1px solid rgba(255,255,255,0.14);
+      opacity: 0; transition: opacity 0.2s ease; pointer-events: none;
+    }
+    #toast.show { opacity: 1; }
+    #toast code { font: 12px ui-monospace, monospace; color: var(--accent, #5cd0ec); }
+
+    /* ── Overview grid (G) ──────────────────────────────── */
+    body.overview { overflow-y: auto; background: #0e0e0e; display: block; }
+    body.overview #stage {
+      width: 100%; height: auto; min-height: 100vh; position: static; margin: 0;
+      transform: none !important;
+      display: grid; grid-template-columns: repeat(auto-fill, 256px);
+      gap: 1.25rem; padding: 2.5rem 2rem 4rem; align-content: start;
+    }
+    body.overview .slide-cell {
+      position: relative; width: 256px; height: 144px; overflow: hidden;
+      border-radius: 6px; border: 2px solid rgba(255,255,255,0.08); cursor: pointer;
+      pointer-events: auto;
+      transition: border-color 120ms ease, box-shadow 120ms ease;
+    }
+    body.overview .slide-cell:hover { border-color: rgba(255,255,255,0.4); }
+    body.overview .slide-cell.is-active { border-color: rgba(255,255,255,0.75); box-shadow: 0 0 0 1px rgba(255,255,255,0.3); }
+    body.overview .slide-cell.is-focus { outline: 3px solid var(--accent, #5cd0ec); outline-offset: 3px; }
+    body.overview .slide-frame {
+      top: 0; left: 0; width: 1280px !important; height: 720px !important;
+      transform: scale(0.2); transform-origin: top left;
+      opacity: 1; pointer-events: none; transition: none;
+    }
+    .slide-num, .slide-label { display: none; position: absolute; z-index: 11; pointer-events: none; font-family: system-ui, sans-serif; }
+    body.overview .slide-num { display: block; top: 5px; left: 7px; font: 700 10px/1 system-ui, sans-serif; color: rgba(255,255,255,0.7); text-shadow: 0 1px 2px #000; }
+    body.overview .slide-label {
+      display: block; bottom: 0; left: 0; right: 0; padding: 4px 6px 5px;
+      background: rgba(0,0,0,0.65); font-size: 10px; line-height: 1.3;
+      color: rgba(255,255,255,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    #overview-hint {
+      display: none; position: fixed; top: 0; right: 0; z-index: 200;
+      padding: 0.5rem 1.5rem; font: 10px/1.5 system-ui, sans-serif;
+      color: rgba(255,255,255,0.35); letter-spacing: 0.08em; pointer-events: none;
+    }
+    body.overview #overview-hint { display: block; }
+    body.overview #progress, body.overview #counter, body.overview #hud { display: none; }
+
+    /* ── Blackout (B / W) ───────────────────────────────── */
+    #blackout { position: fixed; inset: 0; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 150ms ease; }
+    #blackout.black { background: #000; opacity: 1; pointer-events: auto; }
+    #blackout.white { background: #fff; opacity: 1; pointer-events: auto; }
+
+    /* ── Rehearsal (R) ──────────────────────────────────── */
+    #rehearse {
+      position: fixed; left: 18px; top: 18px; z-index: 55; display: none; align-items: center; gap: 10px;
+      font: 12px/1 system-ui, sans-serif; color: #e6edf3; letter-spacing: 0.04em;
+      background: rgba(20,4,8,0.78); border: 1px solid rgba(240,133,133,0.6);
+      padding: 7px 12px; border-radius: 999px; backdrop-filter: blur(4px);
+    }
+    #rehearse.on { display: flex; }
+    #rehearse .dot { width: 8px; height: 8px; border-radius: 50%; background: #f08585; animation: blink 1.2s infinite; }
+    #rehearse .t { font-variant-numeric: tabular-nums; }
+    #rehearse label { display: flex; align-items: center; gap: 4px; color: rgba(255,255,255,0.6); cursor: pointer; }
+    @keyframes blink { 50% { opacity: 0.25; } }
+
+    #deck-error {
+      display: none; max-width: 640px; padding: 24px 28px; border-radius: 10px;
+      font: 14px/1.6 system-ui, sans-serif; color: #e6edf3;
+      background: #111826; border: 1px solid #f08585;
+    }
+    #deck-error code { font: 13px ui-monospace, monospace; color: #a6e8f2; }
+  </style>
+</head>
+<body>
+
+<div id="stage"></div>
+<div id="deck-error"></div>
+<div id="blackout"></div>
+<div id="progress"></div>
+<div id="counter"></div>
+<div id="toast" role="status"></div>
+<div id="rehearse" role="status" aria-live="off">
+  <span class="dot"></span><strong>Rehearsing</strong>
+  <span class="t" id="rh-total">0:00</span><span>· this slide</span><span class="t" id="rh-slide">0:00</span>
+  <label title="Uses the browser's speech recognition (Chrome sends audio to Google)"><input type="checkbox" id="rh-transcribe"> transcript</label>
+  <span>· R to stop</span>
+</div>
+
+<div id="hud">
+  <span id="hud-count">— / —</span><span class="sep">/</span>
+  <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> nav</span><span class="sep">/</span>
+  <kbd>G</kbd> grid<span class="sep">/</span>
+  <kbd>F</kbd> full<span class="sep">/</span>
+  <kbd>P</kbd> notes<span class="sep">/</span>
+  <kbd>E</kbd> edit
+</div>
+
+<div id="overview-hint">Overview — click a slide, or arrows + Enter, to jump &nbsp;·&nbsp; G or Esc to close</div>
+
+<script src="js/presenter.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+//  MANIFEST — octodeck.json = { octodeck: 2, title, slides: [{ id, file, hidden? }] }
+//  Playback follows the slide list. Hidden slides are skipped.
+//  Loaded with fetch(), so the deck must be served (octodeck open / serve, or npx serve).
+// ═══════════════════════════════════════════════════════════════════════════
+(async () => {
+let DECK = null;
+let loadError = '';
+if (location.protocol === 'file:') loadError = 'This deck must be served, not opened as a file.<br>Run <code>octodeck open &lt;deck&gt;</code> (or <code>npx serve &lt;deck&gt;</code>).';
+else {
+  try {
+    const res = await fetch('octodeck.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    DECK = await res.json();
+  } catch (err) {
+    loadError = `<strong>octodeck.json is missing or invalid</strong> (${String(err.message).replace(/</g, '&lt;')}).<br>Run <code>octodeck check &lt;deck&gt;</code> to find the problem.`;
+  }
+}
+window.DECK = DECK;
+const stage   = document.getElementById('stage');
+const bar     = document.getElementById('progress');
+const counter = document.getElementById('counter');
+const hud     = document.getElementById('hud');
+const hudCount= document.getElementById('hud-count');
+const toastEl = document.getElementById('toast');
+
+function fail(html) {
+  const box = document.getElementById('deck-error');
+  box.innerHTML = html;
+  box.style.display = 'block';
+  stage.style.display = 'none';
+}
+
+const playable = [];
+if (!DECK || !Array.isArray(DECK.slides)) {
+  fail(loadError || '<strong>octodeck.json is invalid</strong> (no slide list).<br>Run <code>octodeck check &lt;deck&gt;</code> to find the problem.');
+} else {
+  if (DECK.title) document.title = DECK.title;
+  DECK.slides.forEach(s => {
+    if (!s.hidden) playable.push({ id: s.id, name: s.id, path: s.file });
+  });
+}
+
+const total     = playable.length;
+const idToIdx   = Object.fromEntries(playable.map((s, i) => [s.id, i]));
+// Served by octodeck, slides render on their own origin (isolated from this page); with
+// npx serve they are same-origin. Either way the shell talks to them only by postMessage.
+const SLIDES    = (window.__DECK_SERVER__ && window.__DECK_SERVER__.slides) || '';
+const info      = [];   // per slide: { title, notes, steps } as reported by the slide (navbridge)
+const loadedAt  = [];   // per slide: when its iframe last loaded
+let current     = 0;
+let inOverview  = false;
+let overviewAt  = 0;    // the highlighted tile in the overview grid (arrow keys move it)
+let presenter   = null;
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  BUILD — one iframe per visible slide (all preloaded so the grid and step
+//  animations are ready). The slide on screen and its neighbours load first;
+//  the rest follow in small batches (see LOAD ORDER), so a long deck no longer
+//  makes the first slide wait for every other slide's CSS, JS and images.
+// ═══════════════════════════════════════════════════════════════════════════
+playable.forEach((slide, i) => {
+  const cell = document.createElement('div');
+  cell.className = 'slide-cell';
+  cell.addEventListener('click', () => { if (inOverview) { closeOverview(); go(i); } });
+
+  const f = document.createElement('iframe');
+  f.dataset.src = SLIDES + slide.path;   // set as src by loadFrame()
+  f.className = 'slide-frame';
+  f.setAttribute('tabindex', '-1');
+  f.setAttribute('title', `Slide ${i + 1}: ${slide.id}`);
+  f.addEventListener('load', () => {
+    if (!f.hasAttribute('src')) return;   // the initial about:blank, before loadFrame()
+    loadedAt[i] = Date.now();
+    info[i] = null;
+    caption.textContent = slide.title || slide.id;
+    askNotes(f);
+    if (i === current) { activate(f); loadRest(); }
+    pump(i);
+  });
+
+  const num = document.createElement('span');
+  num.className = 'slide-num';
+  num.textContent = String(i + 1).padStart(2, '0');
+  const caption = document.createElement('span');
+  caption.className = 'slide-label';
+  caption.textContent = slide.id.replaceAll('-', ' ');
+
+  cell.append(f, num, caption);
+  stage.appendChild(cell);
+});
+
+const frames = () => stage.querySelectorAll('.slide-frame');
+const cells  = () => stage.querySelectorAll('.slide-cell');
+
+// ── LOAD ORDER ── the active slide ± NEAR first; once it has loaded (or after
+// REST_AFTER ms), every other slide, nearest first, at most BATCH loading at once.
+const NEAR = 2, BATCH = 6, REST_AFTER = 2500;
+let restQueue = null;          // indices still to load; null until loadRest()
+const inFlight = new Set();    // background loads not finished yet
+function loadFrame(i) {
+  const f = frames()[i];
+  if (!f || f.hasAttribute('src')) return false;
+  f.src = f.dataset.src;
+  return true;
+}
+function loadAround(i) {
+  for (let d = 0; d <= NEAR; d++) { loadFrame(i + d); if (d) loadFrame(i - d); }
+}
+function loadRest() {
+  if (restQueue) return;
+  restQueue = playable.map((_, i) => i).sort((a, b) => Math.abs(a - current) - Math.abs(b - current));
+  pump();
+}
+// Keeps up to BATCH background loads going; a slide's load (pump(i)) frees its slot. A slide that
+// never fires load (offline asset, hung server) frees it after 8 s so the queue keeps moving.
+function pump(done) {
+  if (done !== undefined) inFlight.delete(done);
+  if (!restQueue) return;
+  while (inFlight.size < BATCH && restQueue.length) {
+    const i = restQueue.shift();
+    if (loadFrame(i)) { inFlight.add(i); setTimeout(() => pump(i), 8000); }
+  }
+}
+function loadAll() { for (let i = 0; i < total; i++) loadFrame(i); }
+setTimeout(loadRest, REST_AFTER);
+
+if (typeof initPresenter === 'function') {
+  presenter = initPresenter({
+    slides: playable,
+    getIndex: () => current,
+    getFrame: (i) => frames()[i] || null,
+    getInfo: (i) => info[i] || null,
+  });
+}
+
+function activate(frame) {
+  try { frame.contentWindow.postMessage({ type: 'octocode-slides:activate' }, '*'); } catch (_) {}
+}
+
+// Title + speaker notes come from the slide itself (navbridge answers octocode-slides:get-notes).
+function askNotes(frame) {
+  try { frame.contentWindow.postMessage({ type: 'octocode-slides:get-notes' }, '*'); } catch (_) {}
+}
+function onNotes(event) {
+  const i = [...frames()].findIndex((f) => f.contentWindow === event.source);
+  if (i < 0) return;
+  const d = event.data;
+  info[i] = { title: String(d.title || ''), subtitle: String(d.subtitle || ''), notes: String(d.notes || ''), steps: Number(d.steps) || 0 };
+  playable[i].title = info[i].title || playable[i].id;
+  const cap = cells()[i] && cells()[i].querySelector('.slide-label');
+  if (cap) cap.textContent = playable[i].title;
+  if (i === current || i === current + 1) presenter?.onSlideChange();
+}
+// A slide forwards keys (and consumes step reveals) only if it runs navbridge: it then answers
+// get-notes. Until it has had a moment to answer, assume it does.
+function bridged(i) {
+  return !!info[i] || !loadedAt[i] || Date.now() - loadedAt[i] < 1500;
+}
+
+// ── Scale 1280×720 to the window ───────────────────────────────────────────
+function scaleStage() {
+  if (inOverview) return;
+  stage.style.transform = `scale(${Math.min(window.innerWidth / 1280, window.innerHeight / 720)})`;
+}
+new ResizeObserver(scaleStage).observe(document.documentElement);
+scaleStage();
+
+// ── Hash ↔ index (#slide-id, or a legacy 1-based number) ────────────────────
+function indexFromHash(h) {
+  const raw = (h || '').replace(/^#/, '');
+  if (!raw) return 0;
+  let decoded = raw;
+  try { decoded = decodeURIComponent(raw); } catch (_) {}
+  if (Object.prototype.hasOwnProperty.call(idToIdx, decoded)) return idToIdx[decoded];
+  const n = parseInt(decoded, 10);
+  return Number.isFinite(n) && n >= 1 ? n - 1 : 0;
+}
+const clampIndex = n => total === 0 ? 0 : Math.max(0, Math.min(total - 1, n));
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  NAVIGATION — go() is the single activation path
+// ═══════════════════════════════════════════════════════════════════════════
+function go(idx) {
+  const allFrames = frames();
+  const allCells  = cells();
+  if (idx < 0 || idx >= total || !allFrames.length) return;
+  loadAround(idx);
+
+  allFrames[current]?.removeAttribute('data-active');
+  allCells[current]?.classList.remove('is-active');
+  current = idx;
+  allFrames[current].setAttribute('data-active', '');
+  allCells[current].classList.add('is-active');
+
+  // Move focus to the active slide so a stale iframe never swallows keys.
+  const f = allFrames[current];
+  requestAnimationFrame(() => { try { f.contentWindow.focus(); } catch (_) {} });
+  activate(f);
+
+  bar.style.width     = ((current + 1) / total) * 100 + '%';
+  counter.textContent = `${current + 1} / ${total}`;
+  hudCount.textContent = `${String(current + 1).padStart(2, '0')} / ${total}`;
+  history.replaceState(null, '', '#' + encodeURIComponent(playable[current].id));
+  presenter?.onSlideChange();
+  rehearsal.onSlide(playable[current].id);
+}
+
+let hudTimer;
+function showHud() {
+  hud.classList.add('show');
+  clearTimeout(hudTimer);
+  hudTimer = setTimeout(() => hud.classList.remove('show'), 1600);
+}
+window.addEventListener('mousemove', showHud);
+
+let toastTimer;
+function toast(html, ms = 4000) {
+  toastEl.innerHTML = html;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toastEl.classList.remove('show'), ms);
+}
+
+function openOverview() {
+  inOverview = true;
+  loadAll();   // the grid shows every slide
+  // Pull focus out of the slide iframe so the parent sees G / Esc directly.
+  try { document.activeElement && document.activeElement.blur(); window.focus(); } catch (_) {}
+  document.body.classList.add('overview');
+  highlight(current);
+  cells()[current]?.scrollIntoView({ block: 'center' });
+}
+function closeOverview() {
+  inOverview = false;
+  cells()[overviewAt]?.classList.remove('is-focus');
+  document.body.classList.remove('overview');
+  requestAnimationFrame(scaleStage);
+}
+
+function highlight(i) {
+  const all = cells();
+  if (!all.length) return;
+  all[overviewAt]?.classList.remove('is-focus');
+  overviewAt = Math.max(0, Math.min(all.length - 1, i));
+  all[overviewAt].classList.add('is-focus');
+  all[overviewAt].scrollIntoView?.({ block: 'nearest' });
+}
+// The tile in the row above/below that is closest horizontally (the last row may have fewer tiles).
+function tileInRow(dir) {
+  const all = [...cells()].map((c, i) => ({ i, r: c.getBoundingClientRect() }));
+  const here = all[overviewAt]?.r;
+  if (!here) return overviewAt;
+  const rows = all.filter((c) => (dir > 0 ? c.r.top > here.top + 1 : c.r.top < here.top - 1));
+  if (!rows.length) return overviewAt;
+  const rowTop = dir > 0 ? Math.min(...rows.map((c) => c.r.top)) : Math.max(...rows.map((c) => c.r.top));
+  const cx = here.left + here.width / 2;
+  const dist = (c) => Math.abs(c.r.left + c.r.width / 2 - cx);
+  return rows.filter((c) => Math.abs(c.r.top - rowTop) < 1).sort((a, b) => dist(a) - dist(b))[0].i;
+}
+function overviewKey(e) {
+  switch (e.key) {
+    case 'Escape': case 'g': case 'G': closeOverview(); break;
+    case 'ArrowRight': highlight(overviewAt + 1); break;
+    case 'ArrowLeft': highlight(overviewAt - 1); break;
+    case 'ArrowDown': highlight(tileInRow(1)); break;
+    case 'ArrowUp': highlight(tileInRow(-1)); break;
+    case 'Home': highlight(0); break;
+    case 'End': highlight(total - 1); break;
+    case 'Enter': case ' ': { const i = overviewAt; closeOverview(); go(i); break; }
+    default: return;
+  }
+  e.preventDefault?.();
+}
+
+function toggleBlackout(mode) {
+  const bl = document.getElementById('blackout');
+  const on = bl.classList.contains(mode);
+  bl.classList.remove('black', 'white');
+  if (!on) bl.classList.add(mode);
+}
+
+// Edit mode exists only when served by octodeck (it injects /__deck/live.js).
+function openEditor() {
+  const id = playable[current] ? playable[current].id : '';
+  if (window.__DECK_SERVER__ && window.__DECK_SERVER__.edit && window.__DECK_SERVER__.editor) {
+    window.open(window.__DECK_SERVER__.editor + '/#' + encodeURIComponent(id), 'deck-editor');
+  } else {
+    toast('Edit mode needs the deck server:<br><code>npx @octocodeai/octodeck open &lt;deck-folder&gt;</code>', 6000);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  REHEARSAL (R) — time per slide, optional transcript. Saved to
+//  .content/rehearsal.json when served by octodeck; the editor shows it and
+//  Claude can coach on it.
+// ═══════════════════════════════════════════════════════════════════════════
+const rehearsal = (() => {
+  const box = document.getElementById('rehearse');
+  let on = false, startedAt = 0, slideId = null, slideStart = 0, timer = null, rec = null;
+  const times = new Map();     // id → { ms, visits, transcript }
+  const fmt = ms => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, '0')}`;
+  const entry = id => { if (!times.has(id)) times.set(id, { ms: 0, visits: 0, transcript: '' }); return times.get(id); };
+  function close() { if (slideId) entry(slideId).ms += Date.now() - slideStart; }
+  function tick() {
+    document.getElementById('rh-total').textContent = fmt(Date.now() - startedAt);
+    document.getElementById('rh-slide').textContent = fmt(Date.now() - slideStart + (slideId ? entry(slideId).ms : 0));
+  }
+  function transcribe(enable) {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!enable) { if (rec) { rec.onend = null; rec.stop(); rec = null; } return; }
+    if (!SR) { toast('Speech recognition is not available in this browser.'); document.getElementById('rh-transcribe').checked = false; return; }
+    rec = new SR();
+    rec.continuous = true; rec.interimResults = false;
+    rec.onresult = ev => {
+      for (let i = ev.resultIndex; i < ev.results.length; i++) if (ev.results[i].isFinal && slideId) entry(slideId).transcript += ev.results[i][0].transcript + ' ';
+    };
+    rec.onend = () => { if (on && rec) try { rec.start(); } catch (_) {} };
+    try { rec.start(); } catch (_) {}
+  }
+  document.getElementById('rh-transcribe').addEventListener('change', e => transcribe(e.target.checked));
+  async function stop() {
+    close();
+    on = false; clearInterval(timer); transcribe(false);
+    document.getElementById('rh-transcribe').checked = false;
+    box.classList.remove('on');
+    const slides = [...times].map(([id, v]) => ({ id, ms: v.ms, visits: v.visits, transcript: v.transcript.trim() || undefined }));
+    const total = slides.reduce((a, s) => a + s.ms, 0);
+    let saved = false;
+    if (window.__DECK_SERVER__) {
+      try { saved = (await fetch('/__deck/rehearsal', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ slides }) })).ok; } catch (_) {}
+    }
+    try { localStorage.setItem('octocode-slides:last-rehearsal', JSON.stringify({ at: Date.now(), slides })); } catch (_) {}
+    toast(`Rehearsal: <strong>${fmt(total)}</strong> over ${slides.length} slide${slides.length === 1 ? '' : 's'}${saved ? ' — saved; see the editor’s Deck tab' : ''}`, 6000);
+  }
+  return {
+    toggle() {
+      if (on) return stop();
+      on = true; times.clear(); startedAt = Date.now();
+      slideId = playable[current] ? playable[current].id : null; slideStart = Date.now();
+      if (slideId) entry(slideId).visits++;
+      box.classList.add('on'); tick(); timer = setInterval(tick, 500);
+      toast('Rehearsal started — present as usual; press R to stop.', 2500);
+    },
+    onSlide(id) {
+      if (!on || id === slideId) return;
+      close(); slideId = id; slideStart = Date.now(); entry(id).visits++;
+    },
+  };
+})();
+
+// ═══════════════════════════════════════════════════════════════════════════
+//  KEYBOARD — single handler. Parent-focused nav keys are first forwarded to
+//  the active iframe so animation.js can consume a step; navbridge.js posts
+//  the key back (passthrough) when nothing is left to reveal.
+// ═══════════════════════════════════════════════════════════════════════════
+const STEP_KEYS = { ArrowRight: 1, ArrowDown: 1, ' ': 1, ArrowLeft: 1, ArrowUp: 1 };
+
+function handleKey(e) {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (inOverview) return overviewKey(e);
+  if (!e.passthrough && STEP_KEYS[e.key]) {
+    const af = stage.querySelector('.slide-frame[data-active]');
+    if (af && bridged(current)) {
+      try { af.contentWindow.postMessage({ type: 'octocode-slides:key', key: e.key }, '*'); } catch (_) {}
+      showHud();
+      e.preventDefault?.();
+      return;
+    }
+  }
+
+  let handled = true;
+  switch (e.key) {
+    case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown': go(current + 1); break;
+    case 'ArrowLeft':  case 'ArrowUp':   case 'PageUp': go(current - 1); break;
+    case 'Home': go(0); break;
+    case 'End':  go(total - 1); break;
+    case 'f': case 'F':
+      // Both return promises that reject when the browser refuses (no permission, an iframe without allowfullscreen).
+      (document.fullscreenElement ? document.exitFullscreen?.() : document.documentElement.requestFullscreen?.())?.catch(() => {});
+      break;
+    case 'g': case 'G': openOverview(); break;
+    case 'p': case 'P': presenter?.open(); break;
+    case 'b': case 'B': toggleBlackout('black'); break;
+    case 'w': case 'W': toggleBlackout('white'); break;
+    case 'e': case 'E': openEditor(); break;
+    case 'r': case 'R': rehearsal.toggle(); break;
+    default: handled = false;
+  }
+  if (handled) { showHud(); e.preventDefault?.(); }
+}
+document.addEventListener('keydown', handleKey, true);
+
+window.addEventListener('message', event => {
+  const data = event.data;
+  if (!data || typeof data !== 'object') return;
+  if (data.type === 'octocode-slides:notes') {
+    onNotes(event);
+  } else if (data.type === 'octocode-slides:nav' && data.key) {
+    handleKey({ key: data.key, passthrough: true });
+  } else if (data.type === 'octocode-slides:activity') {
+    showHud();
+  } else if (data.type === 'octocode-slides:presenter-goto' && typeof data.index === 'number') {
+    go(clampIndex(data.index));
+  } else if (data.type === 'octocode-slides:presenter-key' && data.key) {
+    handleKey({ key: data.key });
+  }
+});
+
+let touchStartX = null;
+document.addEventListener('touchstart', e => { if (!inOverview) touchStartX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  if (touchStartX === null || inOverview) return;
+  const diff = touchStartX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 40) go(current + (diff > 0 ? 1 : -1));
+  touchStartX = null;
+});
+
+window.addEventListener('hashchange', () => {
+  const next = clampIndex(indexFromHash(location.hash));
+  if (next !== current) go(next);
+});
+
+if (total) { go(clampIndex(indexFromHash(location.hash))); showHud(); }
+else if (DECK) fail('<strong>No visible slides.</strong> Every slide in <code>octodeck.json</code> is hidden or the slide list is empty.');
+})();
+
+// ── Stale page: a newer player (index.html) or a changed octodeck.json on disk → offer a reload ──
+// Static servers (an editor preview, npx serve) never reload by themselves; octodeck's own server
+// live-reloads already (live.js), so the check runs only without it.
+const SHELL_VERSION = '4fe1af6843fe';
+(() => {
+  if (document.querySelector('script[src*="live.js"]') || location.protocol === 'file:') return;
+  let deckText = null;
+  let told = false;
+  async function checkFresh() {
+    if (told || document.hidden) return;
+    try {
+      const [html, deck] = await Promise.all([
+        fetch(location.pathname, { cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')),
+        fetch('octodeck.json', { cache: 'no-store' }).then((r) => (r.ok ? r.text() : '')),
+      ]);
+      const onDisk = (html.match(/const SHELL_VERSION = '([^']*)'/) || [])[1];
+      const newShell = !!onDisk && onDisk !== SHELL_VERSION;
+      if (deckText === null) deckText = deck;
+      const newDeck = !!deck && deck !== deckText;
+      if (newShell || newDeck) {
+        told = true;
+        // The shell's toast element (its toast() helper lives inside the main script's scope).
+        const el = document.getElementById('toast');
+        if (!el) return;
+        el.innerHTML = `${newShell ? 'A newer player for this deck is on disk' : 'This deck changed on disk'} — <a href="#" id="stale-reload" style="color:inherit;text-decoration:underline">reload</a>`;
+        el.classList.add('show');
+        document.getElementById('stale-reload')?.addEventListener('click', (e) => { e.preventDefault(); location.reload(); });
+      }
+    } catch (_) {}
+  }
+  setTimeout(checkFresh, 1500);
+  setInterval(checkFresh, 20000);
+  window.addEventListener('focus', checkFresh);
+})();
+</script>
+
+</body>
+</html>

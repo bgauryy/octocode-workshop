@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>An agent loops around the model</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .agent { display: flex; flex-direction: column; gap: 34px; }
+    .lbl { font-family: var(--font-head); font-size: var(--t-small); color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; margin-bottom: 12px; }
+    .lbl strong { color: var(--text-strong); }
+    .stream { font-family: var(--font-mono); font-size: var(--t-mid); line-height: 1.6; padding: 18px 22px; border: 1px solid var(--border-strong); border-radius: 10px; background: var(--surface-2); color: var(--muted-2); white-space: nowrap; overflow: hidden; }
+    .stream span { color: var(--c); }
+    .stream .fade { color: var(--muted); }
+    .agent .pipe > li { text-align: left; padding: 18px 20px; }
+    .agent .pipe h3 { font-size: var(--t-body); }
+    .agent .pipe p { font-size: var(--t-mid); }
+    .agent .pipe li.is-key .n { color: var(--text-strong); border-color: var(--border-strong); background: var(--surface-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--warm"><span class="pip"></span>LLM basics</span>
+    <h2 class="title" data-slide-title>An agent loops around the model</h2>
+    <p class="description" data-slide-subtitle>It connects model responses to tool calls and feeds the results into the next turn.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="agent">
+      <div>
+        <div class="lbl">What the <strong>model</strong> sees: just text, start to end</div>
+        <div class="stream"><span style="--c: var(--violet)">[system + tools]</span> <span style="--c: var(--text-strong)">user: fix the login bug</span> <span style="--c: var(--warm)">→ call search("login")</span> <span style="--c: var(--accent)">← result: auth.ts:42</span> <span class="fade">…</span></div>
+      </div>
+      <div data-step="1">
+        <div class="lbl">What the <strong>agent</strong> adds: the loop</div>
+        <ol class="pipe pipe--warm" data-anim="draw" data-stagger style="--stagger: 220ms">
+          <li style="--pc: var(--violet)"><span class="n">1</span><h3>model reads</h3><p>the whole stream</p></li>
+          <li><span class="n">2</span><h3>asks for a tool</h3><p>name + JSON args</p></li>
+          <li><span class="n">3</span><h3>your code runs it</h3><p>search · read · test</p></li>
+          <li class="is-key" style="--pc: var(--accent)"><span class="n">4</span><h3>result appended</h3><p>as more text</p></li>
+        </ol>
+        <div class="loopback" style="--pc: var(--warm); --delay: 900ms" data-anim="draw"><span>repeat until done</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Two ideas only. First: the model never sees "tools" or "files"; it sees one stream of text, from the system prompt and tool schemas, through the user's request, to every tool call and every result, in order. It predicts what comes next. Press → for the second idea: an agent is the loop around that model. The model reads the stream, asks for a tool by name with JSON arguments, your code runs the tool, and the result is appended to the stream as more text. Then the model reads it all again, until it's done. So your tool's output is literally part of what the model reads next. Source: Anthropic, "Building Effective Agents" (19 Dec 2024, anthropic.com/engineering/building-effective-agents): "Agents … are systems where LLMs dynamically direct their own processes and tool usage." Next: the unit that stream is measured in: tokens.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

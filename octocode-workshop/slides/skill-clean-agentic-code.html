@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>octocode-clean-agentic-code</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    /* skill series (11 slides, one layout): example + rule | steps */
+    .skx .slide-header { margin-bottom: 22px; }
+    .sk { display: grid; grid-template-columns: 1fr 1.2fr; gap: 44px; width: 100%; align-items: stretch; }
+    .sk .col { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+    .sk .col > .kicker { padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .sk .bubble { font-size: var(--t-mid); }
+    .sk .bubble code { color: var(--accent-2); font-size: 0.92em; overflow-wrap: anywhere; }
+    .sk .rule { margin-top: auto; display: flex; flex-direction: column; gap: 6px; padding: 14px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); border-left: 4px solid var(--violet); background: color-mix(in srgb, var(--violet) 7%, var(--code-bg)); }
+    .sk .rule .kicker { color: var(--violet); }
+    .sk .rule blockquote { font-size: var(--t-mid); line-height: 1.38; color: var(--text-strong); }
+    .sk .rule cite { font-style: normal; color: var(--muted-2); letter-spacing: 0; text-transform: none; }
+    .sk .pipe--v { --gap: 14px; }
+    .sk .pipe--v > li { padding: 8px 16px; align-items: center; }
+    .sk .pipe--v > li > div { gap: 0; }
+    .sk .pipe h3 { font-size: var(--t-mid); letter-spacing: 0.02em; }
+    .sk .pipe p { line-height: 1.3; }
+    .sk .out { padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--code-bg); font-family: var(--font-mono); font-size: var(--t-small); color: var(--muted); overflow-wrap: anywhere; }
+    .sk .out span { color: var(--muted-2); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content skx">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>V2 · Skills</span>
+    <h2 class="title" data-slide-title>octocode-clean-agentic-code</h2>
+    <p class="description" data-slide-subtitle>Use when agent clutter piles up: it removes only proven redundancy, then verifies that behavior did not change.</p>
+  </div>
+  <div class="slide-content">
+    <div class="sk">
+      <div class="col">
+        <span class="kicker">Example ask</span>
+        <div class="bubble"><span class="who">You</span>Clean the AI residue out of <code>packages/editor/src/deck</code>.</div>
+        <p class="out"><span>Saves →</span> .octocode/octocode-clean-agentic-code/&lt;date&gt;-&lt;slug&gt;.md</p>
+        <div class="rule" data-step="1" data-anim="land">
+          <span class="kicker">The rule</span>
+          <blockquote>“Read the diff, never the agent’s summary.”</blockquote>
+          <cite>octocode-clean-agentic-code/references/test-gaming.md:5</cite>
+        </div>
+      </div>
+      <div class="col">
+        <span class="kicker">What it does</span>
+        <ol class="pipe pipe--v pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><span class="n">1</span><div><h3>Scope</h3><p>requested paths and intended result</p></div></li>
+          <li><span class="n">2</span><div><h3>Inspect</h3><p>contracts, consumers, dynamic use</p></div></li>
+          <li class="is-key"><span class="n">3</span><div><h3>Removal justified?</h3><p>proof of redundancy, or stop</p></div></li>
+          <li><span class="n">4</span><div><h3>Remove</h3><p>proven redundancy, in batches</p></div></li>
+          <li><span class="n">5</span><div><h3>Verify</h3><p>affected behavior; checks that ran</p></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">The problem: agents leave duplication, needless wrappers, masked errors and gamed tests behind. This skill removes only proven redundancy, without changing behavior. Walk the pipe: Scope the cleanup: the requested paths and intended result. Inspect contracts and consumers: for a deletion, check references, entrypoints, configuration and dynamic or external use, and remember "An empty search alone does not prove absence" (SKILL.md:22). Removal justified? Yes removes; missing evidence means investigate or report the gap; a needed behavior change means describe the repair. Remove in reviewable batches. Verify affected behavior (skills/octocode-clean-agentic-code/SKILL.md:10-17, :21-24). Press → for the mechanic: "Read the diff, never the agent's summary: completion reports have claimed passing tests that never ran." (references/test-gaming.md:5). Test-gaming signals it looks for: tests with no assertion, toBeDefined-only checks, toHaveBeenCalled() with no arguments (test-gaming.md:5-12). The audit order follows measured prevalence: duplication → error masking → test integrity → scope-creep leftovers (references/agentic-defects.md:5-10). And: "Never weaken checks or widen a mask to make cleanup pass" (SKILL.md:29). Invoke: npx octocode skill install octocode-clean-agentic-code, then, for example (illustrative prompt): "Clean the AI residue out of packages/editor/src/deck." Hand-off: callers proven via octocode-research; an unresolved boundary or design change → octocode-architect (SKILL.md:52-53). Next: octocode-agentic-prompts.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

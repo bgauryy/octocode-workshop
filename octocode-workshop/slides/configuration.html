@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The first source with a value wins</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .cfg { display: flex; flex-direction: column; gap: 14px; }
+    .layers { display: flex; flex-direction: column; gap: 6px; }
+    .layer { --lc: var(--border-strong); display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 5px 22px 5px 18px; border: 1px solid var(--border); border-left: 5px solid var(--lc); border-radius: var(--radius-sm); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .layer .r { font-family: var(--font-mono); font-size: var(--t-mid); color: var(--lc); font-weight: 600; }
+    .layer .s { font-family: var(--font-mono); font-size: var(--t-body); color: var(--text-strong); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .layer .s em { font-style: normal; color: var(--muted); }
+    .layer .v { font-family: var(--font-body); font-size: var(--t-mid); text-align: right; color: var(--lc); white-space: nowrap; }
+    .layer.env { --lc: var(--warm); }
+    .layer.rc { --lc: var(--violet); }
+    .layer.def { --lc: var(--muted-2); }
+    .layer.def .s { color: var(--muted); }
+    .rule { font-size: var(--t-small); white-space: nowrap; margin: 0; }
+    .tok { display: flex; flex-direction: column; gap: 8px; }
+    .tok .kicker { line-height: 1.4; }
+    .tok .pipe { --gap: 40px; }
+    .tok .pipe > li { padding: 8px 16px; gap: 0; justify-content: center; }
+    .tok .pipe h3 { font-size: var(--t-mid); font-family: var(--font-mono); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content">
+  <div class="slide-header">
+    <span class="eyebrow eyebrow--violet"><span class="pip"></span>Octocode V2 · configuration</span>
+    <h2 class="title" data-slide-title>The first source with a value wins</h2>
+    <p class="description" data-slide-subtitle>Octocode checks six places, top to bottom, for each setting.</p>
+  </div>
+  <div class="slide-content slide-content--middle">
+    <div class="cfg">
+      <div class="layers" data-anim="draw" data-stagger style="--stagger: 120ms">
+        <div class="layer env"><span class="r">1</span><span class="s">shell env <em>· MCP client env block</em></span><span class="v">always wins</span></div>
+        <div class="layer env"><span class="r">2</span><span class="s">&lt;project&gt;/.octocode/.env</span><span class="v">project API keys</span></div>
+        <div class="layer env"><span class="r">3</span><span class="s">~/.octocode/.env</span><span class="v">global API keys</span></div>
+        <div class="layer rc"><span class="r">4</span><span class="s">&lt;project&gt;/.octocode/.octocoderc</span><span class="v">project settings</span></div>
+        <div class="layer rc"><span class="r">5</span><span class="s">~/.octocode/.octocoderc</span><span class="v">global settings</span></div>
+        <div class="layer def"><span class="r">6</span><span class="s">built-in defaults</span><span class="v">fallback</span></div>
+      </div>
+      <p class="rule" data-step="1">// env beats files · project beats home · a bad value is skipped with a warning, never blocks startup</p>
+      <div class="tok" data-step="2">
+        <span class="kicker">GitHub token: first found wins · env var may come from .env</span>
+        <ol class="pipe pipe--violet" data-anim="draw" data-stagger style="--stagger: 160ms">
+          <li><h3>GH_TOKEN / GITHUB_TOKEN</h3></li>
+          <li><h3>octocode auth login</h3></li>
+          <li><h3>gh auth token</h3></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">Precedence, from docs/CONFIGURATION.md "How settings override each other" (https://github.com/bgauryy/octocode/blob/main/docs/CONFIGURATION.md). The rows draw top to bottom in that order. First, the shell environment or your MCP client's env block: those always win. Then &lt;project&gt;/.octocode/.env, then ~/.octocode/.env: these hold tokens and API keys, and the CLI and MCP server load them. Then &lt;project&gt;/.octocode/.octocoderc and ~/.octocode/.octocoderc: the settings files, workspace beating home. Last, the built-in defaults. Press → for the rule: env beats files, project beats home, and misconfiguration never blocks startup; a bad value is skipped with one stderr warning. Press → for tokens: the GitHub token is the first credential found: a token variable (GH_TOKEN, then GITHUB_TOKEN) from the shell, the workspace .env or the home .env, in that order of source; then the octocode auth login credential; then the OS credential store; then gh auth token (docs/AUTHENTICATION.md:14-22). A token variable always beats a stored login, and .octocoderc never holds a GitHub token. Some keys (for example ALLOWED_PATHS, WORKSPACE_ROOT) are home-only and skipped in a workspace file (docs/CONFIGURATION.md:69). That last step is why gh auth login is enough for most people. Next: what goes in each file.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

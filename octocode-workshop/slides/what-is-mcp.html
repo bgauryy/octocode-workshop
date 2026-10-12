@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP connects agents to tool servers</title>
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/theme.css">
+  <style>
+    .flow { flex: 1; min-height: 0; display: grid; grid-template-columns: 250px minmax(0, 1fr) 250px; gap: 0 22px; align-items: stretch; }
+    .node { display: flex; flex-direction: column; justify-content: center; gap: 8px; padding: 18px 20px; border: 1px solid var(--border-strong); border-top: 3px solid var(--bc); border-radius: var(--radius); background: linear-gradient(160deg, var(--surface-2), var(--surface)); }
+    .node.host { --bc: var(--accent); } .node.srv { --bc: var(--warm); }
+    .node .kicker { color: var(--bc); }
+    .node h3 { font-size: var(--t-sub); color: var(--text-strong); margin: 0; }
+    .node p { font-size: 20px; color: var(--muted); margin: 0; line-height: 1.35; }
+    .node code { font-size: 0.95em; }
+    .wire { display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+    .msg { display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .msg .req, .msg .res { display: flex; align-items: center; gap: 10px; font-family: var(--font-mono); font-size: var(--t-small); }
+    .msg .req { color: var(--text-strong); }
+    .msg .res { color: var(--text); justify-content: flex-end; }
+    .msg .line { flex: 1; height: 2px; background: var(--border-strong); position: relative; }
+    .msg .req .line::after { content: ""; position: absolute; right: -2px; top: -5px; border: 6px solid transparent; border-left: 9px solid var(--border-strong); border-right: 0; }
+    .msg .res .line { background: var(--accent); }
+    .msg .res .line::before { content: ""; position: absolute; left: -2px; top: -5px; border: 6px solid transparent; border-right: 9px solid var(--accent); border-left: 0; }
+    .msg .res b { color: var(--accent); font-weight: 600; }
+    .origin { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; padding: 10px 16px; border-left: 3px solid var(--warm); border-radius: var(--radius-sm); background: var(--surface); }
+    .origin .when { font-family: var(--font-mono); font-size: var(--t-small); color: var(--warm); white-space: nowrap; }
+    .origin p { margin: 0; font-size: 20px; color: var(--text); line-height: 1.35; }
+    .origin q { color: var(--text-strong); }
+    .ctx { margin-top: 18px; display: grid; grid-template-columns: auto repeat(4, minmax(0, 1fr)); gap: 10px; align-items: stretch; padding: 12px 14px; border: 1px dashed var(--accent); border-radius: var(--radius-sm); background: var(--surface); }
+    .ctx .lbl { display: flex; align-items: center; padding-right: 8px; font-family: var(--font-mono); font-size: var(--t-small); color: var(--accent); }
+    .ctx span { display: flex; align-items: center; justify-content: center; text-align: center; padding: 8px 10px; border-radius: var(--radius-sm); font-size: 20px; color: var(--muted); background: var(--surface-2); }
+    .ctx span.mcp { color: var(--text-strong); background: color-mix(in srgb, var(--accent) 22%, var(--surface-2)); border: 1px solid var(--accent); }
+  </style>
+</head>
+<body>
+<div class="slide slide--content" data-step-focus>
+  <div class="slide-header">
+    <span class="eyebrow"><span class="pip"></span>Octocode V1 · what is MCP</span>
+    <h2 class="title" data-slide-title>MCP connects agents to tool servers</h2>
+    <p class="description" data-slide-subtitle>A server supplies instructions and tool schemas that the agent can use in context.</p>
+  </div>
+  <div class="slide-content">
+    <div class="origin">
+      <span class="when">Nov 2024 · Anthropic</span>
+      <p>Open-sourced after a developer got tired of copying code between Claude Desktop and his IDE: <q>just let me do it</q>. One protocol instead of M×N integrations.</p>
+    </div>
+    <div class="flow">
+      <div class="node host" data-step="1"><span class="kicker">Host</span><h3>MCP client</h3><p>Claude Code, Cursor, any agent</p></div>
+      <div class="wire">
+        <div class="msg" data-step="2"><div class="req">initialize<span class="line"></span></div><div class="res"><span class="line"></span><b>instructions</b></div></div>
+        <div class="msg" data-step="3"><div class="req">tools/list<span class="line"></span></div><div class="res"><span class="line"></span><b>tools</b>· name · description · schema</div></div>
+        <div class="msg" data-step="4"><div class="req">tools/call<span class="line"></span></div><div class="res"><span class="line"></span><b>result</b>· content the model reads</div></div>
+      </div>
+      <div class="node srv" data-step="1"><h3>MCP Server</h3></div>
+    </div>
+    <div class="ctx" data-step="5">
+      <span class="lbl">agent context →</span>
+      <span>system prompt</span>
+      <span class="mcp">server instructions</span>
+      <span class="mcp">tool schemas</span>
+      <span>conversation…</span>
+    </div>
+  </div>
+</div>
+<aside class="speaker-notes">MCP is a conversation between two programs, and its output lands in the model's context. Start with where it came from (the strip at the top): Anthropic released and open-sourced MCP on 25 Nov 2024 (anthropic.com/news/model-context-protocol). It started around July 2024 with David Soria Parra, who worked on internal developer tools at Anthropic. Claude Desktop had artifacts but "there was no way to extend it", and the IDE had the file system but no artifacts, so "what I constantly did was just copy things back and forth between Claude Desktop and the IDE… very frustrated" (Latent Space, 3 Apr 2025, latent.space/p/mcp). He saw an M×N problem (many apps × many integrations) and solved it with a protocol, modelled on LSP. He built it with Justin Spahr-Summers, "two guys in a room riffing", not a big strategy. On a16z (2 May 2025): "I'm a developer… I know how to build for this, just let me do it." Click 1, the two sides: the host is the MCP client (Claude Code, Cursor, any agent). It starts or connects to an MCP server and talks to it with JSON-RPC, over stdio for a local server or HTTP for a remote one. Any server works the same way: a database, GitHub, a browser, your own code. Click 2, initialize: the client says hello and the server answers with its capabilities and, optionally, its instructions, a short text on how to use this server. Hosts limit it: Claude Code truncates server instructions and each tool description at 2,048 chars (code.claude.com/docs/en/mcp, checked 2026-10-09). Click 3, tools/list: the server returns every tool it offers, each with a name, a description and a schema. Click 4, tools/call: the model picks a tool and fills its arguments from the schema; the server runs the code and returns content the model reads. Click 5, the point: the host adds the instructions and tool schemas into the agent's context, in the stable, cached layer near the top. The model never sees JSON-RPC, only the text the server chose to send. Every word in instructions, descriptions and results is a prompt. Background if asked: OpenAI adopts it 26 Mar 2025 (simonwillison.net/2025/Mar/26/openaidevs); donated to the Agentic AI Foundation under the Linux Foundation, 9 Dec 2025 (anthropic.com/news/donating-the-model-context-protocol…); July 2026: "Across our Tier 1 SDKs, we’re seeing close to half-a-billion downloads a month" (blog.modelcontextprotocol.io/posts/2026-07-28/). Next: what exactly a server tells the agent about itself.</aside>
+  <script src="../js/animation.js"></script>
+  <script src="../js/navbridge.js"></script>
+</body>
+</html>

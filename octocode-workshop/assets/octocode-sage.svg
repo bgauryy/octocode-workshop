@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 440" role="img" aria-label="Octocode octopus as a wise old sage with glasses, pointed ears, a hooded robe and a wooden staff">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#5cd0ec" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#5cd0ec" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="200" cy="210" r="195" fill="url(#glow)"/>
+  <g fill="none" stroke="#5cd0ec" stroke-opacity="0.35" stroke-width="3" stroke-linecap="round">
+    <path d="M52 92 l-12 14 l12 14"/><path d="M348 70 l12 14 l-12 14"/><path d="M40 300 l-10 12 l10 12"/>
+  </g>
+  <!-- tentacles at the hem -->
+  <g fill="#f0a45c" stroke="#050d1c" stroke-width="6" stroke-linejoin="round">
+    <path d="M130 380 C100 400 80 420 50 410 C70 430 115 425 150 398 Z"/>
+    <path d="M175 395 C165 420 150 432 128 432 C150 444 182 432 195 402 Z"/>
+    <path d="M225 395 C235 420 250 432 272 432 C250 444 218 432 205 402 Z"/>
+    <path d="M270 380 C300 400 320 420 350 410 C330 430 285 425 250 398 Z"/>
+  </g>
+  <!-- staff -->
+  <path d="M322 108 C330 180 312 300 318 418" fill="none" stroke="#050d1c" stroke-width="18" stroke-linecap="round"/>
+  <path d="M322 108 C330 180 312 300 318 418" fill="none" stroke="#f6c794" stroke-width="9" stroke-linecap="round"/>
+  <circle cx="322" cy="104" r="14" fill="#f6c794" stroke="#050d1c" stroke-width="6"/>
+  <!-- robe -->
+  <path d="M142 228 L258 228 L300 398 Q200 418 100 398 Z" fill="#1a325a" stroke="#050d1c" stroke-width="7" stroke-linejoin="round"/>
+  <path d="M200 236 L200 404" stroke="#050d1c" stroke-width="4" opacity="0.5"/>
+  <path d="M150 300 Q200 316 250 300" fill="none" stroke="#f6c794" stroke-width="7" stroke-linecap="round"/>
+  <!-- hood behind head -->
+  <path d="M112 200 Q110 92 200 82 Q290 92 288 200 Q250 250 200 250 Q150 250 112 200 Z" fill="#142847" stroke="#050d1c" stroke-width="7"/>
+  <!-- tentacle on staff -->
+  <path d="M258 270 C285 262 300 250 318 238 C332 232 336 252 322 258 C300 272 282 292 262 300 Z" fill="#f0a45c" stroke="#050d1c" stroke-width="6" stroke-linejoin="round"/>
+  <!-- raised advising tentacle -->
+  <path d="M142 268 C110 262 82 236 78 198 C76 180 92 172 98 188 C104 214 122 236 148 242 Z" fill="#f0a45c" stroke="#050d1c" stroke-width="6" stroke-linejoin="round"/>
+  <!-- ears -->
+  <path d="M128 168 L30 128 Q60 170 126 196 Z" fill="#f0a45c" stroke="#050d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M272 168 L370 128 Q340 170 274 196 Z" fill="#f0a45c" stroke="#050d1c" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M110 168 L64 146" stroke="#050d1c" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+  <path d="M290 168 L336 146" stroke="#050d1c" stroke-width="3" opacity="0.4" stroke-linecap="round"/>
+  <!-- head -->
+  <ellipse cx="200" cy="168" rx="80" ry="76" fill="#f0a45c" stroke="#050d1c" stroke-width="7"/>
+  <circle cx="160" cy="128" r="6" fill="#050d1c" opacity="0.15"/><circle cx="176" cy="114" r="4" fill="#050d1c" opacity="0.15"/>
+  <!-- wispy hairs -->
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+    <path d="M196 94 C190 76 198 66 206 60"/><path d="M206 94 C210 80 222 74 230 74"/><path d="M188 96 C178 84 172 82 164 84"/>
+  </g>
+  <!-- forehead wrinkles -->
+  <g fill="none" stroke="#050d1c" stroke-width="3" stroke-linecap="round" opacity="0.55">
+    <path d="M172 122 Q200 112 228 122"/><path d="M180 134 Q200 126 220 134"/>
+  </g>
+  <!-- glasses + wise half-closed eyes -->
+  <circle cx="170" cy="172" r="26" fill="#ffffff" stroke="#050d1c" stroke-width="6"/>
+  <circle cx="230" cy="172" r="26" fill="#ffffff" stroke="#050d1c" stroke-width="6"/>
+  <path d="M196 172 Q200 166 204 172" fill="none" stroke="#050d1c" stroke-width="6"/>
+  <circle cx="172" cy="178" r="9" fill="#050d1c"/><circle cx="232" cy="178" r="9" fill="#050d1c"/>
+  <path d="M147 170 Q170 156 193 170 L193 150 L147 150 Z" fill="#f0a45c"/>
+  <path d="M207 170 Q230 156 253 170 L253 150 L207 150 Z" fill="#f0a45c"/>
+  <path d="M148 170 Q170 160 192 170" fill="none" stroke="#050d1c" stroke-width="4" stroke-linecap="round"/>
+  <path d="M208 170 Q230 160 252 170" fill="none" stroke="#050d1c" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="170" cy="172" r="26" fill="none" stroke="#050d1c" stroke-width="6"/>
+  <circle cx="230" cy="172" r="26" fill="none" stroke="#050d1c" stroke-width="6"/>
+  <!-- calm smile -->
+  <path d="M184 214 Q200 226 216 214" fill="none" stroke="#050d1c" stroke-width="5" stroke-linecap="round"/>
+</svg>
